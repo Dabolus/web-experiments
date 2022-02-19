@@ -1,0 +1,199 @@
+#start {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  margin: 30px auto;
+  padding: 0;
+  overflow: hidden;
+  border-width: 0;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  background-color: #2ecc71;
+  color: #ecf0f1;
+  transition: background-color 0.3s;
+
+  > div {
+    position: relative;
+    padding: 12px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: #27ae60;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 0;
+    padding-top: 0;
+    border-radius: 100%;
+    background-color: rgba(236, 240, 241, 0.3);
+    transform: translate(-50%, -50%);
+  }
+
+  &:active:before {
+    width: 120%;
+    padding-top: 120%;
+
+    transition: width 0.2s ease-out, padding-top 0.2s ease-out;
+  }
+
+  &[disabled] {
+    filter: grayscale(1);
+    pointer-events: none;
+  }
+}
+
+.input-container {
+  position: relative;
+  margin: 24px 8px;
+
+  input {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    padding: 10px 10px 5px 5px;
+    display: block;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #757575;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus ~ .bar:before,
+    &:focus ~ .bar:after {
+      width: 50%;
+    }
+
+    &:focus ~ .highlight {
+      animation: input-highlighter 0.3s ease;
+    }
+  }
+
+  .bar {
+    position: relative;
+    display: block;
+    width: 100%;
+
+    &:before,
+    &:after {
+      content: '';
+      height: 2px;
+      width: 0;
+      bottom: 1px;
+      position: absolute;
+      background: #5264ae;
+      transition: 0.2s ease all;
+    }
+
+    &:before {
+      left: 50%;
+    }
+
+    &:after {
+      right: 50%;
+    }
+  }
+
+  .highlight {
+    position: absolute;
+    height: 60%;
+    width: 100px;
+    top: 25%;
+    left: 0;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+@keyframes input-highlighter {
+  from {
+    background: #5264ae;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+
+main {
+  padding: 0;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: #4e6172;
+  transition: 0.5s background-color;
+  scroll-snap-type: mandatory;
+  scroll-snap-points-y: repeat(100vh);
+  scroll-snap-type: y mandatory;
+
+  &.locked {
+    overflow: hidden;
+  }
+
+  .spaced > * {
+    margin: 8px 0;
+  }
+
+  .planet {
+    width: 128px;
+    height: auto;
+    margin-bottom: 16px;
+  }
+
+  section {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.5;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+
+    &#birthday-section {
+      z-index: 100;
+      background-color: white;
+    }
+
+    strong {
+      font-weight: 900;
+    }
+
+    & > * {
+      color: rgba(0, 0, 0, 0.87);
+    }
+
+    & > .dark {
+      color: white;
+    }
+  }
+
+  @media (min-width: 480px) {
+    section {
+      font-size: 32px;
+    }
+
+    .spaced > * {
+      margin: 16px 0;
+    }
+
+    .planet {
+      width: 256px;
+      margin-bottom: 32px;
+    }
+  }
+}

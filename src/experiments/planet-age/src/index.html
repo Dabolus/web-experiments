@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Planet Age</title>
+    <base href="<%= base %>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="194x194" href="images/icons/favicon-194x194.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/icons/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="mask-icon" href="images/icons/safari-pinned-tab.svg" color="#87a1ff">
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Planet Age">
+    <meta name="application-name" content="Planet Age">
+    <meta name="msapplication-config" content="browserconfig.xml">
+    <meta name="theme-color" content="#87a1ff">
+    <script type="module" src="/src/scripts/main.ts"></script>
+    <link rel="stylesheet" href="/src/styles/main.scss">
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="locked">
+      <section id="birthday-section">
+        <form id="birthday-form">
+          <h3>Insert your birthday</h3>
+          <div class="input-container">
+            <input type="date" id="birthday" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+          </div>
+          <button id="start" type="submit" disabled>
+            <div>Let's go!</div>
+          </button>
+        </form>
+      </section>
+      <% planets.forEach(({ id, name, background, dark, rotationTime, revolutionTime }) => { %>
+        <section id="<%= id %>">
+          <div class="spaced <%= dark ? 'dark' : '' %>">
+            <img class="planet" src="images/<%= id %>.svg" alt="<%= name %>" title="<%= name %>">
+            <p>On <strong><%= name %></strong> you are <strong id="<%= id %>-age"></strong> old.</p>
+            <p>
+              <strong>One year</strong> here lasts <strong>≈ <%= revolutionTime.toFixed(2) %><%= id === 'earth' ? '' : ' local' %> days</strong><%= id === 'earth' ? '.' : ',' %>
+              <% if (id !== 'earth') { %>
+                <br>while <strong>one day</strong> lasts <strong>≈ <%= (rotationTime + 0.002730319999999953).toFixed(2) %> terrestrial days.</strong>
+              <% } %>
+            </p>
+            <p>Your <strong>next birthday</strong> will be <strong id="<%= id %>-birthday"></strong>.</p>
+          </div>
+        </section>
+      <% }) %>
+    </main>
+  </body>
+</html>

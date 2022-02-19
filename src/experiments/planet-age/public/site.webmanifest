@@ -1,0 +1,49 @@
+{
+  "name": "Planet Age",
+  "short_name": "Planet Age",
+  "lang": "en",
+  "start_url": ".",
+  "description": "Check how old you are on each planet.",
+  "author": "Giorgio Garasto (Dabolus)",
+  "icons": [
+    {
+      "src": "images/icons/android-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/icons/android-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/icons/maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "images/icons/maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "images/icons/mstile-70x70.png",
+      "sizes": "70x70",
+      "type": "image/png",
+      "purpose": "badge"
+    },
+    {
+      "src": "images/icons/mstile-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "badge"
+    }
+  ],
+  "theme_color": "#87a1ff",
+  "background_color": "#87a1ff",
+  "display": "standalone"
+}
