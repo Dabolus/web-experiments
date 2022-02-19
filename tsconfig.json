@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "allowJs": true,
+    "checkJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "lib": ["esnext"],
+    "module": "esnext",
+    "moduleResolution": "node"
+  },
+  "include": ["src"]
+}

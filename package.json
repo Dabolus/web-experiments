@@ -1,0 +1,18 @@
+{
+  "name": "web-experiments",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Dabolus/web-experiments.git",
+  "author": "Giorgio Garasto <giorgio@garasto.me>",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "typescript": "^4.5.5"
+  },
+  "workspaces": [
+    "src/config",
+    "src/experiments/*"
+  ],
+  "packageManager": "yarn@3.1.1"
+}
