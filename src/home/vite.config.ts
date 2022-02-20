@@ -5,6 +5,7 @@ import createConfig from '../config/vite/vanilla';
 import { fromYaml } from '../config/utils/yaml';
 
 export default createConfig(async () => ({
+  base: '/',
   htmlData: {
     projects: await fromYaml('src/data/projects.yml'),
   },

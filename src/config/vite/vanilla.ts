@@ -4,6 +4,7 @@ import { createHtmlPlugin } from 'vite-plugin-html';
 import yaml from './plugins/yaml';
 
 export interface DefineConfigOptions {
+  base?: string;
   htmlData?: Record<string, any> | Promise<Record<string, any>>;
 }
 
@@ -15,8 +16,7 @@ const createConfig = async (
   options: DefineConfigOptions | DefineConfigOptionsCallback,
 ) => {
   const projectPath = process.cwd();
-  const base = `/${basename(projectPath)}/`;
-  const { htmlData } =
+  const { base = `/${basename(projectPath)}/`, htmlData } =
     typeof options === 'function' ? await options() : options;
 
   return defineConfig({
