@@ -1,10 +1,11 @@
 import { basename } from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, UserConfig } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import yaml from './plugins/yaml';
 
 export interface DefineConfigOptions {
-  base?: string;
+  base?: UserConfig['base'];
+  plugins?: UserConfig['plugins'];
   htmlData?: Record<string, any> | Promise<Record<string, any>>;
 }
 
@@ -13,11 +14,14 @@ export type DefineConfigOptionsCallback = () =>
   | Promise<DefineConfigOptions>;
 
 const createConfig = async (
-  options: DefineConfigOptions | DefineConfigOptionsCallback,
+  options?: DefineConfigOptions | DefineConfigOptionsCallback,
 ) => {
   const projectPath = process.cwd();
-  const { base = `/${basename(projectPath)}/`, htmlData } =
-    typeof options === 'function' ? await options() : options;
+  const {
+    base = `/${basename(projectPath)}/`,
+    plugins,
+    htmlData,
+  } = (typeof options === 'function' ? await options() : options) || {};
 
   return defineConfig({
     base,
@@ -33,6 +37,7 @@ const createConfig = async (
         },
         template: 'src/index.html',
       }),
+      ...(plugins || []),
     ],
     build: {
       sourcemap: true,
