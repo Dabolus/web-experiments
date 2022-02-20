@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>GGA - Projects</title>
+    <base href="<%= base %>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="module" src="/src/scripts/main.ts"></script>
+    <link rel="stylesheet" href="/src/styles/main.scss">
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to my projects homepage!</h1>
+    <ul>
+      <% projects.forEach(({ id, name, description, link, source, technologies, icon }) => { %>
+        <li><a href="<%= link %>" target="<%= id %>"><%= name %></a></li>
+      <% }) %>
+    </ul>
+  </body>
+</html>

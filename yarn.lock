@@ -103,6 +103,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@webexp/home@workspace:src/home":
+  version: 0.0.0-use.local
+  resolution: "@webexp/home@workspace:src/home"
+  dependencies:
+    "@types/js-yaml": ^4.0.5
+    "@types/node": ^17.0.18
+    "@webexp/config": "workspace:^"
+    js-yaml: ^4.1.0
+    sass: ^1.49.8
+    tosource: ^2.0.0-alpha.3
+    vite: ^2.8.4
+    vite-plugin-html: ^3.0.6
+  languageName: unknown
+  linkType: soft
+
 "@webexp/planet-age@workspace:src/experiments/planet-age":
   version: 0.0.0-use.local
   resolution: "@webexp/planet-age@workspace:src/experiments/planet-age"
