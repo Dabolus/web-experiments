@@ -7,3 +7,4 @@ dist/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+size-plugin.json

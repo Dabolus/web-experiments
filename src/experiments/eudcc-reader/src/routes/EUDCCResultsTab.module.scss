@@ -1,0 +1,25 @@
+.grid {
+  display: grid;
+  gap: 2rem;
+
+  > label {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  > span {
+    font-size: 1.75rem;
+    font-weight: 400;
+  }
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: 10rem auto;
+  }
+
+  .reason {
+    grid-column: 1 / span 2;
+  }
+}

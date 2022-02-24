@@ -1,0 +1,40 @@
+.content {
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
+
+  > section {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+
+    h2 {
+      margin-top: 0;
+    }
+  }
+}
+
+.startReaderButton {
+  appearance: none;
+  border: none;
+  outline: none;
+  background: var(--gpr-primary-main);
+  color: var(--gpr-text-on-primary);
+  display: inline-flex;
+  align-items: center;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: 0.3s background;
+
+  > svg {
+    height: 1.5em;
+    margin-right: 1em;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: var(--gpr-primary-light);
+  }
+}

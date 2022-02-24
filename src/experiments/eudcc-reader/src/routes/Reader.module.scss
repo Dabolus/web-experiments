@@ -1,0 +1,70 @@
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: calc(100vh - 64px);
+}
+
+.camera {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 64px);
+  background: #000;
+
+  // Overlay
+  > div {
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: calc(50% - 0.5px);
+      left: calc(50vw - 40vmin);
+      width: 80vmin;
+      height: 1px;
+      background: var(--gpr-secondary-main);
+      animation: 0.15s bar-blinking infinite alternate;
+    }
+
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.25);
+      clip-path: polygon(
+        0% 0%,
+        0% 100%,
+        calc(50vw - 40vmin) 100%,
+        calc(50vw - 40vmin) calc(50vh - 40vmin),
+        calc(50vw + 40vmin) calc(50vh - 40vmin),
+        calc(50vw + 40vmin) calc(50vh + 40vmin),
+        calc(50vw - 40vmin) calc(50vh + 40vmin),
+        calc(50vw - 40vmin) 100%,
+        100% 100%,
+        100% 0%
+      );
+    }
+  }
+
+  // Actual camera
+  > video {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@keyframes bar-blinking {
+  0%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

@@ -2,10 +2,12 @@
   "compilerOptions": {
     "strict": true,
     "allowJs": true,
-    "checkJs": true,
+    "checkJs": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "downlevelIteration": true,
+    "noEmit": true,
+    "skipLibCheck": true,
     "lib": ["esnext"],
     "module": "esnext",
     "moduleResolution": "node"

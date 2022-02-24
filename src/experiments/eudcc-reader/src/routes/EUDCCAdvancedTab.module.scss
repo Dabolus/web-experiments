@@ -1,0 +1,26 @@
+.list {
+  display: flex;
+  flex-direction: column;
+
+  > h2 {
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    font-weight: 700;
+  }
+
+  > label {
+    display: block;
+  }
+
+  > span {
+    font-size: 1.25rem;
+    font-weight: 400;
+    overflow: auto;
+
+    &:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+  }
+}

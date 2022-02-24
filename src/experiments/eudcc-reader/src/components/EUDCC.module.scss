@@ -1,0 +1,15 @@
+.container {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0.5rem 0 0 0;
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
+}
+
+.warning {
+  display: block;
+  margin: 1rem;
+}
