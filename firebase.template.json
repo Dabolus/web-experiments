@@ -10,14 +10,6 @@
       {
         "source": "**",
         "destination": "/index.html"
-      },
-      {
-        "source": "/eudcc-reader/**",
-        "destination": "/eudcc-reader/"
-      },
-      {
-        "source": "/planet-age/**",
-        "destination": "/planet-age/"
       }
     ]
   },

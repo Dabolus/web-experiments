@@ -11,3 +11,4 @@ lib/
 size-plugin.json
 *.log
 .firebase*
+firebase.json
