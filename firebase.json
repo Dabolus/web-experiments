@@ -1,4 +1,8 @@
 {
+  "functions": {
+    "source": "src/functions",
+    "runtime": "nodejs16"
+  },
   "hosting": {
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],

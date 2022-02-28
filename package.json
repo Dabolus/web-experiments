@@ -17,6 +17,7 @@
   "workspaces": [
     "src/config",
     "src/experiments/*",
+    "src/functions",
     "src/home"
   ],
   "packageManager": "yarn@3.1.1"
