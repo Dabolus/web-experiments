@@ -8,3 +8,5 @@ dist/
 !.yarn/sdks
 !.yarn/versions
 size-plugin.json
+*.log
+.firebase*
