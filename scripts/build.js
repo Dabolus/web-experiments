@@ -31,11 +31,11 @@ const firebaseConfig = {
   hosting: {
     ...firebaseConfigTemplate.hosting,
     rewrites: [
-      ...(firebaseConfigTemplate.hosting.rewrites || []),
       ...projects.map(project => ({
         source: `/${project}/**`,
         destination: `/${project}/`,
       })),
+      ...(firebaseConfigTemplate.hosting.rewrites || []),
     ],
   },
 };
