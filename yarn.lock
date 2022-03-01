@@ -1837,6 +1837,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rollup/plugin-yaml@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "@rollup/plugin-yaml@npm:3.1.0"
+  dependencies:
+    "@rollup/pluginutils": ^3.1.0
+    js-yaml: ^3.14.0
+    tosource: ^1.0.0
+  peerDependencies:
+    rollup: ^1.20.0 || ^2.0.0
+  checksum: be99aa097c480a24e6bedf85de2f8e21e287baf443155e7f2e765c939dda53f63cda674476f170b0397e3c69ce3bc825f0ad4041ac6fe25912480c27423e1b37
+  languageName: node
+  linkType: hard
+
 "@rollup/pluginutils@npm:^3.1.0":
   version: 3.1.0
   resolution: "@rollup/pluginutils@npm:3.1.0"
@@ -2462,10 +2475,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@webexp/config@workspace:src/config"
   dependencies:
-    "@types/js-yaml": ^4.0.5
+    "@rollup/plugin-yaml": ^3.1.0
     "@types/node": ^17.0.18
-    js-yaml: ^4.1.0
-    tosource: ^2.0.0-alpha.3
     vite: ^2.8.4
     vite-plugin-html: ^3.0.6
   languageName: unknown
@@ -2524,13 +2535,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@webexp/planet-age@workspace:src/experiments/planet-age"
   dependencies:
-    "@types/js-yaml": ^4.0.5
+    "@rollup/plugin-yaml": ^3.1.0
     "@types/node": ^17.0.18
     "@webexp/config": "workspace:^"
-    js-yaml: ^4.1.0
     pwa-helpers: ^0.9.1
     sass: ^1.49.8
-    tosource: ^2.0.0-alpha.3
     vite: ^2.8.4
     vite-plugin-html: ^3.0.6
   languageName: unknown
@@ -8218,7 +8227,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^3.10.0, js-yaml@npm:^3.13.1":
+"js-yaml@npm:^3.10.0, js-yaml@npm:^3.13.1, js-yaml@npm:^3.14.0":
   version: 3.14.1
   resolution: "js-yaml@npm:3.14.1"
   dependencies:
@@ -13608,6 +13617,13 @@ __metadata:
   version: 1.0.7
   resolution: "toposort@npm:1.0.7"
   checksum: 68c074586ae4ad8eb518d5b5ebee7b3ef903ace180d822b9846b52bd945b14db00c1c5e1107ed77ea48705806291a6efda95c90ff5b31ce416257cdc21461a86
+  languageName: node
+  linkType: hard
+
+"tosource@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "tosource@npm:1.0.0"
+  checksum: 683fc64700484cd749b6eed461c2d105e251df7caf886484ff824bcf1249e365210d65c4f2ca3ced30baa34ea7912c656984e084aaada669920b44e2437c1c05
   languageName: node
   linkType: hard
 
