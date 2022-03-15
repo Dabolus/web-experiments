@@ -8,7 +8,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "node scripts/build.js"
+    "build": "node scripts/build.js",
+    "deploy": "firebase deploy"
   },
   "devDependencies": {
     "@yarnpkg/shell": "^3.2.0",
