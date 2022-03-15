@@ -2471,12 +2471,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@webexp/choicest-voice@workspace:src/experiments/choicest-voice":
+  version: 0.0.0-use.local
+  resolution: "@webexp/choicest-voice@workspace:src/experiments/choicest-voice"
+  dependencies:
+    "@rollup/plugin-yaml": ^3.1.0
+    "@types/node": ^17.0.18
+    "@webexp/config": "workspace:^"
+    sass: ^1.49.8
+    tosource: ^2.0.0-alpha.3
+    vite: ^2.8.4
+    vite-plugin-html: ^3.0.6
+  languageName: unknown
+  linkType: soft
+
 "@webexp/config@workspace:^, @webexp/config@workspace:src/config":
   version: 0.0.0-use.local
   resolution: "@webexp/config@workspace:src/config"
   dependencies:
     "@rollup/plugin-yaml": ^3.1.0
     "@types/node": ^17.0.18
+    tosource: ^2.0.0-alpha.3
     vite: ^2.8.4
     vite-plugin-html: ^3.0.6
   languageName: unknown

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Choicest Voice</title>
+    <script type="module" src="/src/scripts/main.ts"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Righteous">
+    <link rel="stylesheet" href="/src/styles/main.scss">
+    <style>
+      *,
+      *::before,
+      *::after {
+        font-family: 'Righteous', sans-serif;
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      button {
+        cursor: pointer;
+        appearance: none;
+        border: none;
+        outline: none;
+        background: none;
+        transition: 0.3s transform;
+      }
+
+      button:hover,
+      button:focus {
+        transform: scale(1.025);
+      }
+
+      button:active {
+        transform: scale(0.975);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section id="notification" role="alert" hidden></section>
+      <section id="landing">
+        <h1>The Choicest Voice</h1>
+        <div id="menu-container">
+          <p id="universes-nav-label">Select the universe you want to play with</p>
+          <nav aria-labelledby="universes-nav-label">
+            <ul id="universes-list"></ul>
+          </nav>
+          <button id="start" hidden>Start</button>
+        </div>
+      </section>
+      <section id="game" hidden>
+        <canvas id="visualizer" width="480" height="960"></canvas>
+        <div id="microphone">
+          <img id="mic-img" src="/src/assets/microphone.svg" alt="">
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
