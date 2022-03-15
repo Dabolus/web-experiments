@@ -9,6 +9,7 @@
   "private": true,
   "dependencies": {
     "@rollup/plugin-yaml": "^3.1.0",
+    "tosource": "^2.0.0-alpha.3",
     "vite": "^2.8.4",
     "vite-plugin-html": "^3.0.6"
   },

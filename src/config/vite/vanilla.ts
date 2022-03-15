@@ -2,6 +2,7 @@ import { basename } from 'path';
 import { defineConfig, UserConfig, Plugin } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import yaml from '@rollup/plugin-yaml';
+import tree from './plugins/tree';
 
 export interface DefineConfigOptions {
   base?: UserConfig['base'];
@@ -27,6 +28,7 @@ const createConfig = async (
     base,
     plugins: [
       yaml() as Plugin,
+      tree(),
       createHtmlPlugin({
         minify: true,
         inject: {
