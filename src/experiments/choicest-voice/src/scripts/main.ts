@@ -3,6 +3,7 @@ import { getRandomArrayElement, shuffle, sleep } from './utils';
 import { DirStructureElement } from '../../../../config/vite/plugins/tree';
 import { playRound } from './game';
 import { notify } from './notify';
+import emptyOgg from '../assets/empty.ogg';
 
 const totalRounds = 3;
 const scoreToWin = totalRounds * 30;
@@ -46,10 +47,28 @@ const startGame = async (
   );
 };
 
+const checkForOggSupport = async () => {
+  const testOgg = new Audio(emptyOgg);
+
+  try {
+    await testOgg.play();
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 voiceUniverses.forEach(({ name, children }) => {
   const button = document.createElement('button');
   button.textContent = name;
-  button.addEventListener('click', () => startGame(name, children));
+  button.addEventListener('click', async () => {
+    const supportsOgg = await checkForOggSupport();
+    if (supportsOgg) {
+      startGame(name, children);
+    } else {
+      notify('Your browser is not supported. :(', -1);
+    }
+  });
   const li = document.createElement('li');
   li.appendChild(button);
   universesList.appendChild(li);
