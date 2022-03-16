@@ -7,8 +7,11 @@ section {
 }
 
 #notification {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  line-height: 100vh;
   font-size: 96px;
   font-weight: bold;
   z-index: 9999;

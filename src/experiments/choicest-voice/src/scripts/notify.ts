@@ -1,16 +1,17 @@
 const notification = document.querySelector<HTMLElement>('#notification')!;
+const notificationContent = notification.firstElementChild! as HTMLDivElement;
 
 notification.addEventListener('transitionend', () => {
   if (!notification.classList.contains('shown')) {
     notification.hidden = true;
-    notification.textContent = '';
+    notificationContent.textContent = '';
   }
 });
 
 let previousHandle: number;
 
 export const notify = (text: string, time = 3000) => {
-  notification.textContent = text;
+  notificationContent.textContent = text;
   notification.hidden = false;
   setTimeout(() => notification.classList.add('shown'), 50);
   if (previousHandle) {
