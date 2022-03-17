@@ -1,0 +1,34 @@
+{
+  "name": "The Choicest Voice",
+  "short_name": "Choicest Voice",
+  "icons": [
+    {
+      "src": "./maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./any-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./any-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#f8ce46",
+  "background_color": "#f8ce46",
+  "start_url": "/choicest-voice/",
+  "display": "standalone"
+}
