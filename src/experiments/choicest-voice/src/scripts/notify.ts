@@ -12,6 +12,7 @@ let previousHandle: number;
 
 export const notify = (text: string, time = 3000) => {
   notificationContent.textContent = text;
+  notification.style.fontSize = text.length > 20 ? '3rem' : '6rem';
   notification.hidden = false;
   setTimeout(() => notification.classList.add('shown'), 50);
   if (previousHandle) {
