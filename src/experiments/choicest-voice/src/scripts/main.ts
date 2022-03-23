@@ -1,49 +1,27 @@
+import { installRouter } from 'pwa-helpers';
 import voiceUniverses from '@virtual:tree:../../public/voices';
-import { getRandomArrayElement, shuffle, sleep } from './utils';
 import { DirStructureElement } from '../../../../config/vite/plugins/tree';
-import { playRound } from './game';
+import { playMatch } from './game';
 import { notify } from './notify';
 import emptyOgg from '../assets/empty.ogg';
+import { hideMenu, showMenu } from './menu';
 
-const totalRounds = 3;
-const scoreToWin = totalRounds * 30;
+const baseHref = document.querySelector('base')!.getAttribute('href')!;
 
-const universesNavLabel = document.querySelector<HTMLElement>(
-  '#universes-nav-label',
-)!;
-const universesList =
-  document.querySelector<HTMLUListElement>('#universes-list')!;
 const startButton = document.querySelector<HTMLButtonElement>('#start')!;
 
-const startGame = async (
-  universe: string,
-  characters: DirStructureElement[],
-) => {
-  universesNavLabel.hidden = true;
-  universesList.parentElement!.hidden = true;
+const prepareGame = (universe: string, characters: DirStructureElement[]) => {
+  hideMenu();
   startButton.hidden = false;
-  const selectedCharacters = shuffle(characters).slice(0, totalRounds);
   startButton.addEventListener(
     'click',
     async () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const totalVotes = await selectedCharacters.reduce(
-        async (previousVotesPromise, { name, children = [] }) => {
-          const previousVotes = await previousVotesPromise;
-          const voice = getRandomArrayElement(children).name;
-          const newVotes = await playRound(stream, universe, name, voice);
-          return previousVotes + newVotes;
-        },
-        Promise.resolve(0),
-      );
-      const totalScore = totalVotes * 10;
-      notify('Game over!', -1);
-      await sleep(3000);
-      notify(`Final score: ${totalScore}`, -1);
-      await sleep(3000);
-      notify(`You ${totalScore >= scoreToWin ? 'win!' : 'lose.'}`, -1);
+      await playMatch(stream, universe, characters);
     },
-    { once: true },
+    {
+      once: true,
+    },
   );
 };
 
@@ -58,18 +36,44 @@ const checkForOggSupport = async () => {
   }
 };
 
-voiceUniverses.forEach(({ name, children }) => {
-  const button = document.createElement('button');
-  button.textContent = name;
-  button.addEventListener('click', async () => {
-    const supportsOgg = await checkForOggSupport();
-    if (supportsOgg) {
-      startGame(name, children);
-    } else {
-      notify('Your browser is not supported. :(', -1);
-    }
-  });
-  const li = document.createElement('li');
-  li.appendChild(button);
-  universesList.appendChild(li);
+installRouter(({ pathname }) => {
+  switch (pathname) {
+    case baseHref:
+      showMenu('Main Menu', [
+        {
+          name: 'Single Player',
+          url: 'single-player',
+        },
+        // TODO: coming soon
+        // {
+        //   name: 'Multiplayer',
+        //   url: 'multiplayer',
+        // },
+        // {
+        //   name: 'Online Play',
+        //   url: 'online-play',
+        // },
+        // {
+        //   name: 'About',
+        //   url: 'about',
+        // },
+      ]);
+      break;
+    case `${baseHref}single-player`:
+      showMenu(
+        'Select the universe you want to play with',
+        voiceUniverses.map(({ name, children }) => ({
+          name,
+          onClick: async () => {
+            const supportsOgg = await checkForOggSupport();
+            if (supportsOgg) {
+              prepareGame(name, children);
+            } else {
+              notify('Your browser is not supported. :(', -1);
+            }
+          },
+        })),
+      );
+      break;
+  }
 });

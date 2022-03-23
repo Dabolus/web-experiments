@@ -1,6 +1,10 @@
 import { WaveformIndicator, OutlineLoudnessIndicator } from './visualize';
-import { count, sleep } from './utils';
+import { count, getRandomArrayElement, shuffle, sleep } from './utils';
 import { notify } from './notify';
+import { DirStructureElement } from '../../../../config/vite/plugins/tree';
+
+const totalRounds = 3;
+const scoreToWin = totalRounds * 30;
 
 const canvas = document.querySelector('canvas')!;
 const waveformIndicator = new WaveformIndicator(canvas);
@@ -100,4 +104,27 @@ export const playRound = async (
   await sleep(3000);
 
   return votes;
+};
+
+export const playMatch = async (
+  stream: MediaStream,
+  universe: string,
+  characters: DirStructureElement[],
+) => {
+  const selectedCharacters = shuffle(characters).slice(0, totalRounds);
+  const totalVotes = await selectedCharacters.reduce(
+    async (previousVotesPromise, { name, children = [] }) => {
+      const previousVotes = await previousVotesPromise;
+      const voice = getRandomArrayElement(children).name;
+      const newVotes = await playRound(stream, universe, name, voice);
+      return previousVotes + newVotes;
+    },
+    Promise.resolve(0),
+  );
+  const totalScore = totalVotes * 10;
+  notify('Game over!', -1);
+  await sleep(3000);
+  notify(`Final score: ${totalScore}`, -1);
+  await sleep(3000);
+  notify(`You ${totalScore >= scoreToWin ? 'win!' : 'lose.'}`, -1);
 };
