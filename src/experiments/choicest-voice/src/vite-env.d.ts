@@ -5,3 +5,13 @@ declare module '@virtual:tree:*' {
   const tree: DirStructureElement[];
   export default tree;
 }
+
+declare module '*.md' {
+  export interface TOCItem {
+    level: string;
+    content: string;
+  }
+
+  export const toc: TOCItem[];
+  export const html: string;
+}

@@ -1,6 +1,7 @@
 import { basename } from 'path';
 import { defineConfig, UserConfig, Plugin } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
+import { plugin as markdownPlugin, Mode } from 'vite-plugin-markdown';
 import yaml from '@rollup/plugin-yaml';
 import tree from './plugins/tree';
 
@@ -28,6 +29,7 @@ const createConfig = async (
     base,
     plugins: [
       yaml() as Plugin,
+      markdownPlugin({ mode: [Mode.HTML, Mode.TOC] }),
       tree(),
       createHtmlPlugin({
         minify: true,
