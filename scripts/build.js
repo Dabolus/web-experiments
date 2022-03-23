@@ -33,7 +33,7 @@ const firebaseConfig = {
     rewrites: [
       ...projects.map(project => ({
         source: `/${project}/**`,
-        destination: `/${project}/`,
+        destination: `/${project}/index.html`,
       })),
       ...(firebaseConfigTemplate.hosting.rewrites || []),
     ],
