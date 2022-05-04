@@ -22,6 +22,8 @@ h1,
     max-width: 480px;
     height: 320px;
     padding: 16px;
+    display: flex;
+    flex-direction: column;
 
     .header {
       display: grid;
@@ -50,6 +52,23 @@ h1,
     .header h2 {
       margin: 0;
       align-self: end;
+    }
+
+    .actions {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 16px;
+
+      > a {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #fff;
+        text-decoration: none;
+        padding: 8px;
+      }
     }
   }
 }
@@ -91,6 +110,7 @@ ul.chips {
       > .check {
         margin-left: -8px;
         margin-right: 8px;
+        transform: scale(1);
         width: 16px;
       }
     }
@@ -102,9 +122,10 @@ ul.chips {
     > .check {
       width: 0;
       height: 16px;
+      transform: scale(0);
       overflow: hidden;
       fill: currentColor;
-      transition: 0.3s width, 0.3s margin;
+      transition: 0.3s width, 0.3s transform, 0.3s margin;
     }
 
     > input[type='checkbox'] {

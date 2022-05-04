@@ -153,7 +153,9 @@ export const setupFilters = () => {
       const checkbox = languageElement.querySelector<HTMLInputElement>(
         'input[type="checkbox"]',
       )!;
-      const language = languageElement.textContent?.trim() || '';
+      const language = languageElement
+        .querySelector('label')!
+        .textContent!.trim();
 
       toggleChip(languageElement, selectedLanguages[language]);
 
@@ -171,7 +173,9 @@ export const setupFilters = () => {
       const checkbox = frameworkElement.querySelector<HTMLInputElement>(
         'input[type="checkbox"]',
       )!;
-      const framework = frameworkElement.textContent?.trim() || '';
+      const framework = frameworkElement
+        .querySelector('label')!
+        .textContent!.trim();
 
       toggleChip(frameworkElement, selectedFrameworks[framework]);
 

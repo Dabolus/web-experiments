@@ -6,8 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <script type="module" src="/src/scripts/main.ts"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
     <link rel="stylesheet" href="/src/styles/main.scss">
-
     <style>
       @font-face {
         font-family: 'Jost*';
@@ -53,6 +53,10 @@
         background: #303030;
         color: #fff;
       }
+
+      .material-symbols-outlined {
+        font-size: 1rem;
+      }
     </style>
   </head>
   <body>
@@ -67,7 +71,7 @@
           <% languages.forEach(language => { %>
             <li class="checkable">
               <input type="checkbox" name="filter-language" id="filter-language-<%= language %>">
-              <svg class="check" viewBox="0 0 24 24"><path d="M21 7 9 19l-5-5 1-2 4 4L20 6l1 1Z"/></svg>
+              <span class="material-symbols-outlined check">check</span>
               <label for="filter-language-<%= language %>"><%= language %></label>
             </li>
           <% }) %>
@@ -142,19 +146,37 @@
           </div>
           <p><%= description %></p>
           <div class="actions">
+            <%
+              const typeToActionMap = {
+                'app-web': {
+                  icon: 'public',
+                  label: 'Visit',
+                },
+                'app-cross-platform': {
+                  icon: 'download',
+                  label: 'Download',
+                },
+                'app-windows': {
+                  icon: 'download',
+                  label: 'Download',
+                },
+                'bot-telegram': {
+                  icon: 'open_in_new',
+                  label: 'Launch',
+                },
+              };
+            %>
             <% if (source) { %>
-              <a href="<%= source %>" target="source-<%= id %>">View source code</a>
+              <a href="<%= source %>" target="source-<%= id %>">
+                <span class="material-symbols-outlined">code</span>
+                <span>View source</span>
+              </a>
             <% } %>
             <% if (link) { %>
               <a href="<%= link %>" target="link-<%= id %>">
-                <%=
-                  {
-                    'app-web': 'Open',
-                    'app-cross-platform': 'Download',
-                    'app-windows': 'Download',
-                    'bot-telegram': 'Launch',
-                  }[type]
-                %>
+                <% const { icon, label } = typeToActionMap[type] %>
+                <span class="material-symbols-outlined"><%= icon %></span>
+                <span><%= label %></span>
               </a>
             <% } %>
           </div>
