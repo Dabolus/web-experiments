@@ -1,0 +1,13 @@
+input.material {
+  font-size: 1rem;
+  outline: none;
+  border: 1px solid gray;
+  border-radius: 4px;
+  padding: 0.4rem 0.6rem;
+  color: gray;
+  transition: 0.3s border-color;
+
+  &:focus {
+    border-color: rgba(255, 128, 128, 0.6);
+  }
+}

@@ -11,6 +11,9 @@
     "start": "vite",
     "build": "vite build"
   },
+  "dependencies": {
+    "fuse.js": "^6.6.0"
+  },
   "devDependencies": {
     "@types/js-yaml": "^4.0.5",
     "@types/node": "^17.0.18",

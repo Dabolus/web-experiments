@@ -3113,6 +3113,7 @@ __metadata:
     "@types/js-yaml": ^4.0.5
     "@types/node": ^17.0.18
     "@webexp/config": "workspace:^"
+    fuse.js: ^6.6.0
     js-yaml: ^4.1.0
     sass: ^1.49.8
     tosource: ^2.0.0-alpha.3
@@ -8057,6 +8058,13 @@ __metadata:
   version: 1.0.1
   resolution: "functional-red-black-tree@npm:1.0.1"
   checksum: ca6c170f37640e2d94297da8bb4bf27a1d12bea3e00e6a3e007fd7aa32e37e000f5772acf941b4e4f3cf1c95c3752033d0c509af157ad8f526e7f00723b9eb9f
+  languageName: node
+  linkType: hard
+
+"fuse.js@npm:^6.6.0":
+  version: 6.6.0
+  resolution: "fuse.js@npm:6.6.0"
+  checksum: ebabf54309fecbe955e6db2dddfaa7cd781018e1b8f09f3acd5f094d03cbca6aa48cc8cfa09f2a23f7b86b881f5b2fb65a5960dd7a4ee36b01f5e84c091fca0e
   languageName: node
   linkType: hard
 

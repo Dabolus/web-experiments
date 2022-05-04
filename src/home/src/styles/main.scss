@@ -1,0 +1,133 @@
+@use './textfield';
+
+h1,
+#filters,
+#projects {
+  margin: 32px;
+}
+
+#projects {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 32px;
+
+  > li {
+    background: #484848;
+    border-radius: 16px;
+    color: #fff;
+    width: 100%;
+    max-width: 480px;
+    height: 320px;
+    padding: 16px;
+
+    .header {
+      display: grid;
+      align-items: center;
+      grid-template: 1fr / 128px 1fr;
+      gap: 16px;
+    }
+
+    .header picture {
+      display: flex;
+    }
+
+    .header img,
+    .header picture {
+      grid-row: 1 / 3;
+      width: 128px;
+      height: 128px;
+    }
+
+    .header ul.chips {
+      align-self: start;
+      margin-right: -16px;
+      padding-right: 24px;
+    }
+
+    .header h2 {
+      margin: 0;
+      align-self: end;
+    }
+  }
+}
+
+ul.chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  margin: 0 -8px;
+  font-size: 0.8rem;
+
+  &.scrollable {
+    flex-wrap: nowrap;
+    overflow: auto;
+  }
+
+  > li {
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    transition: 0.3s color, 0.3s border-color;
+
+    &.checkable {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    &.checked {
+      background: rgba(255, 128, 128, 0.6);
+      border-color: transparent;
+
+      > .check {
+        margin-left: -8px;
+        margin-right: 8px;
+        width: 16px;
+      }
+    }
+
+    * {
+      pointer-events: none;
+    }
+
+    > .check {
+      width: 0;
+      height: 16px;
+      overflow: hidden;
+      fill: currentColor;
+      transition: 0.3s width, 0.3s margin;
+    }
+
+    > input[type='checkbox'] {
+      display: none;
+    }
+  }
+}
+
+.heading {
+  display: block;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+fieldset {
+  appearance: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+input {
+  appearance: none;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #fff;
+}

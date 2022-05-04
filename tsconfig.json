@@ -10,7 +10,10 @@
     "skipLibCheck": true,
     "lib": ["esnext"],
     "module": "esnext",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": false
   },
   "include": ["src"]
 }

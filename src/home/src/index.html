@@ -9,25 +9,124 @@
     <link rel="stylesheet" href="/src/styles/main.scss">
 
     <style>
+      @font-face {
+        font-family: 'Jost*';
+        font-style: normal;
+        font-weight: 200;
+        src: url('assets/fonts/f0519003.woff2') format('woff2');
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Jost*';
+        font-style: normal;
+        font-weight: 300;
+        src: url('assets/fonts/512b8a76.woff2') format('woff2');
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Jost*';
+        font-style: normal;
+        font-weight: 400;
+        src: url('assets/fonts/ee4ca8b4.woff2') format('woff2');
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Jost*';
+        font-style: normal;
+        font-weight: 600;
+        src: url('assets/fonts/6b4bd741.woff2') format('woff2');
+        font-display: swap;
+      }
+
       * {
         box-sizing: border-box;
+        font-family: 'Jost*', sans-serif;
       }
 
       html,
       body {
         margin: 0;
         padding: 0;
-        overflow: hidden;
-        font-family: 'Roboto', sans-serif;
-        font-weight: 400;
+        background: #303030;
+        color: #fff;
       }
     </style>
   </head>
   <body>
     <h1>Welcome to my projects homepage!</h1>
-    <ul>
+    <section id="filters" hidden>
+      <label class="heading" for="filter-search">Search</label>
+      <input name="filter-search" id="filter-search" class="material">
+      <fieldset>
+        <legend class="heading">Filter by technology</legend>
+        <ul id="technologies" class="chips">
+          <% const technologies = Array.from(new Set(projects.flatMap(({ technologies }) => technologies))) %>
+          <% technologies.forEach(technology => { %>
+            <li class="checkable">
+              <input type="checkbox" name="filter-technology" id="filter-technology-<%= technology %>">
+              <svg class="check" viewBox="0 0 24 24"><path d="M21 7 9 19l-5-5 1-2 4 4L20 6l1 1Z"/></svg>
+              <label for="filter-technology-<%= technology %>"><%= technology %></label>
+            </li>
+          <% }) %>
+        </ul>
+      </fieldset>
+    </section>
+    <ul id="projects">
       <% projects.forEach(({ id, name, description, link, source, technologies, icon }) => { %>
-        <li><a href="<%= link %>" target="<%= id %>"><%= name %></a></li>
+        <li id="project-<%= id %>">
+          <div class="header">
+            <%
+              const projectImageFormats = [
+                {
+                  name: 'svg',
+                  type: 'image/svg+xml',
+                },
+                {
+                  name: 'jxl',
+                  type: 'image/jxl',
+                },
+                {
+                  name: 'webp',
+                  type: 'image/webp',
+                },
+                {
+                  name: 'png',
+                  type: 'image/png',
+                },
+                {
+                  name: 'jpg',
+                  type: 'image/jpeg',
+                },
+              ].filter(format => icon[format.name]);
+            %>
+            <picture>
+              <% projectImageFormats.forEach(format => { %>
+                <source srcset="<%= icon[format.name] %>" type="<%= format.type %>">
+              <% }) %>
+              <img
+                style="background-image: url(&#34;<%= icon.placeholder %>&#34;);"
+                src="<%= icon[projectImageFormats[projectImageFormats.length - 1].name] %>"
+                width="128"
+                height="128"
+                alt="<%= name %>"
+                title="<%= name %>"
+                loading="lazy"
+                lazyload
+              >
+            </picture>
+            <ul class="chips scrollable">
+              <% technologies.forEach(technology => { %>
+                <li class="technology-chip"><%= technology %></li>
+              <% }) %>
+            </ul>
+            <h2><%= name %></h2>
+          </div>
+          <p><%= description %></p>
+          <a href="<%= link %>" target="<%= id %>"><%= name %></a>
+        </li>
       <% }) %>
     </ul>
   </body>
