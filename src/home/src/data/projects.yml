@@ -3,10 +3,13 @@
   description: A PWA to consult journals, songs, prayers, and breviary of the FFB.
   link: https://ancill.app
   source: https://github.com/Ancillapp/ancillapp
-  technologies:
+  type: app-web
+  languages:
     - TypeScript
     - SCSS
-    - LitElement
+  frameworks:
+    - Lit
+  api:
     - Node.js
   icon:
     svg: images/projects/ancillapp.svg
@@ -28,10 +31,13 @@
   name: Clash of Clans Troop Creator
   description: Create your own Clash of Clans troops!
   link: https://clashroyalecardmaker.com/CoCTC
-  technologies:
+  type: app-web
+  languages:
     - HTML
     - CSS
     - JavaScript
+  frameworks:
+    - Vanilla
   icon:
     jpg: images/projects/coc-troop-creator.jpg
     webp: images/projects/coc-troop-creator.webp
@@ -58,10 +64,13 @@
   name: Clash Royale Card Maker
   description: Create your own Clash Royale cards!
   link: https://clashroyalecardmaker.com
-  technologies:
+  type: app-web
+  languages:
     - HTML
     - CSS
     - JavaScript
+  frameworks:
+    - Vanilla
   icon:
     jpg: images/projects/cr-card-maker.jpg
     webp: images/projects/cr-card-maker.webp
@@ -90,8 +99,10 @@
   description: A Telegram inline bot to generate funny text effects.
   link: https://t.me/DabbextBot
   source: https://github.com/Dabolus/dabbext
-  technologies:
+  type: bot-telegram
+  languages:
     - Go
+  frameworks: []
   icon:
     jpg: images/projects/dabbext.jpg
     webp: images/projects/dabbext.webp
@@ -117,9 +128,11 @@
   description: A web-based EUDCC (aka Green Pass) reader and verifier.
   link: https://gga.dev/eudcc-reader
   source: https://github.com/Dabolus/eudcc-reader
-  technologies:
+  type: app-web
+  languages:
     - TypeScript
     - SCSS Modules
+  frameworks:
     - Preact
   icon:
     svg: images/projects/eudcc-reader.svg
@@ -144,11 +157,13 @@
   description: A desktop version for the Google Assistant.
   link: https://github.com/Dabolus/google-assistant-desktop-unofficial/releases/latest
   source: https://github.com/Dabolus/google-assistant-desktop-unofficial
-  technologies:
+  type: app-cross-platform
+  languages:
     - TypeScript
     - SCSS
+  frameworks:
     - Electron
-    - LitElement
+    - Lit
     - Redux
   icon:
     svg: images/projects/google-assistant-desktop.svg
@@ -174,10 +189,13 @@
   description: Check how old you are on each planet.
   link: https://gga.dev/planet-age
   source: https://github.com/Dabolus/planet-age
-  technologies:
+  type: app-web
+  languages:
     - TypeScript
     - SCSS
     - EJS
+  frameworks:
+    - Vanilla
   icon:
     svg: images/projects/planet-age.svg
     placeholder:
@@ -204,9 +222,12 @@
   description: A super-simple tool to change Windows default system font.
   link: https://github.com/Dabolus/WinFontSwitcher/releases/latest
   source: https://github.com/Dabolus/WinFontSwitcher
-  technologies:
+  type: app-windows
+  languages:
     - C#
     - XAML
+  frameworks:
+    - .NET
   icon:
     svg: images/projects/win-font-switcher.svg
     placeholder:
@@ -229,8 +250,10 @@
   description: A porting of the xkill utility to Windows.
   link: https://github.com/Dabolus/win-xkill/releases/latest
   source: https://github.com/Dabolus/win-xkill
-  technologies:
+  type: app-windows
+  languages:
     - C
+  frameworks: []
   icon:
     png: images/projects/win-xkill.png
     jxl: images/projects/win-xkill.jxl

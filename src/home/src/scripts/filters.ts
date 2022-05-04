@@ -2,6 +2,15 @@ import Fuse from 'fuse.js';
 
 const currentUrl = new URL(window.location.href);
 
+const updateSearchParam = (key: string, value?: string | null) => {
+  if (!value) {
+    currentUrl.searchParams.delete(key);
+  } else {
+    currentUrl.searchParams.set(key, value);
+  }
+  window.history.replaceState({}, '', currentUrl.href);
+};
+
 const projectsElements =
   document.querySelectorAll<HTMLLIElement>('#projects > li');
 
@@ -9,17 +18,38 @@ interface Project {
   id: string;
   name: string;
   description: string;
+  languages: string[];
+  frameworks: string[];
+  element: HTMLElement;
 }
 
-const projects: Project[] = Array.from(projectsElements).map(projectElement => {
-  const id = projectElement.id.slice(8);
-  const name = projectElement.querySelector('h2')!.textContent!;
-  const description = projectElement.querySelector('p')!.textContent!;
-  return { id, name, description };
-});
+const hydrateProjectFromDomElement = (element: HTMLElement): Project => {
+  const id = element.id.slice(8);
+  const name = element.querySelector('h2')!.textContent!;
+  const description = element.querySelector('p')!.textContent!;
+  const chips = element.querySelector('.chips')!;
+  const languages = Array.from(chips.querySelectorAll('.chip-language')).map(
+    language => language.textContent!.trim(),
+  );
+  const frameworks = Array.from(chips.querySelectorAll('.chip-framework')).map(
+    framework => framework.textContent!.trim(),
+  );
+  return {
+    id,
+    name,
+    description,
+    languages,
+    frameworks,
+    element,
+  };
+};
+
+const projects: Project[] = Array.from(projectsElements).map(
+  hydrateProjectFromDomElement,
+);
 
 const fuse = new Fuse(projects, {
-  keys: ['name', 'description'],
+  keys: ['name', 'description', 'languages', 'frameworks'],
   // We need to force-cast due to a bug in Fuse.js type definitions.
   // See: https://github.com/krisk/Fuse/issues/650
 } as Fuse.IFuseOptions<Project>);
@@ -33,20 +63,16 @@ const updateProjectsView = () => {
       : projects.map(project => [project.id, project]),
   );
 
-  projectsElements.forEach(projectElement => {
-    const projectId = projectElement.id.slice(8);
-    const projectChips = projectElement.querySelector('.chips')!;
-    const projectTechnologies = Array.from(
-      projectChips.querySelectorAll('.technology-chip'),
-    );
-    const hasSearchMatch = Boolean(currentSearchProjectsKeyVal[projectId]);
-    const hasTechnology =
-      Object.keys(selectedTechnologies).length < 1 ||
-      projectTechnologies.some(
-        projectTechnology =>
-          selectedTechnologies[projectTechnology.textContent!.trim()],
-      );
-    projectElement.hidden = !hasSearchMatch || !hasTechnology;
+  projects.forEach(({ id, languages, frameworks, element }) => {
+    const hasSearchMatch = Boolean(currentSearchProjectsKeyVal[id]);
+    const hasLanguage =
+      Object.keys(selectedLanguages).length < 1 ||
+      languages.some(language => selectedLanguages[language]);
+    const hasFramework =
+      Object.keys(selectedFrameworks).length < 1 ||
+      frameworks.some(framework => selectedFrameworks[framework]);
+
+    element.hidden = !hasSearchMatch || !hasLanguage || !hasFramework;
   });
 };
 
@@ -66,24 +92,42 @@ const parseSelectionMapFromUrl = (key: string) =>
       .map(val => [val, true]),
   );
 
-const selectedTechnologies: Record<string, boolean> =
-  parseSelectionMapFromUrl('technologies');
+const selectedLanguages: Record<string, boolean> =
+  parseSelectionMapFromUrl('languages');
+const selectedFrameworks: Record<string, boolean> =
+  parseSelectionMapFromUrl('frameworks');
 
-const toggleTechnology = (technology: string) => {
-  if (selectedTechnologies[technology]) {
-    delete selectedTechnologies[technology];
+const toggleLanguage = (language: string) => {
+  if (selectedLanguages[language]) {
+    delete selectedLanguages[language];
   } else {
-    selectedTechnologies[technology] = true;
+    selectedLanguages[language] = true;
   }
   requestAnimationFrame(() => {
-    const selectedTechnologiesArray = Object.keys(selectedTechnologies);
-    if (selectedTechnologiesArray.length > 0) {
-      const updatedTechnologiesFilter = selectedTechnologiesArray.join(',');
-      currentUrl.searchParams.set('technologies', updatedTechnologiesFilter);
-    } else {
-      currentUrl.searchParams.delete('technologies');
-    }
-    window.history.replaceState({}, '', currentUrl.href);
+    updateProjectsView();
+    const selectedLanguagesArray = Object.keys(selectedLanguages);
+    updateSearchParam(
+      'languages',
+      selectedLanguagesArray.length > 0 ? selectedLanguagesArray.join(',') : '',
+    );
+  });
+};
+
+const toggleFramework = (framework: string) => {
+  if (selectedFrameworks[framework]) {
+    delete selectedFrameworks[framework];
+  } else {
+    selectedFrameworks[framework] = true;
+  }
+  requestAnimationFrame(() => {
+    updateProjectsView();
+    const selectedFrameworksArray = Object.keys(selectedFrameworks);
+    updateSearchParam(
+      'frameworks',
+      selectedFrameworksArray.length > 0
+        ? selectedFrameworksArray.join(',')
+        : '',
+    );
   });
 };
 
@@ -96,29 +140,45 @@ export const setupFilters = () => {
   searchBar.value = currentSearch;
   searchBar.addEventListener('input', event => {
     currentSearch = (event.target as HTMLInputElement).value;
-    updateProjectsView();
     requestAnimationFrame(() => {
-      currentUrl.searchParams.set('search', currentSearch);
-      window.history.replaceState({}, '', currentUrl.href);
+      updateProjectsView();
+      updateSearchParam('search', currentSearch);
     });
   });
 
-  // Setup technologies chips
+  // Setup languages chips
   document
-    .querySelectorAll<HTMLUListElement>('#technologies > li')
-    .forEach(technologyElement => {
-      const checkbox = technologyElement.querySelector<HTMLInputElement>(
+    .querySelectorAll<HTMLUListElement>('#languages > li')
+    .forEach(languageElement => {
+      const checkbox = languageElement.querySelector<HTMLInputElement>(
         'input[type="checkbox"]',
       )!;
-      const technology = technologyElement.textContent?.trim() || '';
+      const language = languageElement.textContent?.trim() || '';
 
-      toggleChip(technologyElement, selectedTechnologies[technology]);
+      toggleChip(languageElement, selectedLanguages[language]);
 
-      technologyElement.addEventListener('click', () => {
-        toggleTechnology(technology);
-        checkbox.checked = selectedTechnologies[technology];
-        toggleChip(technologyElement, selectedTechnologies[technology]);
-        updateProjectsView();
+      languageElement.addEventListener('click', () => {
+        toggleLanguage(language);
+        checkbox.checked = selectedLanguages[language];
+        toggleChip(languageElement, selectedLanguages[language]);
+      });
+    });
+
+  // Setup frameworks chips
+  document
+    .querySelectorAll<HTMLUListElement>('#frameworks > li')
+    .forEach(frameworkElement => {
+      const checkbox = frameworkElement.querySelector<HTMLInputElement>(
+        'input[type="checkbox"]',
+      )!;
+      const framework = frameworkElement.textContent?.trim() || '';
+
+      toggleChip(frameworkElement, selectedFrameworks[framework]);
+
+      frameworkElement.addEventListener('click', () => {
+        toggleFramework(framework);
+        checkbox.checked = selectedFrameworks[framework];
+        toggleChip(frameworkElement, selectedFrameworks[framework]);
       });
     });
 };

@@ -61,21 +61,34 @@
       <label class="heading" for="filter-search">Search</label>
       <input name="filter-search" id="filter-search" class="material">
       <fieldset>
-        <legend class="heading">Filter by technology</legend>
-        <ul id="technologies" class="chips">
-          <% const technologies = Array.from(new Set(projects.flatMap(({ technologies }) => technologies))) %>
-          <% technologies.forEach(technology => { %>
+        <legend class="heading">Filter by language</legend>
+        <ul id="languages" class="chips">
+          <% const languages = Array.from(new Set(projects.flatMap(({ languages }) => languages))) %>
+          <% languages.forEach(language => { %>
             <li class="checkable">
-              <input type="checkbox" name="filter-technology" id="filter-technology-<%= technology %>">
+              <input type="checkbox" name="filter-language" id="filter-language-<%= language %>">
               <svg class="check" viewBox="0 0 24 24"><path d="M21 7 9 19l-5-5 1-2 4 4L20 6l1 1Z"/></svg>
-              <label for="filter-technology-<%= technology %>"><%= technology %></label>
+              <label for="filter-language-<%= language %>"><%= language %></label>
+            </li>
+          <% }) %>
+        </ul>
+      </fieldset>
+      <fieldset>
+        <legend class="heading">Filter by library/framework</legend>
+        <ul id="frameworks" class="chips">
+          <% const frameworks = Array.from(new Set(projects.flatMap(({ frameworks }) => frameworks))) %>
+          <% frameworks.forEach(language => { %>
+            <li class="checkable">
+              <input type="checkbox" name="filter-framework" id="filter-framework-<%= language %>">
+              <svg class="check" viewBox="0 0 24 24"><path d="M21 7 9 19l-5-5 1-2 4 4L20 6l1 1Z"/></svg>
+              <label for="filter-framework-<%= language %>"><%= language %></label>
             </li>
           <% }) %>
         </ul>
       </fieldset>
     </section>
     <ul id="projects">
-      <% projects.forEach(({ id, name, description, link, source, technologies, icon }) => { %>
+      <% projects.forEach(({ id, name, description, link, source, type, languages, frameworks, icon }) => { %>
         <li id="project-<%= id %>">
           <div class="header">
             <%
@@ -118,14 +131,33 @@
               >
             </picture>
             <ul class="chips scrollable">
-              <% technologies.forEach(technology => { %>
-                <li class="technology-chip"><%= technology %></li>
+              <% languages.forEach(language => { %>
+                <li class="chip-language"><%= language %></li>
+              <% }) %>
+              <% frameworks.forEach(framework => { %>
+                <li class="chip-framework"><%= framework %></li>
               <% }) %>
             </ul>
             <h2><%= name %></h2>
           </div>
           <p><%= description %></p>
-          <a href="<%= link %>" target="<%= id %>"><%= name %></a>
+          <div class="actions">
+            <% if (source) { %>
+              <a href="<%= source %>" target="source-<%= id %>">View source code</a>
+            <% } %>
+            <% if (link) { %>
+              <a href="<%= link %>" target="link-<%= id %>">
+                <%=
+                  {
+                    'app-web': 'Open',
+                    'app-cross-platform': 'Download',
+                    'app-windows': 'Download',
+                    'bot-telegram': 'Launch',
+                  }[type]
+                %>
+              </a>
+            <% } %>
+          </div>
         </li>
       <% }) %>
     </ul>
