@@ -2,7 +2,7 @@ name: Build and deploy
 'on':
   push:
     branches:
-      - master
+      - main
       - 'feature/**'
       - 'fix/**'
 jobs:
@@ -22,7 +22,7 @@ jobs:
       - name: Build
         run: yarn build
       - name: Deploy
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         uses: Dabolus/deploy-firebase@master
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
