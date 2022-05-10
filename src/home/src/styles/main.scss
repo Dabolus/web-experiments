@@ -3,7 +3,7 @@
 h1,
 #filters,
 #projects {
-  margin: 32px;
+  margin: 16px;
 }
 
 #projects {
@@ -12,7 +12,7 @@ h1,
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 32px;
+  gap: 16px;
 
   > li {
     background: #484848;
@@ -151,4 +151,16 @@ input {
   appearance: none;
   background: rgba(0, 0, 0, 0.6);
   border: 1px solid #fff;
+}
+
+@media (min-width: 640px) {
+  h1,
+  #filters,
+  #projects {
+    margin: 32px;
+  }
+
+  #projects {
+    gap: 32px;
+  }
 }
