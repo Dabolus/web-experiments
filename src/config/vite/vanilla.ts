@@ -32,7 +32,24 @@ const createConfig = async (
       markdownPlugin({ mode: [Mode.HTML, Mode.TOC] }),
       tree(),
       createHtmlPlugin({
-        minify: true,
+        minify: {
+          html5: true,
+          collapseWhitespace: true,
+          collapseBooleanAttributes: true,
+          decodeEntities: true,
+          minifyCSS: true,
+          minifyJS: true,
+          minifyURLs: true,
+          removeAttributeQuotes: true,
+          removeComments: true,
+          removeEmptyAttributes: true,
+          removeRedundantAttributes: true,
+          removeScriptTypeAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          sortAttributes: true,
+          sortClassName: true,
+          useShortDoctype: true,
+        },
         inject: {
           data: {
             base,
@@ -41,6 +58,19 @@ const createConfig = async (
         },
         template: 'src/index.html',
       }),
+      // Workaround Vite quotes escaping issue
+      {
+        name: 'vite-plugin-fix-inline-background-image-urls',
+        enforce: 'post',
+        transformIndexHtml: {
+          enforce: 'post',
+          transform: html =>
+            html.replace(
+              /style=\"background-image:url\("([^"]+)"/g,
+              'style="background-image:url(&#34;$1&#34;',
+            ),
+        },
+      },
       ...(plugins || []),
     ],
     build: {
