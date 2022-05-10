@@ -17,8 +17,8 @@
     "cbor-web": "^8.1.0",
     "date-fns": "^2.28.0",
     "pako": "^2.0.4",
-    "preact": "^10.6.6",
-    "preact-render-to-string": "^5.1.20",
+    "preact": "^10.7.2",
+    "preact-render-to-string": "^5.2.0",
     "qr.js": "^0.0.0",
     "wouter-preact": "^2.8.0-alpha.2"
   },

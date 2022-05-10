@@ -15,12 +15,12 @@
     "esbuild": "esbuild --platform=node --target=node16 --outdir=lib --format=cjs --external:firebase-functions --external:firebase-admin"
   },
   "dependencies": {
-    "firebase-admin": "^9.8.0",
-    "firebase-functions": "^3.14.1"
+    "firebase-admin": "^10.2.0",
+    "firebase-functions": "^3.21.0"
   },
   "devDependencies": {
-    "esbuild": "^0.14.23",
-    "firebase-functions-test": "^0.2.0",
+    "esbuild": "^0.14.38",
+    "firebase-functions-test": "^2.0.1",
     "npm-run-all": "^4.1.5",
     "wait-on": "^6.0.1"
   },
