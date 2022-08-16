@@ -11,6 +11,13 @@
         "source": "**",
         "destination": "/index.html"
       }
+    ],
+    "redirects": [
+      {
+        "source": "/hi",
+        "destination": "https://giorgio.garasto.me/en/contacts",
+        "type": 301
+      }
     ]
   },
   "emulators": {
