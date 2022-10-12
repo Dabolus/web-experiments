@@ -1383,6 +1383,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dabolus/portfolio-data@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@dabolus/portfolio-data@npm:0.6.0"
+  checksum: 5aa5a610b7ecda7373eebafe0ff187dc7fca19db4f5ed3896aad5bf2302ec60ae77aa5c316118474a28dcfa40bca3e9b329a1cb714574f3ed7720abda43a0130
+  languageName: node
+  linkType: hard
+
 "@firebase/analytics-compat@npm:0.1.10":
   version: 0.1.10
   resolution: "@firebase/analytics-compat@npm:0.1.10"
@@ -3098,6 +3105,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@webexp/home@workspace:src/home"
   dependencies:
+    "@dabolus/portfolio-data": ^0.6.0
     "@types/js-yaml": ^4.0.5
     "@types/node": ^17.0.31
     "@webexp/config": "workspace:^"

@@ -84,7 +84,7 @@
       <fieldset>
         <legend class="heading">Filter by library/framework</legend>
         <ul id="frameworks" class="chips">
-          <% const frameworks = Array.from(new Set(projects.flatMap(({ frameworks }) => frameworks))) %>
+          <% const frameworks = Array.from(new Set(projects.flatMap(({ frameworks = [] }) => frameworks))) %>
           <% frameworks.forEach(language => { %>
             <li class="checkable">
               <input type="checkbox" name="filter-framework" id="filter-framework-<%= language %>">
@@ -94,9 +94,22 @@
           <% }) %>
         </ul>
       </fieldset>
+      <fieldset>
+        <legend class="heading">Filter by APIs technology/paradigm</legend>
+        <ul id="frameworks" class="chips">
+          <% const apiItems = Array.from(new Set(projects.flatMap(({ api = [] }) => api))) %>
+          <% apiItems.forEach(apiItem => { %>
+            <li class="checkable">
+              <input type="checkbox" name="filter-framework" id="filter-framework-<%= apiItem %>">
+              <svg class="check" viewBox="0 0 24 24"><path d="M21 7 9 19l-5-5 1-2 4 4L20 6l1 1Z"/></svg>
+              <label for="filter-framework-<%= apiItem %>"><%= apiItem %></label>
+            </li>
+          <% }) %>
+        </ul>
+      </fieldset>
     </section>
     <ul id="projects">
-      <% projects.forEach(({ id, name, description, link, source, type, languages, frameworks, icon }) => { %>
+      <% projects.forEach(({ id, name, description, link, source, type, languages, frameworks = [], api = [], icon }) => { %>
         <li id="project-<%= id %>">
           <div class="header">
             <%
@@ -144,6 +157,9 @@
               <% }) %>
               <% frameworks.forEach(framework => { %>
                 <li class="chip-framework"><%= framework %></li>
+              <% }) %>
+              <% api.forEach(apiItem => { %>
+                <li class="chip-framework"><%= apiItem %></li>
               <% }) %>
             </ul>
             <h2><%= name %></h2>
