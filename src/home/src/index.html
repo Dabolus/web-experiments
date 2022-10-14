@@ -109,40 +109,51 @@
       </fieldset>
     </section>
     <ul id="projects">
+      <%
+        const iconFormatsExtensionsExceptions = {
+          [ProjectIconFormat.PNG_PIXELATED]: 'png',
+        };
+
+        const iconFormatsMediaTypesExceptions = {
+          [ProjectIconFormat.PNG_PIXELATED]: 'png',
+          [ProjectIconFormat.SVG]: 'svg+xml',
+          [ProjectIconFormat.JPEG]: 'jpeg',
+        };
+
+        const typeToActionMap = {
+          [ProjectType.APP_WEB]: {
+            icon: 'public',
+            label: 'Visit',
+          },
+          [ProjectType.APP_CROSS_PLATFORM]: {
+            icon: 'download',
+            label: 'Download',
+          },
+          [ProjectType.APP_WINDOWS]: {
+            icon: 'download',
+            label: 'Download',
+          },
+          [ProjectType.BOT_TELEGRAM]: {
+            icon: 'open_in_new',
+            label: 'Launch',
+          },
+        };
+      %>
       <% projects.forEach(({ id, name, description, link, source, type, languages, frameworks = [], api = [], icon }) => { %>
+        <% const fallbackIconFormat = icon.formats.at(-1); %>
         <li id="project-<%= id %>">
           <div class="header">
-            <%
-              const projectImageFormats = [
-                {
-                  name: 'svg',
-                  type: 'image/svg+xml',
-                },
-                {
-                  name: 'jxl',
-                  type: 'image/jxl',
-                },
-                {
-                  name: 'webp',
-                  type: 'image/webp',
-                },
-                {
-                  name: 'png',
-                  type: 'image/png',
-                },
-                {
-                  name: 'jpg',
-                  type: 'image/jpeg',
-                },
-              ].filter(format => icon[format.name]);
-            %>
             <picture>
-              <% projectImageFormats.forEach(format => { %>
-                <source srcset="<%= icon[format.name] %>" type="<%= format.type %>">
+              <% icon.formats.forEach(format => { %>
+                <source
+                  srcset="../images/projects/<%= id %>.<%= iconFormatsExtensionsExceptions[format] || format %>"
+                  type="image/<%= iconFormatsMediaTypesExceptions[format] || format %>"
+                >
               <% }) %>
               <img
+                <%- icon.formats.includes(ProjectIconFormat.PNG_PIXELATED) ? 'class="pixelated"' : '' %>
                 style="background-image:url(&#34;<%- icon.placeholder %>&#34;);"
-                src="<%= icon[projectImageFormats[projectImageFormats.length - 1].name] %>"
+                src="../images/projects/<%= id %>.<%= iconFormatsExtensionsExceptions[fallbackIconFormat] || fallbackIconFormat %>"
                 width="128"
                 height="128"
                 alt="<%= name %>"
@@ -166,26 +177,6 @@
           </div>
           <p><%= description %></p>
           <div class="actions">
-            <%
-              const typeToActionMap = {
-                'app-web': {
-                  icon: 'public',
-                  label: 'Visit',
-                },
-                'app-cross-platform': {
-                  icon: 'download',
-                  label: 'Download',
-                },
-                'app-windows': {
-                  icon: 'download',
-                  label: 'Download',
-                },
-                'bot-telegram': {
-                  icon: 'open_in_new',
-                  label: 'Launch',
-                },
-              };
-            %>
             <% if (source) { %>
               <a href="<%= source %>" target="source-<%= id %>">
                 <span class="material-symbols-outlined">code</span>

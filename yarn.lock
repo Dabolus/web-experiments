@@ -1383,10 +1383,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dabolus/portfolio-data@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "@dabolus/portfolio-data@npm:0.6.0"
-  checksum: 5aa5a610b7ecda7373eebafe0ff187dc7fca19db4f5ed3896aad5bf2302ec60ae77aa5c316118474a28dcfa40bca3e9b329a1cb714574f3ed7720abda43a0130
+"@dabolus/portfolio-data@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "@dabolus/portfolio-data@npm:0.8.0"
+  checksum: 300ae85927104f31345c62b57fa0dadc6fad6b57d74903170bd3e1bebfaed3b6c99ceb476f57b69e9f757ab2cd6f6597c1771ac8ceb8f543e7d63c9173b5a24b
   languageName: node
   linkType: hard
 
@@ -3105,7 +3105,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@webexp/home@workspace:src/home"
   dependencies:
-    "@dabolus/portfolio-data": ^0.6.0
+    "@dabolus/portfolio-data": ^0.8.0
     "@types/js-yaml": ^4.0.5
     "@types/node": ^17.0.31
     "@webexp/config": "workspace:^"
