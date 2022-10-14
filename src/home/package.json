@@ -12,17 +12,17 @@
     "build": "vite build"
   },
   "dependencies": {
-    "fuse.js": "^6.6.1"
+    "fuse.js": "^6.6.2"
   },
   "devDependencies": {
     "@dabolus/portfolio-data": "^0.8.0",
     "@types/js-yaml": "^4.0.5",
-    "@types/node": "^17.0.31",
+    "@types/node": "^18.8.5",
     "@webexp/config": "workspace:^",
     "js-yaml": "^4.1.0",
-    "sass": "^1.51.0",
+    "sass": "^1.55.0",
     "tosource": "^2.0.0-alpha.3",
-    "vite": "^2.9.8",
+    "vite": "^3.1.8",
     "vite-plugin-html": "^3.2.0"
   }
 }
