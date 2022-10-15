@@ -146,14 +146,14 @@
             <picture>
               <% icon.formats.forEach(format => { %>
                 <source
-                  srcset="../images/projects/<%= id %>.<%= iconFormatsExtensionsExceptions[format] || format %>"
+                  srcset="./assets/images/projects/<%= id %>.<%= iconFormatsExtensionsExceptions[format] || format %>"
                   type="image/<%= iconFormatsMediaTypesExceptions[format] || format %>"
                 >
               <% }) %>
               <img
                 <%- icon.formats.includes(ProjectIconFormat.PNG_PIXELATED) ? 'class="pixelated"' : '' %>
                 style="background-image:url(&#34;<%- icon.placeholder %>&#34;);"
-                src="../images/projects/<%= id %>.<%= iconFormatsExtensionsExceptions[fallbackIconFormat] || fallbackIconFormat %>"
+                src="./assets/images/projects/<%= id %>.<%= iconFormatsExtensionsExceptions[fallbackIconFormat] || fallbackIconFormat %>"
                 width="128"
                 height="128"
                 alt="<%= name %>"

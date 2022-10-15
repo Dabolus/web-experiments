@@ -1392,10 +1392,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dabolus/portfolio-data@npm:^0.8.0":
-  version: 0.8.0
-  resolution: "@dabolus/portfolio-data@npm:0.8.0"
-  checksum: 300ae85927104f31345c62b57fa0dadc6fad6b57d74903170bd3e1bebfaed3b6c99ceb476f57b69e9f757ab2cd6f6597c1771ac8ceb8f543e7d63c9173b5a24b
+"@dabolus/portfolio-data@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "@dabolus/portfolio-data@npm:0.9.0"
+  checksum: f6ab6512f1da7d0ea59041b5ada7ae0ec7d365f57f36c7a7a5ae33c011b43bd1d5aca8fc3571559fd4cf07161e1b631307473d6a5331a0e9502fb107983d5acd
   languageName: node
   linkType: hard
 
@@ -3196,7 +3196,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@webexp/home@workspace:src/home"
   dependencies:
-    "@dabolus/portfolio-data": ^0.8.0
+    "@dabolus/portfolio-data": ^0.9.0
     "@types/js-yaml": ^4.0.5
     "@types/node": ^18.8.5
     "@webexp/config": "workspace:^"
@@ -3206,6 +3206,7 @@ __metadata:
     tosource: ^2.0.0-alpha.3
     vite: ^3.1.8
     vite-plugin-html: ^3.2.0
+    vite-plugin-static-copy: ^0.9.0
   languageName: unknown
   linkType: soft
 
@@ -17274,6 +17275,20 @@ __metadata:
   peerDependencies:
     vite: ^2.0.0 || ^3.0.0
   checksum: 83d336fcc48ef471814fb4f78a41a54e9237dfdd8d05e13fc5a9cff4c27aaa43e191955fbcfab5f822e60f4512c4140d4b9798fb7b0564ce92dbec562e9cc553
+  languageName: node
+  linkType: hard
+
+"vite-plugin-static-copy@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "vite-plugin-static-copy@npm:0.9.0"
+  dependencies:
+    chokidar: ^3.5.3
+    fast-glob: ^3.2.11
+    fs-extra: ^10.1.0
+    picocolors: ^1.0.0
+  peerDependencies:
+    vite: ^3.0.0
+  checksum: f1e8110c196d01d43732e42830844e7563168f992b6f274b18117fba2efa37c69ecebc661bcef7a08e0a62bb85918c55e0e84ee9c260f96301b49ed87b58e73b
   languageName: node
   linkType: hard
 
