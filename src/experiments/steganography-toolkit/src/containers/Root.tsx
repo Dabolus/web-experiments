@@ -6,7 +6,7 @@ import React, {
   FunctionComponent,
 } from 'react';
 
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { Snackbar, Button } from '@material-ui/core';
 
@@ -51,21 +51,25 @@ const Root: FunctionComponent = () => {
         onClose={handleSidebarClose}
       >
         <Suspense fallback={<Loader />}>
-          <Switch>
-            <Route exact path="/">
-              <Home onMenuButtonClick={handleMenuButtonClick} />
-            </Route>
+          <Routes>
+            <Route
+              path="/"
+              element={<Home onMenuButtonClick={handleMenuButtonClick} />}
+            />
 
-            <Route path="/text">Text</Route>
+            <Route path="/text/*" element={<>Text</>} />
 
-            <Route path="/image">Image</Route>
+            <Route path="/image/*" element={<>Image</>} />
 
-            <Route path="/music">
-              <MusicRouter onMenuButtonClick={handleMenuButtonClick} />
-            </Route>
+            <Route
+              path="/music/*"
+              element={
+                <MusicRouter onMenuButtonClick={handleMenuButtonClick} />
+              }
+            />
 
-            <Redirect to="/" />
-          </Switch>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
         </Suspense>
       </SidebarLayout>
 

@@ -33,10 +33,8 @@ import SolresolOutput, {
   SolresolOutputProps,
 } from '../../components/music/SolresolOutput';
 
-const {
-  computeSolresolOutput,
-  computeEnglishOutput,
-} = new (SolresolWorker as any)() as typeof SolresolWorker;
+const { computeSolresolOutput, computeEnglishOutput } =
+  new (SolresolWorker as any)() as typeof SolresolWorker;
 
 const fullSolresolCodes = [
   undefined,
@@ -77,11 +75,11 @@ const convertToSolresolForm = (
 ): ReactNode => {
   switch (type) {
     case 'full':
-      return [...word].map((code) => fullSolresolCodes[Number(code)]);
+      return [...word].map(code => fullSolresolCodes[Number(code)]);
     case 'abbreviated':
-      return [...word].map((code) => abbreviatedSolresolCodes[Number(code)]);
+      return [...word].map(code => abbreviatedSolresolCodes[Number(code)]);
     case 'english':
-      return [...word].map((code) => englishSolresolCodes[Number(code)]);
+      return [...word].map(code => englishSolresolCodes[Number(code)]);
     case 'numeric':
       return word;
     case 'color':
@@ -113,13 +111,12 @@ const convertToSolresolForm = (
   }
 };
 
-const Solresol: FunctionComponent<TopbarLayoutProps> = (props) => {
+const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
   const [input, setInput] = useState<string>('');
   const [hint, setHint] = useState<string>('');
   const [output, setOutput] = useState<SolresolWorker.TranslationOutput>([]);
-  const [outputType, setOutputType] = useState<
-    SolresolWorker.SolresolOutputType
-  >('full');
+  const [outputType, setOutputType] =
+    useState<SolresolWorker.SolresolOutputType>('full');
   const [swapped, setSwapped] = useState(false);
 
   const [debouncedInput] = useDebounce(input, 300);
@@ -144,11 +141,11 @@ const Solresol: FunctionComponent<TopbarLayoutProps> = (props) => {
   }, [debouncedInput, swapped]);
 
   const handleSwapClick = useCallback(() => {
-    setSwapped((prev) => !prev);
+    setSwapped(prev => !prev);
   }, []);
 
   const handleInput = useCallback<NonNullable<OutlinedInputProps['onInput']>>(
-    (event) => {
+    event => {
       setInput((event.target as HTMLTextAreaElement).value);
     },
     [],
@@ -167,7 +164,7 @@ const Solresol: FunctionComponent<TopbarLayoutProps> = (props) => {
 
   const handleOutputTypeChange = useCallback<
     NonNullable<SelectProps['onChange']>
-  >((event) => {
+  >(event => {
     setOutputType(event.target.value as SolresolWorker.SolresolOutputType);
   }, []);
 
