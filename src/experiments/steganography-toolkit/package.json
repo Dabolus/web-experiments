@@ -1,0 +1,36 @@
+{
+  "name": "@webexp/steganography-toolkit",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@types/node": "^18.11.0",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "abcjs": "6.1.6",
+    "file-saver": "^2.0.5",
+    "fuse.js": "^6.6.2",
+    "lamejs": "^1.2.1",
+    "preact": "^10.11.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "5.2.0",
+    "use-debounce": "^8.0.4",
+    "workbox-core": "^6.5.4",
+    "workbox-precaching": "^6.5.4",
+    "workbox-routing": "^6.5.4"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.4.0",
+    "@types/file-saver": "^2.0.5",
+    "@types/react-router-dom": "5.1.5",
+    "firebase-tools": "^11.14.4",
+    "typescript": "^4.8.4",
+    "vite": "^3.1.8"
+  }
+}
