@@ -7,7 +7,7 @@ await fs.rm('dist', { recursive: true, force: true });
 
 // Build all the things
 await execute(
-  "yarn workspaces foreach --exclude 'web-experiments,@webexp/config' run build",
+  "yarn workspaces foreach -p --exclude 'web-experiments,@webexp/config' run build",
 );
 
 // Move home page to the root dist directory
