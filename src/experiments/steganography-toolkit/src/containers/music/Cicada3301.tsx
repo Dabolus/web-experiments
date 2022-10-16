@@ -27,11 +27,16 @@ import Cicada3301Form, {
 } from '../../components/music/Cicada3301Form';
 import Abc, { AbcProps } from '../../components/music/Abc';
 import Loader from '../../components/Loader';
+import { setupWorkerClient } from '../../workers/utils';
+import type { Cicada3301Worker } from '../../workers/music/cicada3301.worker';
 
-import * as Cicada3301Worker from '../../workers/music/cicada3301.worker';
-
-const { computeAbc, encodeMp3 } =
-  new (Cicada3301Worker as any)() as typeof Cicada3301Worker;
+const cicada3301Worker = setupWorkerClient<Cicada3301Worker>(
+  new Worker(
+    new URL('../../workers/music/cicada3301.worker.ts', import.meta.url),
+    { type: 'module' },
+  ),
+  ['computeAbc', 'encodeMp3'],
+);
 
 const Cicada3301: FunctionComponent<TopbarLayoutProps> = props => {
   const [data, setData] = useState<Cicada3301FormValue>();
@@ -48,7 +53,7 @@ const Cicada3301: FunctionComponent<TopbarLayoutProps> = props => {
   useEffect(() => {
     const compute = async () => {
       if (debouncedData) {
-        const computedAbc = await computeAbc(debouncedData);
+        const computedAbc = await cicada3301Worker.computeAbc(debouncedData);
 
         setInput(computedAbc);
       }
@@ -167,7 +172,7 @@ const Cicada3301: FunctionComponent<TopbarLayoutProps> = props => {
 
     const wavUrl = await getWavUrl();
 
-    const mp3 = await encodeMp3(wavUrl);
+    const mp3 = await cicada3301Worker.encodeMp3(wavUrl);
 
     saveAs(mp3, `${data?.title || 'song'}.mp3`);
 

@@ -27,14 +27,25 @@ import { useDebounce } from 'use-debounce';
 
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
 import Page from '../../components/Page';
+import { setupWorkerClient } from '../../workers/utils';
 
-import * as SolresolWorker from '../../workers/music/solresol.worker';
 import SolresolOutput, {
   SolresolOutputProps,
 } from '../../components/music/SolresolOutput';
 
-const { computeSolresolOutput, computeEnglishOutput } =
-  new (SolresolWorker as any)() as typeof SolresolWorker;
+import type {
+  SolresolWorker,
+  SolresolOutputType,
+  TranslationOutput,
+} from '../../workers/music/solresol.worker';
+
+const solresolWorker = setupWorkerClient<SolresolWorker>(
+  new Worker(
+    new URL('../../workers/music/solresol.worker.ts', import.meta.url),
+    { type: 'module' },
+  ),
+  ['computeSolresolOutput', 'computeEnglishOutput'],
+);
 
 const fullSolresolCodes = [
   undefined,
@@ -71,7 +82,7 @@ const colorSolresolCodes = [
 const convertToSolresolForm = (
   word: string,
   classes: Record<string, string>,
-  type: SolresolWorker.SolresolOutputType,
+  type: SolresolOutputType,
 ): ReactNode => {
   switch (type) {
     case 'full':
@@ -114,9 +125,8 @@ const convertToSolresolForm = (
 const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
   const [input, setInput] = useState<string>('');
   const [hint, setHint] = useState<string>('');
-  const [output, setOutput] = useState<SolresolWorker.TranslationOutput>([]);
-  const [outputType, setOutputType] =
-    useState<SolresolWorker.SolresolOutputType>('full');
+  const [output, setOutput] = useState<TranslationOutput>([]);
+  const [outputType, setOutputType] = useState<SolresolOutputType>('full');
   const [swapped, setSwapped] = useState(false);
 
   const [debouncedInput] = useDebounce(input, 300);
@@ -129,9 +139,9 @@ const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
         return;
       }
 
-      const { output: possibleOutput, hint: possibleHint } = swapped
-        ? await computeEnglishOutput(debouncedInput)
-        : await computeSolresolOutput(debouncedInput);
+      const { output: possibleOutput, hint: possibleHint = '' } = swapped
+        ? await solresolWorker.computeEnglishOutput(debouncedInput)
+        : await solresolWorker.computeSolresolOutput(debouncedInput);
 
       setOutput(possibleOutput);
       setHint(possibleHint !== debouncedInput ? possibleHint : '');
@@ -155,17 +165,14 @@ const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
     setInput(hint);
   }, [hint]);
 
-  const handleOutputChange = useCallback(
-    (output: SolresolWorker.TranslationOutput) => {
-      setOutput(output);
-    },
-    [],
-  );
+  const handleOutputChange = useCallback((output: TranslationOutput) => {
+    setOutput(output);
+  }, []);
 
   const handleOutputTypeChange = useCallback<
     NonNullable<SelectProps['onChange']>
   >(event => {
-    setOutputType(event.target.value as SolresolWorker.SolresolOutputType);
+    setOutputType(event.target.value as SolresolOutputType);
   }, []);
 
   const formatTranslation = useCallback<

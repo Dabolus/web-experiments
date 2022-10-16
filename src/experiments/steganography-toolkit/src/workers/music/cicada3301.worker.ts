@@ -1,15 +1,22 @@
-import type {
-  Language,
-  Cicada3301FormValue,
-} from '../../components/music/Cicada3301Form';
+import { Mp3Encoder } from 'lamejs';
 
 import { nextPrime } from '../../helpers';
 
 import letterNotesMapping from '../../static/cicada3301/letterNotesMapping.json';
 
-import { Mp3Encoder } from 'lamejs';
+import { setupWorkerServer } from '../utils';
+
+import type {
+  Language,
+  Cicada3301FormValue,
+} from '../../components/music/Cicada3301Form';
 
 // TODO: this code was rushed and needs to be improved
+
+export interface Cicada3301Worker {
+  computeAbc(data: Cicada3301FormValue): Promise<string>;
+  encodeMp3(wavUrl: string): Promise<Blob>;
+}
 
 enum TieType {
   NONE,
@@ -162,3 +169,8 @@ export const encodeMp3 = async (wavUrl: string): Promise<Blob> => {
 
   return new Blob(mp3, { type: 'audio/mp3' });
 };
+
+setupWorkerServer<Cicada3301Worker>({
+  computeAbc,
+  encodeMp3,
+});

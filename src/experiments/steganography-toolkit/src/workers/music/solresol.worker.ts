@@ -2,6 +2,41 @@ import Fuse from 'fuse.js';
 
 import solresolDictionary from '../../static/solresol/dictionary.json';
 
+import { setupWorkerServer } from '../utils';
+
+export type SolresolOutputType =
+  | 'full'
+  | 'abbreviated'
+  | 'english'
+  | 'numeric'
+  | 'color'
+  | 'stenographic';
+
+export interface TranslationOutputItem {
+  word: string;
+  meanings: string[];
+  preferred?: boolean;
+}
+
+export type TranslationOutput = (string | TranslationOutputItem[])[];
+
+export interface DictionaryItem {
+  solresol: string;
+  english: string[];
+}
+
+export interface TranslationOutputWithHint {
+  output: TranslationOutput;
+  hint?: string;
+}
+
+export type Translator = (input: string) => Promise<TranslationOutputWithHint>;
+
+export interface SolresolWorker {
+  computeSolresolOutput: Translator;
+  computeEnglishOutput: Translator;
+}
+
 const flattenedSolresolDictionary = solresolDictionary.flatMap(
   ({ english = [], ...rest }) =>
     english.map((word: string) => ({ english: word, ...rest })),
@@ -24,27 +59,6 @@ const solresolFuse = new Fuse<{ solresol: string; english: string }>(
     includeScore: true,
   },
 );
-
-export type SolresolOutputType =
-  | 'full'
-  | 'abbreviated'
-  | 'english'
-  | 'numeric'
-  | 'color'
-  | 'stenographic';
-
-export interface TranslationOutputItem {
-  word: string;
-  meanings: string[];
-  preferred?: boolean;
-}
-
-export type TranslationOutput = (string | TranslationOutputItem[])[];
-
-export interface DictionaryItem {
-  solresol: string;
-  english: string[];
-}
 
 export const computeSolresolOutput = async (
   input: string,
@@ -77,13 +91,11 @@ export const computeSolresolOutput = async (
           b.english.indexOf(word.toLowerCase()),
       );
 
-      const [
-        preferredTranslation,
-        ...otherTranslations
-      ] = sortedTranslations.map(({ solresol: word, english: meanings }) => ({
-        word,
-        meanings,
-      }));
+      const [preferredTranslation, ...otherTranslations] =
+        sortedTranslations.map(({ solresol: word, english: meanings }) => ({
+          word,
+          meanings,
+        }));
 
       output.push(
         input.slice(previousIndex, wordRegex.lastIndex - word.length),
@@ -174,22 +186,18 @@ export const computeEnglishOutput = async (
         const normalizedSolresol =
           inputType === 'numeric'
             ? solresol
-            : [...solresol]
-                .map((code) => inputTypeMap[inputType][code])
-                .join('');
+            : [...solresol].map(code => inputTypeMap[inputType][code]).join('');
 
         return normalizedSolresol === word.toLowerCase();
       },
     );
 
     if (translation) {
-      const [
-        preferredTranslation,
-        ...otherTranslations
-      ] = translation.english?.map((word) => ({
-        word,
-        meanings: [],
-      }));
+      const [preferredTranslation, ...otherTranslations] =
+        translation.english?.map(word => ({
+          word,
+          meanings: [],
+        }));
 
       output.push(
         input.slice(previousIndex, wordRegex.lastIndex - word.length),
@@ -232,3 +240,8 @@ export const computeEnglishOutput = async (
 
   return { output, hint };
 };
+
+setupWorkerServer<SolresolWorker>({
+  computeSolresolOutput,
+  computeEnglishOutput,
+});
