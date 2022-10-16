@@ -13,7 +13,7 @@ const App: FunctionComponent = () => (
   <ThemeProvider theme={lightTheme}>
     <CssBaseline />
     <ServiceWorkerProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/steganography-toolkit/">
         <Root />
       </BrowserRouter>
     </ServiceWorkerProvider>
