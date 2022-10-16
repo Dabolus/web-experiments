@@ -30,6 +30,13 @@ const lightTheme = createTheme(
         main: '#00c853',
       },
     },
+    components: {
+      MuiLink: {
+        defaultProps: {
+          underline: 'hover',
+        },
+      },
+    },
   },
   enUS,
 );
