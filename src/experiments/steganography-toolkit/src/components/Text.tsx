@@ -1,8 +1,12 @@
-import React, { FunctionComponent, BlockquoteHTMLAttributes } from 'react';
+import React, {
+  FunctionComponent,
+  BlockquoteHTMLAttributes,
+  PropsWithChildren,
+} from 'react';
 
 import { Typography, TypographyProps, makeStyles } from '@material-ui/core';
 
-interface QuoteTextProps extends BlockquoteHTMLAttributes<HTMLDivElement> {
+interface QuoteTextProps extends BlockquoteHTMLAttributes<HTMLQuoteElement> {
   variant: 'quote';
 }
 
@@ -12,7 +16,7 @@ interface ParagraphTextProps extends Omit<TypographyProps, 'variant'> {
 
 export type TextProps = TypographyProps | QuoteTextProps | ParagraphTextProps;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   quote: {
     fontStyle: 'italic',
     border: `0.02rem solid ${theme.palette.divider}`,
@@ -29,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Text: FunctionComponent<TextProps> = (props) => {
+const Text: FunctionComponent<PropsWithChildren<TextProps>> = props => {
   const classes = useStyles();
 
   switch (props.variant) {

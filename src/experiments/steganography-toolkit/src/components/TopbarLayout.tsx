@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useCallback, ReactNode } from 'react';
+import React, {
+  FunctionComponent,
+  useCallback,
+  ReactNode,
+  PropsWithChildren,
+} from 'react';
 
 import {
   AppBar,
@@ -19,7 +24,7 @@ export interface TopbarLayoutProps {
   onMenuButtonClick?(): void;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -61,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TopbarLayout: FunctionComponent<TopbarLayoutProps> = ({
+const TopbarLayout: FunctionComponent<PropsWithChildren<TopbarLayoutProps>> = ({
   title = 'Steganography Toolkit',
   topbarContent,
   onMenuButtonClick,

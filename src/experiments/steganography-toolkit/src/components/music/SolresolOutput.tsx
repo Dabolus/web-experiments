@@ -29,7 +29,7 @@ export interface SolresolOutputProps {
 }
 
 const useStyles = makeStyles<Theme, Pick<SolresolOutputProps, 'type'>>(
-  (theme) => ({
+  theme => ({
     container: {
       whiteSpace: 'pre-wrap',
       padding: '18.5px 14px',
@@ -82,7 +82,7 @@ const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
   type = 'full',
   value,
   onChange,
-  formatTranslation = (word) => word,
+  formatTranslation = word => word,
 }) => {
   const classes = useStyles({ type });
 
@@ -92,12 +92,13 @@ const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
   }>();
 
   const createTranslationClickHandler = useCallback(
-    (index: number): MouseEventHandler<HTMLElement> => (event) => {
-      setSelectedTranslation({
-        index,
-        anchor: event.target as HTMLElement,
-      });
-    },
+    (index: number): MouseEventHandler<HTMLElement> =>
+      event => {
+        setSelectedTranslation({
+          index,
+          anchor: event.target as HTMLElement,
+        });
+      },
     [],
   );
 

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactNode } from 'react';
+import React, { FunctionComponent, PropsWithChildren, ReactNode } from 'react';
 
 import {
   Drawer,
@@ -15,7 +15,7 @@ export interface SidebarLayoutProps extends DrawerProps {
   menuContent?: ReactNode;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   toolbar: theme.mixins.toolbar,
   menu: {
     width: 'min(100vw - 56px, 280px)',
@@ -36,12 +36,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SidebarLayout: FunctionComponent<SidebarLayoutProps> = ({
-  menuContent,
-  open,
-  children,
-  ...props
-}) => {
+const SidebarLayout: FunctionComponent<
+  PropsWithChildren<SidebarLayoutProps>
+> = ({ menuContent, open, children, ...props }) => {
   const theme = useTheme();
 
   const classes = useStyles();

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, PropsWithChildren } from 'react';
 
 import { Box, BoxProps, makeStyles, Theme } from '@material-ui/core';
 import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
@@ -7,7 +7,7 @@ export interface PageProps extends BoxProps {
   size?: number | Breakpoint;
 }
 
-const useStyles = makeStyles<Theme, PageProps>((theme) => ({
+const useStyles = makeStyles<Theme, PageProps>(theme => ({
   root: ({ size = 'sm' }) => ({
     padding: '2rem 3rem',
     background: theme.palette.background.paper,
@@ -26,7 +26,7 @@ const useStyles = makeStyles<Theme, PageProps>((theme) => ({
   }),
 }));
 
-const Page: FunctionComponent<PageProps> = (props) => {
+const Page: FunctionComponent<PropsWithChildren<PageProps>> = props => {
   const classes = useStyles(props);
 
   return <Box component="section" className={classes.root} {...props} />;
