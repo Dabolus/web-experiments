@@ -9,11 +9,11 @@ import {
   TableRow,
   TableCell,
   TableBody,
-} from '@material-ui/core';
+} from '@mui/material';
 
 import TopbarLayout, { TopbarLayoutProps } from './TopbarLayout';
 
-const Home: FunctionComponent<TopbarLayoutProps> = (props) => (
+const Home: FunctionComponent<TopbarLayoutProps> = props => (
   <TopbarLayout title="Home" {...props}>
     <Page>
       <section>

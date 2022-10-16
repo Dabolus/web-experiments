@@ -12,10 +12,12 @@ import ABCJS from 'abcjs';
 
 import { saveAs } from 'file-saver';
 
-import { Button, Menu, MenuItem, Box, Grid } from '@material-ui/core';
+import { Button, Menu, MenuItem, Box, Grid } from '@mui/material';
 
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import {
+  ArrowDropUp as ArrowDropUpIcon,
+  ArrowDropDown as ArrowDropDownIcon,
+} from '@mui/icons-material';
 
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
 import Page from '../../components/Page';
@@ -28,12 +30,10 @@ import Loader from '../../components/Loader';
 
 import * as Cicada3301Worker from '../../workers/music/cicada3301.worker';
 
-const {
-  computeAbc,
-  encodeMp3,
-} = new (Cicada3301Worker as any)() as typeof Cicada3301Worker;
+const { computeAbc, encodeMp3 } =
+  new (Cicada3301Worker as any)() as typeof Cicada3301Worker;
 
-const Cicada3301: FunctionComponent<TopbarLayoutProps> = (props) => {
+const Cicada3301: FunctionComponent<TopbarLayoutProps> = props => {
   const [data, setData] = useState<Cicada3301FormValue>();
   const [input, setInput] = useState<string>();
   const [abcRenderOutput, setAbcRenderOutput] = useState<any>();
@@ -59,7 +59,7 @@ const Cicada3301: FunctionComponent<TopbarLayoutProps> = (props) => {
 
   const handleFormChange = useCallback<
     NonNullable<Cicada3301FormProps['onChange']>
-  >((data) => {
+  >(data => {
     setData(data);
   }, []);
 
@@ -200,7 +200,6 @@ const Cicada3301: FunctionComponent<TopbarLayoutProps> = (props) => {
               </Button>
               <Menu
                 id="export-menu"
-                getContentAnchorEl={null}
                 anchorEl={exportButtonRef.current}
                 anchorOrigin={{
                   horizontal: 'right',

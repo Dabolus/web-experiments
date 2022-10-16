@@ -1,8 +1,12 @@
-import { createMuiTheme } from '@material-ui/core';
+import { createTheme, Theme } from '@mui/material';
 
-import { enUS } from '@material-ui/core/locale';
+import { enUS } from '@mui/material/locale';
 
-const lightTheme = createMuiTheme(
+declare module '@mui/styles' {
+  interface DefaultTheme extends Theme {}
+}
+
+const lightTheme = createTheme(
   {
     typography: {
       fontFamily: "'Jost', sans-serif",
@@ -18,6 +22,7 @@ const lightTheme = createMuiTheme(
       },
     },
     palette: {
+      mode: 'light',
       primary: {
         main: '#212121',
       },

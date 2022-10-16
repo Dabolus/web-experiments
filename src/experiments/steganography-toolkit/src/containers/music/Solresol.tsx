@@ -19,9 +19,9 @@ import {
   InputLabel,
   SelectProps,
   IconButton,
-} from '@material-ui/core';
+} from '@mui/material';
 
-import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+import { SwapHoriz as SwapHorizIcon } from '@mui/icons-material';
 
 import { useDebounce } from 'use-debounce';
 

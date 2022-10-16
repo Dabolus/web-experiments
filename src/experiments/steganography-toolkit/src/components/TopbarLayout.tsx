@@ -10,13 +10,13 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  makeStyles,
   useMediaQuery,
   useTheme,
   Link,
-} from '@material-ui/core';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-import MenuIcon from '@material-ui/icons/Menu';
+import { Menu as MenuIcon } from '@mui/icons-material';
 
 export interface TopbarLayoutProps {
   title?: ReactNode;

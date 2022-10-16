@@ -13,18 +13,21 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  makeStyles,
   Collapse,
-} from '@material-ui/core';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-import HomeIcon from '@material-ui/icons/Home';
-import TitleIcon from '@material-ui/icons/Title';
-import ImageIcon from '@material-ui/icons/Image';
-import MusicNoteIcon from '@material-ui/icons/MusicNote';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import {
+  Home as HomeIcon,
+  Title as TitleIcon,
+  Image as ImageIcon,
+  MusicNote as MusicNoteIcon,
+  ExpandMore as ExpandMoreIcon,
+  ExpandLess as ExpandLessIcon,
+} from '@mui/icons-material';
+import { ListItemLink } from './ListItemLink';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   active: {
     '& *': {
       color: theme.palette.primary.main,
@@ -186,17 +189,15 @@ const SidebarMenu: FunctionComponent<SidebarMenuProps> = ({ onItemClick }) => {
               <List component="div" disablePadding>
                 {subitems.map(
                   ({ key: subkey, title: subtitle, link: sublink }) => (
-                    <ListItem
-                      button
+                    <ListItemLink
                       className={classes.nested}
                       key={`${key}-${subkey}`}
-                      component={NavLink}
                       to={`${sublink || `/${key}/${subkey}`}`}
                       activeClassName={classes.active}
                       onClick={handleListItemClick}
                     >
                       <ListItemText>{subtitle}</ListItemText>
-                    </ListItem>
+                    </ListItemLink>
                   ),
                 )}
               </List>

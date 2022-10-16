@@ -8,7 +8,7 @@ import React, {
 
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import { Snackbar, Button } from '@material-ui/core';
+import { Snackbar, Button } from '@mui/material';
 
 import { useServiceWorker } from '../providers/ServiceWorkerProvider';
 

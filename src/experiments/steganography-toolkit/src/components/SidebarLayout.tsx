@@ -4,12 +4,12 @@ import {
   Drawer,
   Toolbar,
   Typography,
-  makeStyles,
   useMediaQuery,
   useTheme,
   Divider,
   DrawerProps,
-} from '@material-ui/core';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 export interface SidebarLayoutProps extends DrawerProps {
   menuContent?: ReactNode;

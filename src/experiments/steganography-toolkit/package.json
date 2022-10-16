@@ -7,12 +7,16 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/material": "^5.10.9",
+    "@mui/styles": "^5.10.9",
     "@types/node": "^18.11.0",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "abcjs": "6.1.6",
+    "clsx": "^1.2.1",
     "file-saver": "^2.0.5",
     "fuse.js": "^6.6.2",
     "lamejs": "^1.2.1",

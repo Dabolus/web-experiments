@@ -4,7 +4,8 @@ import React, {
   PropsWithChildren,
 } from 'react';
 
-import { Typography, TypographyProps, makeStyles } from '@material-ui/core';
+import { Typography, TypographyProps } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 interface QuoteTextProps extends BlockquoteHTMLAttributes<HTMLQuoteElement> {
   variant: 'quote';

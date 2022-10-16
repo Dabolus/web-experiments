@@ -13,15 +13,15 @@ import {
   FormControl,
   FormLabel,
   OutlinedInput,
-  makeStyles,
   OutlinedInputProps,
   Box,
   Select,
   SelectProps,
   FormHelperText,
-} from '@material-ui/core';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   label: {
     marginBottom: theme.spacing(1),
   },
@@ -104,7 +104,7 @@ export interface InitCicada3301FormAction {
 }
 
 export interface SetFieldCicada3301FormAction<
-  F extends keyof Cicada3301FormState = keyof Cicada3301FormState
+  F extends keyof Cicada3301FormState = keyof Cicada3301FormState,
 > {
   type: Cicada3301FormActionType.SET_FIELD;
   field: F;
@@ -173,19 +173,20 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
 
   const createTextFieldInputHandler = useCallback(
     <F extends keyof Cicada3301FormState>(
-      field: F,
-    ): NonNullable<OutlinedInputProps['onInput']> => (event) => {
-      dispatch({
-        type: Cicada3301FormActionType.SET_FIELD,
-        field,
-        value: (event.target as HTMLTextAreaElement | HTMLInputElement).value,
-      });
-    },
+        field: F,
+      ): NonNullable<OutlinedInputProps['onInput']> =>
+      event => {
+        dispatch({
+          type: Cicada3301FormActionType.SET_FIELD,
+          field,
+          value: (event.target as HTMLTextAreaElement | HTMLInputElement).value,
+        });
+      },
     [],
   );
 
   const handleKeyChange = useCallback<NonNullable<SelectProps['onChange']>>(
-    (event) => {
+    event => {
       dispatch({
         type: Cicada3301FormActionType.SET_FIELD,
         field: 'key',
@@ -197,7 +198,7 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
 
   const handleLanguageChange = useCallback<
     NonNullable<SelectProps['onChange']>
-  >((event) => {
+  >(event => {
     dispatch({
       type: Cicada3301FormActionType.SET_FIELD,
       field: 'language',

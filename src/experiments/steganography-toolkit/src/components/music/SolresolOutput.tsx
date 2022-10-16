@@ -7,13 +7,8 @@ import React, {
   ReactNode,
 } from 'react';
 
-import {
-  makeStyles,
-  Menu,
-  MenuItem,
-  Typography,
-  Theme,
-} from '@material-ui/core';
+import { Menu, MenuItem, Typography, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 import type {
   TranslationOutput as SolresolWorkerOutput,
