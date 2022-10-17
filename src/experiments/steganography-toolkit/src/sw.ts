@@ -1,7 +1,11 @@
 /* eslint-disable no-restricted-globals */
 
 import { setCacheNameDetails, clientsClaim } from 'workbox-core';
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
+import {
+  precacheAndRoute,
+  createHandlerBoundToURL,
+  cleanupOutdatedCaches,
+} from 'workbox-precaching';
 import { registerRoute, NavigationRoute } from 'workbox-routing';
 import type { PrecacheEntry } from 'workbox-precaching/_types';
 
@@ -29,7 +33,7 @@ declare global {
   function skipWaiting(): void;
 }
 
-self.addEventListener('message', (event) => {
+self.addEventListener('message', event => {
   if (event.data?.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
@@ -39,12 +43,13 @@ clientsClaim();
 
 if (process.env.NODE_ENV === 'development') {
   console.groupCollapsed('Workbox precache manifest');
-  self.__WB_MANIFEST.forEach((entry) => console.info(entry));
+  self.__WB_MANIFEST.forEach(entry => console.info(entry));
   console.groupEnd();
 } else {
   setCacheNameDetails({
     prefix: 'steganography-toolkit',
   });
   precacheAndRoute(self.__WB_MANIFEST);
-  registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html')));
+  cleanupOutdatedCaches();
+  registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html')));
 }

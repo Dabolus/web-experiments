@@ -3949,6 +3949,7 @@ __metadata:
     vite: ^3.1.8
     vite-plugin-html: ^3.2.0
     vite-plugin-markdown: ^2.1.0
+    vite-plugin-pwa: ^0.13.1
   languageName: unknown
   linkType: soft
 
@@ -4045,6 +4046,7 @@ __metadata:
     typescript: ^4.8.4
     use-debounce: ^8.0.4
     vite: ^3.1.8
+    vite-plugin-pwa: ^0.13.1
     workbox-core: ^6.5.4
     workbox-precaching: ^6.5.4
     workbox-routing: ^6.5.4
@@ -14865,6 +14867,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pretty-bytes@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "pretty-bytes@npm:6.0.0"
+  checksum: 0bb9f95e617236404b29a8392c6efd82d65805f622f5e809ecd70068102be857d4e3276c86d2a32fa2ef851cc29472e380945dab7bec83ec79bd57a19a10faf7
+  languageName: node
+  linkType: hard
+
 "pretty-error@npm:^2.0.2":
   version: 2.1.2
   resolution: "pretty-error@npm:2.1.2"
@@ -16007,6 +16016,20 @@ __metadata:
   bin:
     rollup: dist/bin/rollup
   checksum: c883f6fb2e10e1c79a32527da0c50ef47a7beb8ddacfdae4197ff2d1911fb8d10bb2704496cf878d3048fbf3524d613bc87f25c5be0afc667fe30b7d04fa8092
+  languageName: node
+  linkType: hard
+
+"rollup@npm:^2.79.0":
+  version: 2.79.1
+  resolution: "rollup@npm:2.79.1"
+  dependencies:
+    fsevents: ~2.3.2
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    rollup: dist/bin/rollup
+  checksum: 6a2bf167b3587d4df709b37d149ad0300692cc5deb510f89ac7bdc77c8738c9546ae3de9322b0968e1ed2b0e984571f5f55aae28fa7de4cfcb1bc5402a4e2be6
   languageName: node
   linkType: hard
 
@@ -18533,6 +18556,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"vite-plugin-pwa@npm:^0.13.1":
+  version: 0.13.1
+  resolution: "vite-plugin-pwa@npm:0.13.1"
+  dependencies:
+    debug: ^4.3.4
+    fast-glob: ^3.2.11
+    pretty-bytes: ^6.0.0
+    rollup: ^2.79.0
+    workbox-build: ^6.5.4
+    workbox-window: ^6.5.4
+  peerDependencies:
+    vite: ^3.1.0
+    workbox-build: ^6.5.4
+    workbox-window: ^6.5.4
+  checksum: 705bb4593cbdfef0ea375af420fd46cdb301a3298abe41e80aa6ec08e793112960179d14c567f3c7c4d0bdde0702b4b1864a3aff23ceaedf7687d649172e5e62
+  languageName: node
+  linkType: hard
+
 "vite-plugin-static-copy@npm:^0.9.0":
   version: 0.9.0
   resolution: "vite-plugin-static-copy@npm:0.9.0"
@@ -19042,7 +19083,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workbox-build@npm:6.5.4":
+"workbox-build@npm:6.5.4, workbox-build@npm:^6.5.4":
   version: 6.5.4
   resolution: "workbox-build@npm:6.5.4"
   dependencies:
@@ -19218,7 +19259,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workbox-window@npm:6.5.4":
+"workbox-window@npm:6.5.4, workbox-window@npm:^6.5.4":
   version: 6.5.4
   resolution: "workbox-window@npm:6.5.4"
   dependencies:

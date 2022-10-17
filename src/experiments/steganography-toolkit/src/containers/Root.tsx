@@ -21,15 +21,15 @@ import MusicRouter from './music/MusicRouter';
 const Home = lazy(() => import('../components/Home'));
 
 const Root: FunctionComponent = () => {
-  const { assetsUpdateReady, updateAssets } = useServiceWorker();
+  const { updateReady, update } = useServiceWorker();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleUpdate = useCallback(() => {
     setIsUpdating(true);
-    updateAssets();
-  }, [updateAssets]);
+    update();
+  }, [update]);
 
   const handleMenuButtonClick = useCallback(() => {
     setSidebarOpen(!sidebarOpen);
@@ -74,7 +74,7 @@ const Root: FunctionComponent = () => {
       </SidebarLayout>
 
       <Snackbar
-        open={assetsUpdateReady}
+        open={updateReady}
         message="Update available!"
         action={
           <Button

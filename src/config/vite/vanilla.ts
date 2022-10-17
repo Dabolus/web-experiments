@@ -2,6 +2,7 @@ import { basename } from 'path';
 import { defineConfig, UserConfig, Plugin } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { plugin as markdownPlugin, Mode } from 'vite-plugin-markdown';
+import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa';
 import yaml from '@rollup/plugin-yaml';
 import tree from './plugins/tree';
 
@@ -9,6 +10,7 @@ export interface DefineConfigOptions {
   base?: UserConfig['base'];
   plugins?: UserConfig['plugins'];
   htmlData?: Record<string, any> | Promise<Record<string, any>>;
+  pwa?: boolean | Partial<VitePWAOptions>;
 }
 
 export type DefineConfigOptionsCallback = () =>
@@ -23,6 +25,7 @@ const createConfig = async (
     base = `/${basename(projectPath)}/`,
     plugins,
     htmlData,
+    pwa,
   } = (typeof options === 'function' ? await options() : options) || {};
 
   return defineConfig({
@@ -71,6 +74,26 @@ const createConfig = async (
             ),
         },
       },
+      ...(pwa
+        ? [
+            VitePWA(
+              typeof pwa === 'boolean'
+                ? {
+                    manifest: false,
+                    strategies: 'injectManifest',
+                    srcDir: 'src',
+                    filename: 'sw.ts',
+                    workbox: {
+                      sourcemap: true,
+                      globPatterns: [
+                        '**/*.{js,html,woff2,css,svg,png,jpg,jpeg,gif,ico,webp,jxl,mp4,webm,ogg,mp3,opus}',
+                      ],
+                    },
+                  }
+                : pwa,
+            ),
+          ]
+        : []),
       ...(plugins || []),
     ],
     build: {

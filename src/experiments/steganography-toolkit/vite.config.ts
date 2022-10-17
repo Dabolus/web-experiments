@@ -3,4 +3,4 @@
 // See: https://github.com/vitejs/vite/issues/5370
 import createPreactConfig from '../../config/vite/preact';
 
-export default createPreactConfig();
+export default createPreactConfig({ pwa: true });

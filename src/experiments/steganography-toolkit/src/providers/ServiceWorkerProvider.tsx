@@ -1,73 +1,75 @@
 import React, {
-  createContext,
   FunctionComponent,
+  createContext,
+  useContext,
   useMemo,
   useState,
-  useEffect,
+  useCallback,
   PropsWithChildren,
 } from 'react';
-import * as serviceWorker from '../serviceWorker/browser';
 
-export type ServiceWorkerContextValue =
-  | {
-      readonly assetsUpdateReady: boolean;
-      readonly assetsCached: boolean;
-      readonly updateAssets: () => void;
-    }
-  | undefined;
+import { registerSW } from 'virtual:pwa-register';
 
-const ServiceWorkerContext =
-  createContext<ServiceWorkerContextValue>(undefined);
+export interface ServiceWorkerContextValue {
+  updateReady: boolean;
+  offlineReady: boolean;
+  update(this: void): void;
+}
 
-const ServiceWorkerProvider: FunctionComponent<
+export const ServiceWorkerContext = createContext<
+  ServiceWorkerContextValue | undefined
+>(undefined);
+
+export const ServiceWorkerProvider: FunctionComponent<
   PropsWithChildren<{}>
 > = props => {
-  const [waitingServiceWorker, setWaitingServiceWorker] =
-    useState<ServiceWorker | null>(null);
-  const [assetsUpdateReady, setAssetsUpdateReady] = useState(false);
-  const [assetsCached, setAssetsCached] = useState(false);
+  const [updateReady, setUpdateReady] = useState(false);
+  const [offlineReady, setOfflineReady] = useState(false);
 
-  const value = useMemo(
-    () => ({
-      assetsUpdateReady,
-      assetsCached,
-      // Call when the user confirm update of application and reload page
-      updateAssets: () => {
-        if (waitingServiceWorker) {
-          waitingServiceWorker.addEventListener('statechange', event => {
-            const newSW = event?.target as ServiceWorker | undefined;
-
-            if (newSW?.state === 'activated') {
-              window.location.reload();
-            }
-          });
-
-          waitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
-        }
-      },
-    }),
-    [assetsUpdateReady, assetsCached, waitingServiceWorker],
+  const updateSW = useMemo(
+    () =>
+      registerSW({
+        onRegistered: registration => {
+          if (registration) {
+            // Periodically check for updates when the app is left open
+            setInterval(
+              () => void registration.update(),
+              300000 /* 5 minutes */,
+            );
+          }
+        },
+        onNeedRefresh: () => setUpdateReady(true),
+        onOfflineReady: () => setOfflineReady(true),
+      }),
+    [],
   );
 
-  // Once on component mounted subscribe to Update and Succes events in
-  // CRA's service worker wrapper
-  useEffect(() => {
-    serviceWorker.register({
-      onUpdate: registration => {
-        setWaitingServiceWorker(registration.waiting);
-        setAssetsUpdateReady(true);
-      },
-      onSuccess: () => {
-        setAssetsCached(true);
-      },
-    });
-  }, []);
+  const update = useCallback(
+    () =>
+      Promise.race([
+        // Sometimes service worker update gets stuck and doesn't automatically refresh the browser
+        // so we manually refresh the browser after 5 seconds to avoid this situation
+        new Promise<void>(resolve =>
+          setTimeout(() => {
+            window.location.reload();
+            resolve();
+          }, 5000),
+        ),
+        updateSW(),
+      ]),
+    [updateSW],
+  );
 
-  return <ServiceWorkerContext.Provider value={value} {...props} />;
+  return (
+    <ServiceWorkerContext.Provider
+      value={{ updateReady, offlineReady, update }}
+      {...props}
+    />
+  );
 };
 
-export const useServiceWorker = (): NonNullable<ServiceWorkerContextValue> => {
-  const context = React.useContext(ServiceWorkerContext);
+export const useServiceWorker = (): ServiceWorkerContextValue => {
+  const context = useContext(ServiceWorkerContext);
 
   if (!context) {
     throw new Error(
