@@ -26,6 +26,7 @@ import {
   ExpandLess as ExpandLessIcon,
 } from '@mui/icons-material';
 import { ListItemLink } from './ListItemLink';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
   active: {
@@ -38,6 +39,10 @@ const useStyles = makeStyles(theme => ({
     background: theme.palette.background.default,
     paddingLeft: theme.spacing(4),
   },
+  disabled: {
+    opacity: 0.5,
+    pointerEvents: 'none',
+  },
 }));
 
 interface MenuItem {
@@ -45,6 +50,7 @@ interface MenuItem {
   title: string;
   icon: ReactNode;
   link?: string;
+  available?: boolean;
   subitems?: Omit<MenuItem, 'icon' | 'subitems'>[];
 }
 
@@ -63,14 +69,17 @@ const MENU_ITEMS: MenuItem[] = [
       {
         key: 'mlp',
         title: 'Missing Letter Puzzle',
+        available: false,
       },
       {
         key: 'wordlist',
         title: 'Wordlist',
+        available: false,
       },
       {
         key: 'Paragraph',
         title: 'Paragraph',
+        available: false,
       },
     ],
   },
@@ -82,10 +91,12 @@ const MENU_ITEMS: MenuItem[] = [
       {
         key: 'lsb',
         title: 'Least Significant Bit',
+        available: false,
       },
       {
         key: 'dct',
         title: 'Discrete Cosine Transform',
+        available: false,
       },
     ],
   },
@@ -188,15 +199,25 @@ const SidebarMenu: FunctionComponent<SidebarMenuProps> = ({ onItemClick }) => {
             >
               <List component="div" disablePadding>
                 {subitems.map(
-                  ({ key: subkey, title: subtitle, link: sublink }) => (
+                  ({
+                    key: subkey,
+                    title: subtitle,
+                    link: sublink,
+                    available = true,
+                  }) => (
                     <ListItemLink
-                      className={classes.nested}
+                      className={clsx(
+                        classes.nested,
+                        !available && classes.disabled,
+                      )}
                       key={`${key}-${subkey}`}
                       to={`${sublink || `/${key}/${subkey}`}`}
                       activeClassName={classes.active}
                       onClick={handleListItemClick}
                     >
-                      <ListItemText>{subtitle}</ListItemText>
+                      <ListItemText>
+                        {subtitle} {available ? null : <sup>Coming Soon</sup>}
+                      </ListItemText>
                     </ListItemLink>
                   ),
                 )}
