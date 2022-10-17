@@ -1,4 +1,5 @@
 import { basename } from 'path';
+import { promises as fs } from 'fs';
 import { defineConfig, UserConfig, Plugin } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { plugin as markdownPlugin, Mode } from 'vite-plugin-markdown';
@@ -16,6 +17,32 @@ export interface DefineConfigOptions {
 export type DefineConfigOptionsCallback = () =>
   | DefineConfigOptions
   | Promise<DefineConfigOptions>;
+
+const getVitePWAOptions = async (
+  pwaOptions: NonNullable<DefineConfigOptions['pwa']>,
+): Promise<Partial<VitePWAOptions>> => {
+  if (typeof pwaOptions !== 'boolean') {
+    return pwaOptions;
+  }
+
+  const swSrcExists = await fs
+    .stat('src/sw.ts')
+    .then(() => true)
+    .catch(() => false);
+
+  return {
+    manifest: false,
+    strategies: swSrcExists ? 'injectManifest' : 'generateSW',
+    srcDir: 'src',
+    filename: 'sw.ts',
+    workbox: {
+      sourcemap: true,
+      globPatterns: [
+        '**/*.{js,html,woff2,css,svg,png,jpg,jpeg,gif,ico,webp,jxl,mp4,webm,ogg,mp3,opus}',
+      ],
+    },
+  };
+};
 
 const createConfig = async (
   options?: DefineConfigOptions | DefineConfigOptionsCallback,
@@ -74,26 +101,7 @@ const createConfig = async (
             ),
         },
       },
-      ...(pwa
-        ? [
-            VitePWA(
-              typeof pwa === 'boolean'
-                ? {
-                    manifest: false,
-                    strategies: 'injectManifest',
-                    srcDir: 'src',
-                    filename: 'sw.ts',
-                    workbox: {
-                      sourcemap: true,
-                      globPatterns: [
-                        '**/*.{js,html,woff2,css,svg,png,jpg,jpeg,gif,ico,webp,jxl,mp4,webm,ogg,mp3,opus}',
-                      ],
-                    },
-                  }
-                : pwa,
-            ),
-          ]
-        : []),
+      ...(pwa ? [VitePWA(await getVitePWAOptions(pwa))] : []),
       ...(plugins || []),
     ],
     build: {
