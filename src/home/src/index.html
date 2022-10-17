@@ -112,10 +112,12 @@
       <%
         const iconFormatsExtensionsExceptions = {
           [ProjectIconFormat.PNG_PIXELATED]: 'png',
+          [ProjectIconFormat.GIF_PIXELATED]: 'gif',
         };
 
         const iconFormatsMediaTypesExceptions = {
           [ProjectIconFormat.PNG_PIXELATED]: 'png',
+          [ProjectIconFormat.GIF_PIXELATED]: 'gif',
           [ProjectIconFormat.SVG]: 'svg+xml',
           [ProjectIconFormat.JPEG]: 'jpeg',
         };
@@ -151,7 +153,7 @@
                 >
               <% }) %>
               <img
-                <%- icon.formats.includes(ProjectIconFormat.PNG_PIXELATED) ? 'class="pixelated"' : '' %>
+                <%- fallbackIconFormat === ProjectIconFormat.PNG_PIXELATED || fallbackIconFormat === ProjectIconFormat.GIF_PIXELATED ? 'class="pixelated"' : '' %>
                 style="background-image:url(&#34;<%- icon.placeholder %>&#34;);"
                 src="./assets/images/projects/<%= id %>.<%= iconFormatsExtensionsExceptions[fallbackIconFormat] || fallbackIconFormat %>"
                 width="128"

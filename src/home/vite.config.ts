@@ -1,6 +1,6 @@
 import {
   projects,
-  ProjectIconFormat,
+  IconFormat,
   ProjectType,
 } from '@dabolus/portfolio-data';
 import { fileURLToPath } from 'url';
@@ -13,7 +13,7 @@ import createConfig from '../config/vite/vanilla';
 export default createConfig(async () => ({
   base: '/',
   htmlData: {
-    ProjectIconFormat,
+    ProjectIconFormat: IconFormat,
     ProjectType,
     projects: Object.entries(projects).map(([id, project]) => ({
       id,
