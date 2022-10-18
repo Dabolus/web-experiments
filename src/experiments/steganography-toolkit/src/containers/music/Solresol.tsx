@@ -242,7 +242,7 @@ const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
               >
                 <FormLabel>Output</FormLabel>
                 {!swapped && (
-                  <FormControl>
+                  <FormControl variant="standard">
                     <InputLabel
                       shrink
                       id="demo-simple-select-placeholder-label-label"

@@ -27,12 +27,12 @@ const useStyles = makeStyles<Theme, Pick<SolresolOutputProps, 'type'>>(
   theme => ({
     container: {
       whiteSpace: 'pre-wrap',
-      padding: '18.5px 14px',
+      padding: '16.5px 14px',
       fontSize: '1rem',
       borderRadius: '4px',
-      lineHeight: '1.1876em',
+      lineHeight: '23px',
       border: '1px solid rgba(0, 0, 0, 0.23)',
-      height: '8.25rem',
+      height: '9.25rem',
       cursor: 'text',
       overflowX: 'auto',
     },
@@ -154,7 +154,6 @@ const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
       </div>
       <Menu
         id="alternative-translations-menu"
-        getContentAnchorEl={null}
         anchorEl={selectedTranslation?.anchor}
         anchorOrigin={{
           horizontal: 'right',
