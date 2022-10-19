@@ -16,6 +16,7 @@ import SidebarLayout from '../components/SidebarLayout';
 import SidebarMenu from '../components/SidebarMenu';
 import Loader from '../components/Loader';
 
+import TextRouter from './text/TextRouter';
 import MusicRouter from './music/MusicRouter';
 
 const Home = lazy(() => import('../components/Home'));
@@ -57,7 +58,7 @@ const Root: FunctionComponent = () => {
               element={<Home onMenuButtonClick={handleMenuButtonClick} />}
             />
 
-            <Route path="/text/*" element={<>Text</>} />
+            <Route path="/text/*" element={<TextRouter />} />
 
             <Route path="/image/*" element={<>Image</>} />
 

@@ -67,6 +67,10 @@ const MENU_ITEMS: MenuItem[] = [
     icon: <TitleIcon />,
     subitems: [
       {
+        key: 'unicode',
+        title: 'Unicode',
+      },
+      {
         key: 'mlp',
         title: 'Missing Letter Puzzle',
         available: false,
