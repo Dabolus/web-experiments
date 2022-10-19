@@ -3,10 +3,16 @@ const randomId = () => {
   return uint32.toString(16);
 };
 
+export type PromisifiedObject<T extends {}> = {
+  [K in keyof T]: T[K] extends (...args: infer A) => infer R
+    ? (...args: A) => Promise<R>
+    : T[K];
+};
+
 export const setupWorkerClient = <T extends {}>(
   worker: Worker,
   methods: (keyof T)[],
-): T => {
+): PromisifiedObject<T> => {
   const eventsQueueMap: Record<
     string,
     { resolve: Function; reject: Function }
@@ -46,7 +52,7 @@ export const setupWorkerClient = <T extends {}>(
           });
         }),
     ]),
-  ) as T;
+  ) as PromisifiedObject<T>;
 };
 
 export const setupWorkerServer = <T extends {}>(methods: T) => {
