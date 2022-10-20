@@ -3,7 +3,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
-  useMemo
+  useMemo,
 } from 'react';
 
 import { useDropzone } from 'react-dropzone';
@@ -23,17 +23,22 @@ import {
   styled,
   IconButton,
   Tooltip,
+  Link,
 } from '@mui/material';
 
 import {
   FileCopy as FileCopyIcon,
-  GetApp as GetAppIcon,
+  FileDownload as FileDownloadIcon,
+  SimCardDownload as SimCardDownloadIcon,
 } from '@mui/icons-material';
 
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
 import Page from '../../components/Page';
 import { setupWorkerClient } from '../../workers/utils';
-import type { UnicodeWorker } from '../../workers/text/unicode.worker';
+import type {
+  DecodedTextResult,
+  UnicodeWorker,
+} from '../../workers/text/unicode.worker';
 
 const unicodeWorker = setupWorkerClient<UnicodeWorker>(
   new Worker(new URL('../../workers/text/unicode.worker.ts', import.meta.url), {
@@ -76,6 +81,13 @@ const FileContainer = styled('p')<{ isDragActive?: boolean }>(
   }),
 );
 
+const DownloadLink = styled(Link)({
+  marginTop: '-0.25rem',
+  cursor: 'pointer',
+  fontFamily: 'inherit',
+  fontSize: 'inherit',
+}) as typeof Link;
+
 const readFile = (file: File): Promise<Uint8Array> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -92,6 +104,8 @@ const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
     { name: string; content: Uint8Array } | undefined
   >();
   const [output, setOutput] = useState('');
+  const [carrierWithPayload, setCarrierWithPayload] = useState('');
+  const [payload, setPayload] = useState<DecodedTextResult | undefined>();
   const [currentTab, setCurrentTab] = useState(UnicodeTab.CONCEAL);
   const [copyToClipboardText, setCopyToClipboardText] =
     useState('Copy to clipboard');
@@ -100,7 +114,9 @@ const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
     () => ({ carrier, payloadText, payloadFile }),
     [carrier, payloadText, payloadFile],
   );
+
   const [debouncedData] = useDebounce(data, 300);
+  const [debouncedCarrierWithPayload] = useDebounce(carrierWithPayload, 300);
 
   const onFileDrop = useCallback(async ([acceptedFile]: File[]) => {
     const content = await readFile(acceptedFile);
@@ -141,14 +157,54 @@ const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
     compute();
   }, [debouncedData]);
 
-  const handleOutputCopyToClipboard = async () => {
+  useEffect(() => {
+    const compute = async () => {
+      if (!debouncedCarrierWithPayload) {
+        setPayload(undefined);
+        return;
+      }
+
+      const decoded = await unicodeWorker.decodeText(
+        debouncedCarrierWithPayload,
+      );
+
+      setPayload(decoded);
+    };
+
+    compute();
+  }, [debouncedCarrierWithPayload]);
+
+  const handleEncodedOutputCopyToClipboard = async () => {
     await navigator.clipboard.writeText(output);
     setCopyToClipboardText('Copied!');
     setTimeout(() => setCopyToClipboardText('Copy to clipboard'), 2000);
   };
 
-  const handleOutputDownload = () => {
+  const handleEncodedOutputDownload = () => {
     saveAs(new Blob([output], { type: 'text/plain' }), 'output.txt');
+  };
+
+  const handleDecodedOutputCopyToClipboard = async () => {
+    await navigator.clipboard.writeText(payload!.hiddenText);
+    setCopyToClipboardText('Copied!');
+    setTimeout(() => setCopyToClipboardText('Copy to clipboard'), 2000);
+  };
+
+  const handleDecodedOutputDownloadAsTxt = () => {
+    saveAs(
+      new Blob([payload!.hiddenText], { type: 'text/plain' }),
+      'output.txt',
+    );
+  };
+  const handleDecodedOutputDownloadAsFile = async () => {
+    const decoded = await unicodeWorker.decodeBinary(
+      debouncedCarrierWithPayload,
+    );
+
+    saveAs(
+      new Blob([decoded.hiddenData], { type: 'application/octet-stream' }),
+      'output',
+    );
   };
 
   return (
@@ -216,28 +272,113 @@ const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <Label>Output text</Label>
-                <OutlinedInput
-                  readOnly
-                  multiline
-                  rows={8}
-                  value={output}
-                  onInput={console.log}
-                />
+                <OutlinedInput readOnly multiline rows={8} value={output} />
               </FormControl>
               <Box mt={2} display="flex" justifyContent="flex-end">
                 <Tooltip title={copyToClipboardText}>
                   <IconButton
-                    onClick={handleOutputCopyToClipboard}
+                    onClick={handleEncodedOutputCopyToClipboard}
                     disabled={!output}
                   >
                     <FileCopyIcon />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Download as .txt">
-                  <IconButton onClick={handleOutputDownload} disabled={!output}>
-                    <GetAppIcon />
+                  <IconButton
+                    onClick={handleEncodedOutputDownload}
+                    disabled={!output}
+                  >
+                    <SimCardDownloadIcon />
                   </IconButton>
                 </Tooltip>
+              </Box>
+            </Grid>
+          </Grid>
+        </Page>
+      )}
+      {currentTab === UnicodeTab.REVEAL && (
+        <Page size="md">
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <FormControl fullWidth>
+                <Label>Text with hidden message</Label>
+                <OutlinedInput
+                  multiline
+                  rows={8}
+                  value={carrierWithPayload}
+                  onInput={event =>
+                    setCarrierWithPayload(
+                      (event.target as HTMLInputElement).value,
+                    )
+                  }
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <Label>Original text</Label>
+                <OutlinedInput
+                  readOnly
+                  multiline
+                  rows={8}
+                  value={payload?.originalText}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <Label>Hidden text/file</Label>
+                <OutlinedInput
+                  readOnly
+                  multiline
+                  rows={8}
+                  value={payload?.hiddenText}
+                />
+              </FormControl>
+              <Box mt={2} display="flex" justifyContent="space-between">
+                <Box flex="1 1 auto">
+                  {payload && /[^ -~]/.test(payload?.hiddenText) && (
+                    <>
+                      Output looks weird?
+                      <br />
+                      Try{' '}
+                      <DownloadLink
+                        color="secondary"
+                        component="button"
+                        onClick={handleDecodedOutputDownloadAsFile}
+                      >
+                        downloading it as a file
+                      </DownloadLink>{' '}
+                      instead.
+                    </>
+                  )}
+                </Box>
+                <Box flex="0 0 auto">
+                  <Tooltip title={copyToClipboardText}>
+                    <IconButton
+                      onClick={handleDecodedOutputCopyToClipboard}
+                      disabled={!payload}
+                    >
+                      <FileCopyIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Download as .txt">
+                    <IconButton
+                      onClick={handleDecodedOutputDownloadAsTxt}
+                      disabled={!payload}
+                    >
+                      <SimCardDownloadIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Download as file">
+                    <IconButton
+                      onClick={handleDecodedOutputDownloadAsFile}
+                      disabled={!payload}
+                    >
+                      <FileDownloadIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
               </Box>
             </Grid>
           </Grid>
