@@ -38,6 +38,8 @@ const getVitePWAOptions = async (
     filename: 'sw.ts',
     workbox: {
       sourcemap: true,
+      cleanupOutdatedCaches: true,
+      navigateFallback: 'index.html',
       globPatterns: [
         '**/*.{js,html,woff2,css,svg,png,jpg,jpeg,gif,ico,webp,jxl,mp4,webm,ogg,mp3,opus}',
       ],

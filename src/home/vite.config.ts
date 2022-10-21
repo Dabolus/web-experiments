@@ -1,8 +1,4 @@
-import {
-  projects,
-  IconFormat,
-  ProjectType,
-} from '@dabolus/portfolio-data';
+import { projects, IconFormat, ProjectType } from '@dabolus/portfolio-data';
 import { fileURLToPath } from 'url';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 // TODO: replace this path with @webexp/config/... once Vite
@@ -11,7 +7,23 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 import createConfig from '../config/vite/vanilla';
 
 export default createConfig(async () => ({
-  pwa: true,
+  pwa: {
+    injectRegister: null,
+    manifest: false,
+    strategies: 'generateSW',
+    srcDir: 'src',
+    workbox: {
+      sourcemap: true,
+      cleanupOutdatedCaches: true,
+      navigateFallback: 'index.html',
+      navigateFallbackDenylist: Object.entries(projects)
+        .filter(([, project]) => project.link.includes('gga.dev'))
+        .map(([id]) => new RegExp(`^/${id}/`)),
+      globPatterns: [
+        '**/*.{js,html,woff2,css,svg,png,jpg,jpeg,gif,ico,webp,jxl,mp4,webm,ogg,mp3,opus}',
+      ],
+    },
+  },
   base: '/',
   htmlData: {
     ProjectIconFormat: IconFormat,
