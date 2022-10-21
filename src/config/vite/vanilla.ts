@@ -31,6 +31,7 @@ const getVitePWAOptions = async (
     .catch(() => false);
 
   return {
+    injectRegister: null,
     manifest: false,
     strategies: swSrcExists ? 'injectManifest' : 'generateSW',
     srcDir: 'src',
@@ -55,7 +56,7 @@ const createConfig = async (
     pwa,
   } = (typeof options === 'function' ? await options() : options) || {};
 
-  return defineConfig({
+  return defineConfig(async ({ command, mode }) => ({
     base,
     plugins: [
       yaml() as Plugin,
@@ -83,6 +84,8 @@ const createConfig = async (
         inject: {
           data: {
             base,
+            command,
+            mode,
             ...(await htmlData),
           },
         },
@@ -107,7 +110,7 @@ const createConfig = async (
     build: {
       sourcemap: true,
     },
-  });
+  }));
 };
 
 export default createConfig;

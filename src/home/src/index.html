@@ -8,6 +8,15 @@
     <script type="module" src="/src/scripts/main.ts"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
     <link rel="stylesheet" href="/src/styles/main.scss">
+    <% if (mode === 'production') { %>
+      <script>
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js');
+          });
+        }
+      </script>
+    <% } %>
     <style>
       @font-face {
         font-family: 'Jost*';

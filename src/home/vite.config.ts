@@ -11,6 +11,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 import createConfig from '../config/vite/vanilla';
 
 export default createConfig(async () => ({
+  pwa: true,
   base: '/',
   htmlData: {
     ProjectIconFormat: IconFormat,
