@@ -18,7 +18,6 @@
     <meta name="msapplication-config" content="assets/images/icons/browserconfig.xml?v=4c3e83b7">
     <meta name="theme-color" content="#303030">
     <script type="module" src="/src/scripts/main.ts"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
     <link rel="stylesheet" href="/src/styles/main.scss">
     <% if (mode === 'production') { %>
       <script>
@@ -62,6 +61,30 @@
         font-display: swap;
       }
 
+      @font-face {
+        font-family: 'Material Symbols Outlined';
+        font-style: normal;
+        font-weight: 400;
+        src: url('assets/fonts/8c6985de.woff2') format('woff2');
+        font-display: block;
+      }
+
+      .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 1rem;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-feature-settings: 'liga';
+        -webkit-font-smoothing: antialiased;
+      }
+
       * {
         box-sizing: border-box;
         font-family: 'Jost*', sans-serif;
@@ -78,10 +101,6 @@
         background: #303030;
         color: #fff;
       }
-
-      .material-symbols-outlined {
-        font-size: 1rem;
-      }
     </style>
   </head>
   <body>
@@ -96,7 +115,7 @@
           <% languages.forEach(language => { %>
             <li class="checkable">
               <input type="checkbox" name="filter-language" id="filter-language-<%= language %>">
-              <span class="material-symbols-outlined check">check</span>
+              <span class="material-symbols-outlined check">&#xE5CA;</span>
               <label for="filter-language-<%= language %>"><%= language %></label>
             </li>
           <% }) %>
@@ -145,19 +164,19 @@
 
         const typeToActionMap = {
           [ProjectType.APP_WEB]: {
-            icon: 'public',
+            icon: '&#xE80B;',
             label: 'Visit',
           },
           [ProjectType.APP_CROSS_PLATFORM]: {
-            icon: 'download',
+            icon: '&#xF090;',
             label: 'Download',
           },
           [ProjectType.APP_WINDOWS]: {
-            icon: 'download',
+            icon: '&#xF090;',
             label: 'Download',
           },
           [ProjectType.BOT_TELEGRAM]: {
-            icon: 'open_in_new',
+            icon: '&#xE89E;',
             label: 'Launch',
           },
         };
@@ -202,14 +221,14 @@
           <div class="actions">
             <% if (source) { %>
               <a href="<%= source %>" target="source-<%= id %>">
-                <span class="material-symbols-outlined">code</span>
+                <span class="material-symbols-outlined">&#xE86F;</span>
                 <span>View source</span>
               </a>
             <% } %>
             <% if (link) { %>
               <a href="<%= link %>" target="link-<%= id %>">
                 <% const { icon, label } = typeToActionMap[type] %>
-                <span class="material-symbols-outlined"><%= icon %></span>
+                <span class="material-symbols-outlined"><%- icon %></span>
                 <span><%= label %></span>
               </a>
             <% } %>
