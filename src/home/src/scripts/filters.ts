@@ -1,4 +1,4 @@
-import Fuse from 'fuse.js';
+import type Fuse from 'fuse.js';
 
 const currentUrl = new URL(window.location.href);
 
@@ -48,17 +48,13 @@ const projects: Project[] = Array.from(projectsElements).map(
   hydrateProjectFromDomElement,
 );
 
-const fuse = new Fuse(projects, {
-  keys: ['name', 'description', 'languages', 'frameworks'],
-  // We need to force-cast due to a bug in Fuse.js type definitions.
-  // See: https://github.com/krisk/Fuse/issues/650
-} as Fuse.IFuseOptions<Project>);
+let fuse: Fuse<Project>;
 
 let currentSearch = currentUrl.searchParams.get('search') || '';
 
 const updateProjectsView = () => {
   const currentSearchProjectsKeyVal = Object.fromEntries(
-    currentSearch
+    fuse && currentSearch
       ? fuse.search(currentSearch).map(result => [result.item.id, result.item])
       : projects.map(project => [project.id, project]),
   );
@@ -144,6 +140,13 @@ export const setupFilters = () => {
       updateProjectsView();
       updateSearchParam('search', currentSearch);
     });
+  });
+  import('fuse.js').then(({ default: Fuse }) => {
+    fuse = new Fuse(projects, {
+      keys: ['name', 'description', 'languages', 'frameworks'],
+    });
+    updateProjectsView();
+    searchBar.disabled = false;
   });
 
   // Setup languages chips
