@@ -221,13 +221,13 @@
           <p><%= description %></p>
           <div class="actions">
             <% if (source) { %>
-              <a href="<%= source %>" target="source-<%= id %>">
+              <a href="<%= source %>" rel="external" target="source-<%= id %>">
                 <span class="material-symbols-outlined">&#xE86F;</span>
                 <span>View source</span>
               </a>
             <% } %>
             <% if (link) { %>
-              <a href="<%= link %>" target="link-<%= id %>">
+              <a href="<%= link %>" rel="external" target="link-<%= id %>">
                 <% const { icon, label } = typeToActionMap[type] %>
                 <span class="material-symbols-outlined"><%- icon %></span>
                 <span><%= label %></span>
