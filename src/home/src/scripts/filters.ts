@@ -1,4 +1,18 @@
 import type Fuse from 'fuse.js';
+import { ProjectType } from '@dabolus/portfolio-data';
+
+const projectTypeToNameMap: Record<ProjectType, string> = {
+  [ProjectType.BOT_TELEGRAM]: 'Telegram Bot',
+  [ProjectType.BOT_DISCORD]: 'Discord Bot',
+  [ProjectType.BOT_SLACK]: 'Slack Bot',
+  [ProjectType.APP_WEB]: 'Web App',
+  [ProjectType.APP_CROSS_PLATFORM]: 'Cross Platform App',
+  [ProjectType.APP_WINDOWS]: 'Windows App',
+  [ProjectType.APP_MACOS]: 'macOS App',
+  [ProjectType.APP_LINUX]: 'GNU/Linux App',
+  [ProjectType.APP_ANDROID]: 'Android App',
+  [ProjectType.APP_IOS]: 'iOS App',
+};
 
 const currentUrl = new URL(window.location.href);
 
@@ -17,29 +31,38 @@ const projectsElements =
 interface Project {
   id: string;
   name: string;
+  type: ProjectType;
   description: string;
   languages: string[];
   frameworks: string[];
+  apis: string[];
   element: HTMLElement;
 }
 
 const hydrateProjectFromDomElement = (element: HTMLElement): Project => {
   const id = element.id.slice(8);
   const name = element.querySelector('h2')!.textContent!;
+  const type = element.dataset.type! as ProjectType;
   const description = element.querySelector('p')!.textContent!;
   const chips = element.querySelector('.chips')!;
   const languages = Array.from(chips.querySelectorAll('.chip-language')).map(
-    language => language.textContent!.trim(),
+    language => language.textContent!,
   );
   const frameworks = Array.from(chips.querySelectorAll('.chip-framework')).map(
-    framework => framework.textContent!.trim(),
+    framework => framework.textContent!,
   );
+  const apis = Array.from(chips.querySelectorAll('.chip-api')).map(
+    api => api.textContent!,
+  );
+
   return {
     id,
     name,
+    type,
     description,
     languages,
     frameworks,
+    apis,
     element,
   };
 };
@@ -59,16 +82,23 @@ const updateProjectsView = () => {
       : projects.map(project => [project.id, project]),
   );
 
-  projects.forEach(({ id, languages, frameworks, element }) => {
+  projects.forEach(({ id, type, languages, frameworks, apis, element }) => {
     const hasSearchMatch = Boolean(currentSearchProjectsKeyVal[id]);
+    const hasType =
+      Object.keys(selectedTypes).length < 1 ||
+      selectedTypes[projectTypeToNameMap[type]];
     const hasLanguage =
       Object.keys(selectedLanguages).length < 1 ||
       languages.some(language => selectedLanguages[language]);
     const hasFramework =
       Object.keys(selectedFrameworks).length < 1 ||
       frameworks.some(framework => selectedFrameworks[framework]);
+    const hasApi =
+      Object.keys(selectedApis).length < 1 ||
+      apis.some(api => selectedApis[api]);
 
-    element.hidden = !hasSearchMatch || !hasLanguage || !hasFramework;
+    element.hidden =
+      !hasSearchMatch || !hasType || !hasLanguage || !hasFramework || !hasApi;
   });
 };
 
@@ -88,43 +118,50 @@ const parseSelectionMapFromUrl = (key: string) =>
       .map(val => [val, true]),
   );
 
+const selectedTypes: Record<string, boolean> =
+  parseSelectionMapFromUrl('types');
 const selectedLanguages: Record<string, boolean> =
   parseSelectionMapFromUrl('languages');
 const selectedFrameworks: Record<string, boolean> =
   parseSelectionMapFromUrl('frameworks');
+const selectedApis: Record<string, boolean> = parseSelectionMapFromUrl('apis');
 
-const toggleLanguage = (language: string) => {
-  if (selectedLanguages[language]) {
-    delete selectedLanguages[language];
-  } else {
-    selectedLanguages[language] = true;
-  }
-  requestAnimationFrame(() => {
-    updateProjectsView();
-    const selectedLanguagesArray = Object.keys(selectedLanguages);
-    updateSearchParam(
-      'languages',
-      selectedLanguagesArray.length > 0 ? selectedLanguagesArray.join(',') : '',
-    );
-  });
-};
+const setupToggleQueryParamFunction =
+  (queryParam: string, map: Record<string, boolean>) => (key: string) => {
+    if (map[key]) {
+      delete map[key];
+    } else {
+      map[key] = true;
+    }
+    requestAnimationFrame(() => {
+      updateProjectsView();
+      const selectedKeysArray = Object.keys(map);
+      updateSearchParam(
+        queryParam,
+        selectedKeysArray.length > 0 ? selectedKeysArray.join(',') : '',
+      );
+    });
+  };
 
-const toggleFramework = (framework: string) => {
-  if (selectedFrameworks[framework]) {
-    delete selectedFrameworks[framework];
-  } else {
-    selectedFrameworks[framework] = true;
-  }
-  requestAnimationFrame(() => {
-    updateProjectsView();
-    const selectedFrameworksArray = Object.keys(selectedFrameworks);
-    updateSearchParam(
-      'frameworks',
-      selectedFrameworksArray.length > 0
-        ? selectedFrameworksArray.join(',')
-        : '',
-    );
-  });
+const setupCheckboxFilter = (id: string, map: Record<string, boolean>) => {
+  const toggleFilter = setupToggleQueryParamFunction(id, map);
+  document
+    .querySelectorAll<HTMLUListElement>(`#${id} > li`)
+    .forEach(element => {
+      const checkbox = element.querySelector<HTMLInputElement>(
+        'input[type="checkbox"]',
+      )!;
+      const key =
+        element.querySelector<HTMLLabelElement>('label')!.textContent!;
+
+      toggleChip(element, map[key]);
+
+      element.addEventListener('click', () => {
+        toggleFilter(key);
+        checkbox.checked = map[key];
+        toggleChip(element, map[key]);
+      });
+    });
 };
 
 export const setupFilters = () => {
@@ -143,51 +180,20 @@ export const setupFilters = () => {
   });
   import('fuse.js').then(({ default: Fuse }) => {
     fuse = new Fuse(projects, {
-      keys: ['name', 'description', 'languages', 'frameworks'],
+      keys: ['type', 'name', 'description', 'languages', 'frameworks'],
     });
     updateProjectsView();
     searchBar.disabled = false;
   });
 
+  // Setup project type chips
+  setupCheckboxFilter('types', selectedTypes);
   // Setup languages chips
-  document
-    .querySelectorAll<HTMLUListElement>('#languages > li')
-    .forEach(languageElement => {
-      const checkbox = languageElement.querySelector<HTMLInputElement>(
-        'input[type="checkbox"]',
-      )!;
-      const language = languageElement
-        .querySelector('label')!
-        .textContent!.trim();
-
-      toggleChip(languageElement, selectedLanguages[language]);
-
-      languageElement.addEventListener('click', () => {
-        toggleLanguage(language);
-        checkbox.checked = selectedLanguages[language];
-        toggleChip(languageElement, selectedLanguages[language]);
-      });
-    });
-
+  setupCheckboxFilter('languages', selectedLanguages);
   // Setup frameworks chips
-  document
-    .querySelectorAll<HTMLUListElement>('#frameworks > li')
-    .forEach(frameworkElement => {
-      const checkbox = frameworkElement.querySelector<HTMLInputElement>(
-        'input[type="checkbox"]',
-      )!;
-      const framework = frameworkElement
-        .querySelector('label')!
-        .textContent!.trim();
-
-      toggleChip(frameworkElement, selectedFrameworks[framework]);
-
-      frameworkElement.addEventListener('click', () => {
-        toggleFramework(framework);
-        checkbox.checked = selectedFrameworks[framework];
-        toggleChip(frameworkElement, selectedFrameworks[framework]);
-      });
-    });
+  setupCheckboxFilter('frameworks', selectedFrameworks);
+  // Setup APIs chips
+  setupCheckboxFilter('apis', selectedApis);
 };
 
 updateProjectsView();

@@ -110,6 +110,34 @@
       <label class="heading" for="filter-search">Search</label>
       <input name="filter-search" id="filter-search" class="material" disabled>
       <fieldset>
+        <legend class="heading">Filter by type</legend>
+        <ul id="types" class="chips">
+          <%
+            const typeToNameMap = {
+              [ProjectType.BOT_TELEGRAM]: 'Telegram Bot',
+              [ProjectType.BOT_DISCORD]: 'Discord Bot',
+              [ProjectType.BOT_SLACK]: 'Slack Bot',
+              [ProjectType.APP_WEB]: 'Web App',
+              [ProjectType.APP_CROSS_PLATFORM]: 'Cross Platform App',
+              [ProjectType.APP_WINDOWS]: 'Windows App',
+              [ProjectType.APP_MACOS]: 'macOS App',
+              [ProjectType.APP_LINUX]: 'GNU/Linux App',
+              [ProjectType.APP_ANDROID]: 'Android App',
+              [ProjectType.APP_IOS]: 'iOS App',
+            };
+
+            const types = Object.values(ProjectType).filter(type => projects.some(project => project.type === type));
+          %>
+          <% types.forEach(type => { %>
+            <li class="checkable">
+              <input type="checkbox" name="filter-type" id="filter-type-<%= type %>">
+              <span class="material-symbols-outlined check">&#xE5CA;</span>
+              <label for="filter-type-<%= type %>"><%= typeToNameMap[type] %></label>
+            </li>
+          <% }) %>
+        </ul>
+      </fieldset>
+      <fieldset>
         <legend class="heading">Filter by language</legend>
         <ul id="languages" class="chips">
           <% const languages = Array.from(new Set(projects.flatMap(({ languages }) => languages))) %>
@@ -137,13 +165,13 @@
       </fieldset>
       <fieldset>
         <legend class="heading">Filter by APIs technology/paradigm</legend>
-        <ul id="frameworks" class="chips">
+        <ul id="apis" class="chips">
           <% const apiItems = Array.from(new Set(projects.flatMap(({ api = [] }) => api))) %>
           <% apiItems.forEach(apiItem => { %>
             <li class="checkable">
-              <input type="checkbox" name="filter-framework" id="filter-framework-<%= apiItem %>">
+              <input type="checkbox" name="filter-api" id="filter-api-<%= apiItem %>">
               <svg class="check" viewBox="0 0 24 24"><path d="M21 7 9 19l-5-5 1-2 4 4L20 6l1 1Z"/></svg>
-              <label for="filter-framework-<%= apiItem %>"><%= apiItem %></label>
+              <label for="filter-api-<%= apiItem %>"><%= apiItem %></label>
             </li>
           <% }) %>
         </ul>
@@ -184,7 +212,7 @@
       %>
       <% projects.forEach(({ id, name, description, link, source, type, languages, frameworks = [], api = [], icon }) => { %>
         <% const fallbackIconFormat = icon.formats.at(-1); %>
-        <li id="project-<%= id %>">
+        <li id="project-<%= id %>" data-type="<%= type %>">
           <div class="header">
             <picture>
               <% icon.formats.forEach(format => { %>
@@ -213,7 +241,7 @@
                 <li class="chip-framework"><%= framework %></li>
               <% }) %>
               <% api.forEach(apiItem => { %>
-                <li class="chip-framework"><%= apiItem %></li>
+                <li class="chip-api"><%= apiItem %></li>
               <% }) %>
             </ul>
             <h2><%= name %></h2>
