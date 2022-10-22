@@ -165,9 +165,6 @@ const setupCheckboxFilter = (id: string, map: Record<string, boolean>) => {
 };
 
 export const setupFilters = () => {
-  // Only show filters if JavaScript is enabled
-  document.querySelector<HTMLElement>('#filters')!.hidden = false;
-
   // Setup search bar
   const searchBar = document.querySelector<HTMLInputElement>('#filter-search')!;
   searchBar.value = currentSearch;

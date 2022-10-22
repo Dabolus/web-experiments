@@ -29,6 +29,14 @@
         }
       </script>
     <% } %>
+    <!-- Only show filters if JavaScript is enabled -->
+    <noscript>
+      <style>
+        #filters {
+          display: none;
+        }
+      </style>
+    </noscript>
     <style>
       @font-face {
         font-family: 'Jost*';
@@ -106,7 +114,7 @@
   </head>
   <body>
     <h1>Welcome to my projects homepage!</h1>
-    <section id="filters" hidden>
+    <section id="filters">
       <label class="heading" for="filter-search">Search</label>
       <input name="filter-search" id="filter-search" class="material" disabled>
       <fieldset>
