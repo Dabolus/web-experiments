@@ -1,5 +1,5 @@
 import type Fuse from 'fuse.js';
-import { ProjectType } from '@dabolus/portfolio-data';
+import { ProjectType } from '@dabolus/portfolio-data/lib/projects.js';
 
 const projectTypeToNameMap: Record<ProjectType, string> = {
   [ProjectType.BOT_TELEGRAM]: 'Telegram Bot',
