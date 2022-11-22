@@ -1,9 +1,31 @@
 import { promises as fs } from 'fs';
 import { execute } from '@yarnpkg/shell';
 
-const projects = await fs.readdir('src/experiments');
+const kebabToCamelCase = str =>
+  str.replace(/-([a-z])/g, ([, match]) => match.toUpperCase());
+
+const [projects, apis] = await Promise.all([
+  fs.readdir('src/experiments'),
+  fs.readdir('src/functions/src/apis'),
+]);
 
 await fs.rm('dist', { recursive: true, force: true });
+
+const firebaseFunctionsIndex = `import * as functions from 'firebase-functions';
+${apis.map(
+  api =>
+    `import { handler as ${kebabToCamelCase(
+      api,
+    )}Handler } from './apis/${api}';\n`,
+)}
+${apis.map(
+  api =>
+    `export const ${kebabToCamelCase(
+      api,
+    )}Api = functions.https.onRequest(${kebabToCamelCase(api)}Handler);\n`,
+)}`;
+
+await fs.writeFile('src/functions/src/index.ts', firebaseFunctionsIndex);
 
 // Build all the things
 await execute(
@@ -31,6 +53,10 @@ const firebaseConfig = {
   hosting: {
     ...firebaseConfigTemplate.hosting,
     rewrites: [
+      ...apis.map(api => ({
+        source: `/api/${api}/**`,
+        function: `${kebabToCamelCase(api)}Api`,
+      })),
       ...projects.map(project => ({
         source: `/${project}/**`,
         destination: `/${project}/index.html`,

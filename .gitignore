@@ -12,3 +12,4 @@ size-plugin.json
 *.log
 .firebase*
 firebase.json
+functions/src/index.ts
