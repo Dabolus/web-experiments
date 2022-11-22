@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@yarnpkg/shell": "^4.0.0-rc.25",
-    "firebase-tools": "^11.14.3",
+    "firebase-tools": "^11.16.1",
     "typescript": "^4.8.4"
   },
   "workspaces": [
