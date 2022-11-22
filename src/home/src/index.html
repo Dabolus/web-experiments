@@ -18,8 +18,6 @@
     <meta name="msapplication-TileColor" content="#303030">
     <meta name="msapplication-config" content="assets/images/icons/browserconfig.xml?v=4c3e83b7">
     <meta name="theme-color" content="#303030">
-    <script type="module" src="/src/scripts/main.ts"></script>
-    <link rel="stylesheet" href="/src/styles/main.scss">
     <% if (mode === 'production') { %>
       <script>
         if ('serviceWorker' in navigator) {
@@ -111,6 +109,8 @@
         color: #fff;
       }
     </style>
+    <script type="module" src="/src/scripts/main.ts"></script>
+    <link rel="stylesheet" href="/src/styles/main.scss">
   </head>
   <body>
     <h1>Welcome to my projects homepage!</h1>
