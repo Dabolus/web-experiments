@@ -10,9 +10,9 @@
   "scripts": {
     "start": "run-p watch:esbuild watch:firebase",
     "watch:esbuild": "yarn esbuild --watch --sourcemap=inline src/index.ts",
-    "watch:firebase": "wait-on lib/index.js && firebase emulators:start --only functions",
-    "build": "yarn esbuild --bundle --minify --sourcemap src/index.ts",
-    "esbuild": "esbuild --platform=node --target=node16 --outdir=lib --format=esm --external:firebase-functions --external:firebase-admin"
+    "watch:firebase": "wait-on lib/index.js && firebase emulators:start",
+    "build": "yarn esbuild --minify --sourcemap src/index.ts",
+    "esbuild": "esbuild --platform=node --target=node16 --outdir=lib --format=esm --bundle --external:firebase-functions --external:firebase-admin"
   },
   "dependencies": {
     "firebase-admin": "^11.1.0",
