@@ -4,8 +4,7 @@ import { generateVCard, PrivateData } from './utils.js';
 const apiUrl = import.meta.env.VITE_API_URL || '';
 
 const contactsCaptcha = document.querySelector<HTMLDivElement>('#captcha')!;
-const phoneNumberListOption =
-  document.querySelector<HTMLLIElement>('#phone-number')!;
+const phoneNumberListOption = document.querySelector<HTMLLIElement>('#phone')!;
 const phoneNumberButton = phoneNumberListOption.querySelector('button')!;
 const addToContacts =
   document.querySelector<HTMLAnchorElement>('#add-to-contacts')!;

@@ -79,7 +79,7 @@
     </style>
     <noscript>
       <style>
-        #phone-number, #add-to-contacts {
+        #phone, #add-to-contacts {
           display: none;
         }
       </style>
@@ -138,30 +138,22 @@
         <section id="contacts" aria-labelledby="contacts-title">
           <h3 id="contacts-title">Contact me</h3>
           <ul aria-label="Contacts">
-            <li id="phone-number" aria-disabled="true">
-              <a>
-                <div class="icon">
-                  <img src="./images/socials/phone.svg" alt="Phone" title="Phone" width="24" height="24">
-                </div>
-                <span>
-                  ●●● ●●● ●●● ●●●●
-                </span>
-                <button>
-                  <svg viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12C7 5 3 8 1 12a12 12 0 0 0 22 0c-2-4-6-7-11-7Z"/>
-                  </svg>
-                </button>
-              </a>
-            </li>
             <% contacts.forEach(({ id, name, text, link }) => { %>
-              <li>
-                <a href="<%= link %>" rel="external" target="<%= id %>">
+              <li id="<%= id %>" <%- link ? '' : 'aria-disabled="true"' %>>
+                <a rel="external" target="<%= id %>" <%- link ? `href="${link}"` : '' %>>
                   <div class="icon">
                     <img src="./images/socials/<%= id %>.svg" alt="<%= name %>" title="<%= name %>" width="24" height="24">
                   </div>
                   <span>
                     <%= text %>
                   </span>
+                  <% if (!link) { %>
+                    <button>
+                      <svg viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12C7 5 3 8 1 12a12 12 0 0 0 22 0c-2-4-6-7-11-7Z"/>
+                      </svg>
+                    </button>
+                  <% } %>
                 </a>
               </li>
             <% }) %>
