@@ -3491,6 +3491,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node-fetch@npm:2":
+  version: 2.6.2
+  resolution: "@types/node-fetch@npm:2.6.2"
+  dependencies:
+    "@types/node": "*"
+    form-data: ^3.0.0
+  checksum: 6f73b1470000d303d25a6fb92875ea837a216656cb7474f66cdd67bb014aa81a5a11e7ac9c21fe19bee9ecb2ef87c1962bceeaec31386119d1ac86e4c30ad7a6
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*":
   version: 17.0.18
   resolution: "@types/node@npm:17.0.18"
@@ -3924,14 +3934,6 @@ __metadata:
 "@webexp/business-card@workspace:src/experiments/me":
   version: 0.0.0-use.local
   resolution: "@webexp/business-card@workspace:src/experiments/me"
-  dependencies:
-    "@types/node": ^18.8.5
-    "@webexp/config": "workspace:^"
-    sass: ^1.55.0
-    tosource: ^2.0.0-alpha.3
-    vite: ^3.1.8
-    vite-plugin-html: ^3.2.0
-    vite-plugin-static-copy: ^0.9.0
   languageName: unknown
   linkType: soft
 
@@ -3992,10 +3994,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@webexp/functions@workspace:src/functions"
   dependencies:
+    "@types/node-fetch": 2
     esbuild: ^0.15.11
     firebase-admin: ^11.3.0
     firebase-functions: ^4.1.0
     firebase-functions-test: ^3.0.0
+    node-fetch: 2
     npm-run-all: ^4.1.5
     wait-on: ^6.0.1
   languageName: unknown
@@ -8928,6 +8932,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"form-data@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "form-data@npm:3.0.1"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.8
+    mime-types: ^2.1.12
+  checksum: b019e8d35c8afc14a2bd8a7a92fa4f525a4726b6d5a9740e8d2623c30e308fbb58dc8469f90415a856698933c8479b01646a9dff33c87cc4e76d72aedbbf860d
+  languageName: node
+  linkType: hard
+
 "form-data@npm:^4.0.0":
   version: 4.0.0
   resolution: "form-data@npm:4.0.0"
@@ -12944,7 +12959,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:2.6.7, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.7":
+"node-fetch@npm:2, node-fetch@npm:2.6.7, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.7":
   version: 2.6.7
   resolution: "node-fetch@npm:2.6.7"
   dependencies:
