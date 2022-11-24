@@ -6,7 +6,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 // See: https://github.com/vitejs/vite/issues/5370
 import createConfig from '../config/vite/vanilla';
 
-export default createConfig(async () => ({
+export default createConfig({
   pwa: {
     injectRegister: null,
     manifest: false,
@@ -16,9 +16,13 @@ export default createConfig(async () => ({
       sourcemap: true,
       cleanupOutdatedCaches: true,
       navigateFallback: 'index.html',
-      navigateFallbackDenylist: Object.entries(projects)
-        .filter(([, project]) => project.link.includes('gga.dev'))
-        .map(([id]) => new RegExp(`^/${id}/`)),
+      navigateFallbackDenylist: [
+        /^\/hi\/?$/,
+        /^\/me\/?$/,
+        ...Object.entries(projects)
+          .filter(([, project]) => project.link.includes('gga.dev'))
+          .map(([id]) => new RegExp(`^/${id}/`)),
+      ],
       globPatterns: [
         '**/*.{js,html,woff2,css,svg,png,jpg,jpeg,gif,ico,webp,jxl,mp4,webm,ogg,mp3,opus}',
       ],
@@ -47,4 +51,4 @@ export default createConfig(async () => ({
       ],
     }),
   ],
-}));
+});
