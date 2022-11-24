@@ -6,6 +6,8 @@ const apiUrl = import.meta.env.VITE_API_URL || '';
 const contactsCaptcha = document.querySelector<HTMLDivElement>('#captcha')!;
 const phoneNumberListOption = document.querySelector<HTMLLIElement>('#phone')!;
 const phoneNumberButton = phoneNumberListOption.querySelector('button')!;
+const whatsappListOption = document.querySelector<HTMLLIElement>('#whatsapp')!;
+const whatsappButton = whatsappListOption.querySelector('button')!;
 const addToContacts =
   document.querySelector<HTMLAnchorElement>('#add-to-contacts')!;
 
@@ -32,8 +34,19 @@ const getPrivateData = async () => {
   phoneNumberListOption.removeAttribute('aria-disabled');
   phoneNumberButton.remove();
 
+  // WhatsApp
+  const whatsAppNumber = privateData.phoneNumber.replace(/[^\d]/g, '');
+  whatsappListOption.querySelector(
+    'a',
+  )!.href = `https://wa.me/${whatsAppNumber}`;
+  whatsappListOption.querySelector(
+    'span',
+  )!.textContent = `wa.me/${whatsAppNumber}`;
+  whatsappListOption.removeAttribute('aria-disabled');
+  whatsappButton.remove();
+
   // Add to contacts
-  const vCard = generateVCard(privateData);
+  const vCard = generateVCard({ ...privateData, whatsAppNumber });
   addToContacts.href = URL.createObjectURL(
     new Blob([vCard], { type: 'text/vcard' }),
   );
@@ -42,6 +55,7 @@ const getPrivateData = async () => {
 };
 
 phoneNumberButton.onclick = getPrivateData;
+whatsappButton.onclick = getPrivateData;
 addToContacts.onclick = async () => {
   await getPrivateData();
   addToContacts.click();

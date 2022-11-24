@@ -37,6 +37,11 @@ export default createConfig({
           link: 'https://t.me/Dabolus',
         },
         {
+          id: 'whatsapp',
+          name: 'WhatsApp',
+          text: 'wa.me/●●●●●●●●●●●●',
+        },
+        {
           id: 'linkedin',
           name: 'LinkedIn',
           link: 'https://www.linkedin.com/in/giorgiogarasto',

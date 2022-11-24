@@ -26,10 +26,15 @@ export interface PrivateData {
   personalEmail: string;
 }
 
+export interface VCardData extends PrivateData {
+  whatsAppNumber: string;
+}
+
 export const generateVCard = ({
   phoneNumber,
   personalEmail,
-}: PrivateData) => `BEGIN:VCARD
+  whatsAppNumber,
+}: VCardData) => `BEGIN:VCARD
 VERSION:4.0
 FN:Giorgio Garasto
 N:Garasto;Giorgio;;;
@@ -51,7 +56,7 @@ portfolio.URL:https\://giorgio.garasto.me
 portfolio.X-ABLabel:Portfolio
 telegram.URL:https\://t.me/Dabolus
 telegram.X-ABLabel:Telegram
-whatsapp.URL:https\://wa.me/${phoneNumber.replace(/[^\d]/g, '')}
+whatsapp.URL:https\://wa.me/${whatsAppNumber}
 whatsapp.X-ABLabel:WhatsApp
 linkedin.URL:https\://www.linkedin.com/in/giorgiogarasto
 linkedin.X-ABLabel:LinkedIn
