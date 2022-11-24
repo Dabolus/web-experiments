@@ -156,6 +156,11 @@ header {
     &:hover {
       background: #005f70;
     }
+
+    > img {
+      width: 1em;
+      height: 1em;
+    }
   }
 
   #add-to-contacts {
