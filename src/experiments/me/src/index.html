@@ -144,7 +144,7 @@
                   <div class="icon">
                     <img src="./images/socials/<%= id %>.svg" alt="<%= name %>" title="<%= name %>" width="24" height="24">
                   </div>
-                  <span>
+                  <span <%- link ? '' : 'aria-hidden="true"' %>>
                     <%= text %>
                   </span>
                   <% if (!link) { %>

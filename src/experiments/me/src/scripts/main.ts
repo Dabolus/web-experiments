@@ -6,8 +6,12 @@ const apiUrl = import.meta.env.VITE_API_URL || '';
 const contactsCaptcha = document.querySelector<HTMLDivElement>('#captcha')!;
 const phoneNumberListOption = document.querySelector<HTMLLIElement>('#phone')!;
 const phoneNumberButton = phoneNumberListOption.querySelector('button')!;
+const phoneNumberAnchor = phoneNumberListOption.querySelector('a')!;
+const phoneNumberSpan = phoneNumberListOption.querySelector('span')!;
 const whatsappListOption = document.querySelector<HTMLLIElement>('#whatsapp')!;
 const whatsappButton = whatsappListOption.querySelector('button')!;
+const whatsappAnchor = whatsappListOption.querySelector('a')!;
+const whatsappSpan = whatsappListOption.querySelector('span')!;
 const addToContacts =
   document.querySelector<HTMLAnchorElement>('#add-to-contacts')!;
 
@@ -26,22 +30,17 @@ const getPrivateData = async () => {
   const privateData = (await res.json()) as PrivateData;
 
   // Phone number
-  phoneNumberListOption.querySelector(
-    'a',
-  )!.href = `tel:${privateData.phoneNumber}`;
-  phoneNumberListOption.querySelector('span')!.textContent =
-    privateData.phoneNumber;
+  phoneNumberAnchor.href = `tel:${privateData.phoneNumber}`;
+  phoneNumberSpan.textContent = privateData.phoneNumber;
+  phoneNumberSpan.removeAttribute('aria-hidden');
   phoneNumberListOption.removeAttribute('aria-disabled');
   phoneNumberButton.remove();
 
   // WhatsApp
   const whatsAppNumber = privateData.phoneNumber.replace(/[^\d]/g, '');
-  whatsappListOption.querySelector(
-    'a',
-  )!.href = `https://wa.me/${whatsAppNumber}`;
-  whatsappListOption.querySelector(
-    'span',
-  )!.textContent = `wa.me/${whatsAppNumber}`;
+  whatsappAnchor.href = `https://wa.me/${whatsAppNumber}`;
+  whatsappSpan.textContent = `wa.me/${whatsAppNumber}`;
+  whatsappSpan.removeAttribute('aria-hidden');
   whatsappListOption.removeAttribute('aria-disabled');
   whatsappButton.remove();
 
