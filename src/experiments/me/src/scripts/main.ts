@@ -22,7 +22,8 @@ const getPrivateData = async () => {
     }),
   });
   const privateData = (await res.json()) as PrivateData;
-  const vCard = generateVCard(privateData);
+
+  // Phone number
   phoneNumberListOption.querySelector(
     'a',
   )!.href = `tel:${privateData.phoneNumber}`;
@@ -31,20 +32,20 @@ const getPrivateData = async () => {
   phoneNumberListOption.removeAttribute('aria-disabled');
   phoneNumberButton.remove();
 
+  // Add to contacts
+  const vCard = generateVCard(privateData);
   addToContacts.href = URL.createObjectURL(
     new Blob([vCard], { type: 'text/vcard' }),
   );
   addToContacts.download = 'gga.vcf';
+  addToContacts.onclick = null;
 };
 
-const handleAddToContactsClick = async () => {
+phoneNumberButton.onclick = getPrivateData;
+addToContacts.onclick = async () => {
   await getPrivateData();
-  addToContacts.removeEventListener('click', handleAddToContactsClick);
   addToContacts.click();
 };
-
-phoneNumberButton.addEventListener('click', getPrivateData);
-addToContacts.addEventListener('click', handleAddToContactsClick);
 
 window.addEventListener('load', () => renderCaptcha(contactsCaptcha), {
   once: true,
