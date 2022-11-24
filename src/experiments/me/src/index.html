@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Giorgio Garasto's Business Card</title>
+    <base href="<%= base %>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Check my digital Business Card containing all my contact information.">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/icons/default-192x192.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon-16x16.png">
+    <link rel="manifest" href="images/icons/site.webmanifest">
+    <link rel="mask-icon" href="images/icons/safari-pinned-tab.svg" color="#303030">
+    <link rel="shortcut icon" href="images/icons/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Giorgio Garasto's Projects">
+    <meta name="application-name" content="Giorgio Garasto's Projects">
+    <meta name="msapplication-TileColor" content="#303030">
+    <meta name="msapplication-config" content="images/icons/browserconfig.xml">
+    <meta name="theme-color" content="#303030">
+
+    <style>
+      @font-face {
+        font-family: 'Jost*';
+        font-style: normal;
+        font-weight: 200;
+        src: url('./assets/fonts/f0519003.woff2') format('woff2');
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Jost*';
+        font-style: normal;
+        font-weight: 300;
+        src: url('./assets/fonts/512b8a76.woff2') format('woff2');
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Jost*';
+        font-style: normal;
+        font-weight: 400;
+        src: url('./assets/fonts/ee4ca8b4.woff2') format('woff2');
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Jost*';
+        font-style: normal;
+        font-weight: 600;
+        src: url('./assets/fonts/6b4bd741.woff2') format('woff2');
+        font-display: swap;
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: 'Jost*', sans-serif;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        color: #fff;
+      }
+
+      svg {
+        width: 1em;
+        height: 1em;
+      }
+
+      h1, h2, h3, p {
+        margin: 0;
+      }
+    </style>
+    <noscript>
+      <style>
+        #phone-number, #add-to-contacts {
+          display: none;
+        }
+      </style>
+    </noscript>
+    <script type="module" src="/src/scripts/main.ts"></script>
+    <link rel="stylesheet" href="/src/styles/main.scss">
+  </head>
+  <body>
+    <div id="container">
+      <picture>
+        <source srcset="./images/header.jxl" type="image/jxl">
+        <source srcset="./images/header.webp" type="image/webp">
+        <source srcset="./images/header.jpg" type="image/jpeg">
+        <img id="background" src="./images/header.jpg" alt="" width="1920" height="960">
+      </picture>
+      <header>
+        <div id="header-content">
+          <picture>
+            <source srcset="./images/me.jxl" type="image/jxl">
+            <source srcset="./images/me.webp" type="image/webp">
+            <source srcset="./images/me.jpg" type="image/jpeg">
+            <img id="me-vintage" src="./images/me.jpg" alt="Me" title="Me" width="128" height="128">
+          </picture>
+          <h1>Giorgio Garasto</h1>
+          <h2>Software Engineer</h2>
+          <ul aria-label="Information">
+            <li>
+              <svg viewBox="0 0 24 24" title="Location">
+                <path fill="currentColor" d="M12 11.5A2.5 2.5 0 0 1 9.5 9 2.5 2.5 0 0 1 12 6.5 2.5 2.5 0 0 1 14.5 9a2.5 2.5 0 0 1-2.5 2.5M12 2a7 7 0 0 0-7 7c0 5.3 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Z"/>
+              </svg>
+              <span>Italy</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" title="Birthday">
+                <path fill="currentColor" d="M12 6a2 2 0 0 0 1.7-3L12 0l-1.7 3c-.2.3-.3.6-.3 1a2 2 0 0 0 2 2m4.6 10-1-1-1.2 1a3.6 3.6 0 0 1-4.8 0l-1.1-1-1.1 1a3.5 3.5 0 0 1-4.4.4V21a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-4.6a3.5 3.5 0 0 1-4.4-.4M18 9h-5V7h-2v2H6a3 3 0 0 0-3 3v1.5A2 2 0 0 0 6.3 15l2.2-2.1 2.1 2.1c.8.8 2 .8 2.8 0l2.1-2.1 2.1 2.1a2 2 0 0 0 3.4-1.4V12a3 3 0 0 0-3-3Z"/>
+              </svg>
+              <time datetime="1997-09-01T23:20">Sep 1, 1997</time>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" title="Pronouns">
+                <path fill="currentColor" d="M9 11.75A1.25 1.25 0 0 0 7.75 13 1.25 1.25 0 0 0 9 14.25 1.25 1.25 0 0 0 10.25 13 1.25 1.25 0 0 0 9 11.75m6 0A1.25 1.25 0 0 0 13.75 13 1.25 1.25 0 0 0 15 14.25 1.25 1.25 0 0 0 16.25 13 1.25 1.25 0 0 0 15 11.75M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 18c-4.41 0-8-3.59-8-8 0-.29 0-.58.05-.86a10.06 10.06 0 0 0 5.21-5.37 9.97 9.97 0 0 0 10.41 3.97A7.97 7.97 0 0 1 12 20Z"/>
+              </svg>
+              <span>He/him</span>
+            </li>
+          </ul>
+        </div>
+        <hr>
+      </header>
+      <main>
+        <section id="about" aria-labelledby="about-title">
+          <h3 id="about-title">About me</h3>
+          <p>I put my hands on HTML for the first time when I was seven years old to help my father, and I've never stopped playing with it since then. The passion for web development influenced both my work and study choices and brought me to gain a scholarship from Google and Udacity that gave me the chance to obtain the Mobile Web Specialist certification. At work, I gained vast experience in front end development by means of libraries and frameworks such as React and Angular, as well as using native technologies, like Web Components and Service Workers. On the back end side, I mainly use Node.js and Go.</p>
+          <p>Outside the working world, I like devoting myself to music. I love playing guitar and singing, but I do dabble also with piano and drums.</p>
+        </section>
+        <hr>
+        <section id="contacts" aria-labelledby="contacts-title">
+          <h3 id="contacts-title">Contact me</h3>
+          <ul aria-label="Contacts">
+            <li id="phone-number" aria-disabled="true">
+              <a>
+                <div class="icon">
+                  <img src="./images/socials/phone.svg" alt="Phone" title="Phone" width="24" height="24">
+                </div>
+                <span>
+                  ●●● ●●● ●●● ●●●●
+                </span>
+                <button>
+                  <svg viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12C7 5 3 8 1 12a12 12 0 0 0 22 0c-2-4-6-7-11-7Z"/>
+                  </svg>
+                </button>
+              </a>
+            </li>
+            <% contacts.forEach(({ id, name, text, link }) => { %>
+              <li>
+                <a href="<%= link %>" rel="external" target="<%= id %>">
+                  <div class="icon">
+                    <img src="./images/socials/<%= id %>.svg" alt="<%= name %>" title="<%= name %>" width="24" height="24">
+                  </div>
+                  <span>
+                    <%= text %>
+                  </span>
+                </a>
+              </li>
+            <% }) %>
+          </ul>
+          <a id="add-to-contacts">Add to contacts</a>
+          <div id="captcha"></div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

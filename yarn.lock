@@ -3384,6 +3384,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/grecaptcha@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "@types/grecaptcha@npm:3.0.4"
+  checksum: 5413df122f73a0bfc9304860c42f8e78549557fc03d9e3f97d4241c607103c575503024f3f67ac66700474f1d673e5fbffa466679844e1e0383a8d3239912343
+  languageName: node
+  linkType: hard
+
 "@types/http-proxy@npm:^1.17.8":
   version: 1.17.8
   resolution: "@types/http-proxy@npm:1.17.8"
@@ -3934,6 +3941,15 @@ __metadata:
 "@webexp/business-card@workspace:src/experiments/me":
   version: 0.0.0-use.local
   resolution: "@webexp/business-card@workspace:src/experiments/me"
+  dependencies:
+    "@types/grecaptcha": ^3.0.4
+    "@types/node": ^18.8.5
+    "@webexp/config": "workspace:^"
+    sass: ^1.55.0
+    tosource: ^2.0.0-alpha.3
+    vite: ^3.1.8
+    vite-plugin-html: ^3.2.0
+    vite-plugin-static-copy: ^0.9.0
   languageName: unknown
   linkType: soft
 

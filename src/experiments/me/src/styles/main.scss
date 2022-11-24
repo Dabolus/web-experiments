@@ -1,0 +1,164 @@
+#container {
+  width: 100%;
+  max-width: 45rem;
+  margin: 0 auto;
+  background-color: #303030;
+  box-shadow: 0 0 0.5rem 0 #303030;
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+header,
+main {
+  padding: 0 1rem;
+}
+
+#background {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(20deg, #005f70 50%, #00778b 75%);
+  object-position: top center;
+  object-fit: contain;
+  z-index: -1;
+}
+
+header {
+  position: sticky;
+  top: -64px;
+  background: #303030;
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
+#header-content {
+  margin-top: 8rem;
+  width: 100%;
+  text-align: center;
+
+  img {
+    margin-top: -4rem;
+    border: 0.125rem solid #303030;
+    border-radius: 50%;
+    box-shadow: 0 0 0.5rem 0 #303030;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  ul {
+    font-size: 0.8rem;
+    margin: 0.25rem 0 0;
+    display: inline-flex;
+    list-style: none;
+
+    &,
+    & > li {
+      margin: 0;
+      padding: 0;
+    }
+
+    & > li {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:not(:last-child)::after {
+        content: '|';
+        margin-right: 0.5rem;
+      }
+    }
+  }
+}
+
+#about {
+  p {
+    text-align: justify;
+
+    &:not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+#contacts {
+  display: flex;
+  flex-direction: column;
+
+  > ul {
+    margin: 0;
+    padding: 0.5rem 0;
+    list-style: none;
+
+    > li:not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+
+    > li:not([aria-disabled='true']) > a:hover {
+      text-decoration: underline;
+
+      .icon {
+        background: #005f70;
+      }
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: #00778b;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: background 0.2s;
+
+      > img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  button,
+  #add-to-contacts {
+    appearance: none;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    background: #00778b;
+    color: #fff;
+    border-radius: 0.5rem;
+    padding: 0.25rem 1rem;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #005f70;
+    }
+  }
+
+  #phone-number button {
+    border-radius: 50%;
+    padding: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 1rem;
+    line-height: 2;
+  }
+
+  #add-to-contacts {
+    margin: 0 auto 1rem;
+  }
+}

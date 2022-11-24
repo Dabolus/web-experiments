@@ -1,0 +1,24 @@
+{
+  "name": "@webexp/business-card",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Dabolus/web-experiments.git",
+  "author": "Giorgio Garasto <giorgio@garasto.me>",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "NODE_OPTIONS='--experimental-import-meta-resolve' vite",
+    "build": "NODE_OPTIONS='--experimental-import-meta-resolve' vite build"
+  },
+  "devDependencies": {
+    "@types/grecaptcha": "^3.0.4",
+    "@types/node": "^18.8.5",
+    "@webexp/config": "workspace:^",
+    "sass": "^1.55.0",
+    "tosource": "^2.0.0-alpha.3",
+    "vite": "^3.1.8",
+    "vite-plugin-html": "^3.2.0",
+    "vite-plugin-static-copy": "^0.9.0"
+  }
+}
