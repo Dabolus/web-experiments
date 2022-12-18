@@ -16,17 +16,17 @@
     "base45-ts": "^1.0.3",
     "cbor-web": "^8.1.0",
     "date-fns": "^2.29.3",
-    "pako": "^2.0.4",
-    "preact": "^10.11.1",
-    "preact-render-to-string": "^5.2.5",
+    "pako": "^2.1.0",
+    "preact": "^10.11.3",
+    "preact-render-to-string": "^5.2.6",
     "qr.js": "^0.0.0",
-    "wouter-preact": "^2.8.0-alpha.2"
+    "wouter-preact": "^2.9.0"
   },
   "devDependencies": {
     "@types/pako": "^2.0.0",
     "cbor": "^8.1.0",
-    "node-sass": "^7.0.3",
-    "preact-cli": "^3.4.1",
+    "node-sass": "^8.0.0",
+    "preact-cli": "^3.4.2",
     "sass-loader": "10"
   }
 }

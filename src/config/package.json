@@ -8,15 +8,15 @@
   "type": "module",
   "private": true,
   "dependencies": {
-    "@preact/preset-vite": "^2.3.0",
-    "@rollup/plugin-yaml": "^4.0.0",
+    "@preact/preset-vite": "^2.5.0",
+    "@rollup/plugin-yaml": "^4.0.1",
     "tosource": "^2.0.0-alpha.3",
-    "vite": "^3.1.8",
+    "vite": "^4.0.2",
     "vite-plugin-html": "^3.2.0",
     "vite-plugin-markdown": "^2.1.0",
-    "vite-plugin-pwa": "^0.13.1"
+    "vite-plugin-pwa": "^0.14.0"
   },
   "devDependencies": {
-    "@types/node": "^18.8.5"
+    "@types/node": "^18.11.17"
   }
 }
