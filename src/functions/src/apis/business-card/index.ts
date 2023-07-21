@@ -1,9 +1,12 @@
 import { App, initializeApp, getApp } from 'firebase-admin/app';
 import { getFirestore, Firestore } from 'firebase-admin/firestore';
-import * as functions from 'firebase-functions';
+import { defineString } from 'firebase-functions/params';
 import { stringify } from 'querystring';
 import type { Request } from 'firebase-functions/lib/common/providers/https';
 import type { Response } from 'express';
+
+// TODO: maybe migrate to `defineSecret`?
+const recaptchaSecret = defineString('RECAPTCHA_SECRET');
 
 let app: App;
 let firestore: Firestore;
@@ -30,7 +33,7 @@ export const handler = async (
   try {
     const recaptchaRes = await fetch(
       `https://www.google.com/recaptcha/api/siteverify?${stringify({
-        secret: functions.config().recaptcha.secret,
+        secret: recaptchaSecret.value(),
         response,
         ...(remoteip && { remoteip }),
       })}`,
@@ -44,7 +47,7 @@ export const handler = async (
 
     if (!app) {
       try {
-        app = initializeApp(functions.config().firebase);
+        app = initializeApp();
       } catch {
         app = getApp();
       }

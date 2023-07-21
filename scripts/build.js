@@ -11,7 +11,7 @@ const [projects, apis] = await Promise.all([
 
 await fs.rm('dist', { recursive: true, force: true });
 
-const firebaseFunctionsIndex = `import * as functions from 'firebase-functions';
+const firebaseFunctionsIndex = `import { onRequest } from 'firebase-functions/v2/https';
 ${apis.map(
   api =>
     `import { handler as ${kebabToCamelCase(
@@ -22,7 +22,7 @@ ${apis.map(
   api =>
     `export const ${kebabToCamelCase(
       api,
-    )}Api = functions.https.onRequest(${kebabToCamelCase(api)}Handler);\n`,
+    )}Api = onRequest({ cors: true }, ${kebabToCamelCase(api)}Handler);\n`,
 )}`;
 
 await fs.writeFile('src/functions/src/index.ts', firebaseFunctionsIndex);

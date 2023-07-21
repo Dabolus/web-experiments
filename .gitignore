@@ -14,4 +14,5 @@ size-plugin.json
 firebase.json
 src/functions/src/index.ts
 .runtimeconfig.json
-.env.local
+.env
+.env.*
