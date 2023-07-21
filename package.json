@@ -12,9 +12,9 @@
     "deploy": "firebase deploy"
   },
   "devDependencies": {
-    "@yarnpkg/shell": "^4.0.0-rc.33",
-    "firebase-tools": "^11.18.0",
-    "typescript": "^4.9.4"
+    "@yarnpkg/shell": "^4.0.0-rc.48",
+    "firebase-tools": "^12.4.5",
+    "typescript": "^5.1.6"
   },
   "workspaces": [
     "src/config",

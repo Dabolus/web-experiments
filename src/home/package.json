@@ -15,15 +15,15 @@
     "fuse.js": "^6.6.2"
   },
   "devDependencies": {
-    "@dabolus/portfolio-data": "^0.15.0",
+    "@dabolus/portfolio-data": "^0.16.0",
     "@types/js-yaml": "^4.0.5",
-    "@types/node": "^18.11.17",
+    "@types/node": "18",
     "@webexp/config": "workspace:^",
     "js-yaml": "^4.1.0",
-    "sass": "^1.57.0",
+    "sass": "^1.64.0",
     "tosource": "^2.0.0-alpha.3",
-    "vite": "^4.0.2",
+    "vite": "^4.4.6",
     "vite-plugin-html": "^3.2.0",
-    "vite-plugin-static-copy": "^0.13.0"
+    "vite-plugin-static-copy": "^0.17.0"
   }
 }

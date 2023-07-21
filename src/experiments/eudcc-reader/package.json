@@ -12,21 +12,21 @@
     "build": "NODE_OPTIONS=--openssl-legacy-provider preact build --config preact.config.mjs --preload --no-prerender --dest dist"
   },
   "dependencies": {
-    "barcode-detector": "^1.0.0",
+    "barcode-detector": "^1.0.3",
     "base45-ts": "^1.0.3",
-    "cbor-web": "^8.1.0",
-    "date-fns": "^2.29.3",
+    "cbor-web": "^9.0.1",
+    "date-fns": "^2.30.0",
     "pako": "^2.1.0",
-    "preact": "^10.11.3",
-    "preact-render-to-string": "^5.2.6",
+    "preact": "^10.16.0",
+    "preact-render-to-string": "^6.2.0",
     "qr.js": "^0.0.0",
-    "wouter-preact": "^2.9.0"
+    "wouter-preact": "^2.11.0"
   },
   "devDependencies": {
     "@types/pako": "^2.0.0",
-    "cbor": "^8.1.0",
-    "node-sass": "^8.0.0",
-    "preact-cli": "^3.4.2",
+    "cbor": "^9.0.1",
+    "preact-cli": "^3.4.6",
+    "sass": "^1.64.0",
     "sass-loader": "10"
   }
 }

@@ -13,12 +13,12 @@
   },
   "devDependencies": {
     "@types/grecaptcha": "^3.0.4",
-    "@types/node": "^18.11.17",
+    "@types/node": "18",
     "@webexp/config": "workspace:^",
-    "sass": "^1.57.0",
+    "sass": "^1.64.0",
     "tosource": "^2.0.0-alpha.3",
-    "vite": "^4.0.2",
+    "vite": "^4.4.6",
     "vite-plugin-html": "^3.2.0",
-    "vite-plugin-static-copy": "^0.13.0"
+    "vite-plugin-static-copy": "^0.17.0"
   }
 }
