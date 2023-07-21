@@ -1,7 +1,6 @@
 import { App, initializeApp, getApp } from 'firebase-admin/app';
 import { getFirestore, Firestore } from 'firebase-admin/firestore';
 import * as functions from 'firebase-functions';
-import fetch from 'node-fetch';
 import { stringify } from 'querystring';
 import type { Request } from 'firebase-functions/lib/common/providers/https';
 import type { Response } from 'express';
