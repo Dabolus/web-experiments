@@ -11,7 +11,7 @@ import { Menu, MenuItem, Typography, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import type {
-  TranslationOutput as SolresolWorkerOutput,
+  TranslationOutputItems as SolresolWorkerOutput,
   TranslationOutputItem,
   SolresolOutputType,
 } from '../../workers/music/solresol.worker';
@@ -19,6 +19,7 @@ import type {
 export interface SolresolOutputProps {
   type?: SolresolOutputType;
   value?: SolresolWorkerOutput;
+  comments?: string;
   onChange?(output: SolresolWorkerOutput): void;
   formatTranslation?(word: string, classes: Record<string, string>): ReactNode;
 }
@@ -70,12 +71,16 @@ const useStyles = makeStyles<Theme, Pick<SolresolOutputProps, 'type'>>(
         whiteSpace: 'normal',
       },
     },
+    disabled: {
+      pointerEvents: 'none',
+    },
   }),
 );
 
 const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
   type = 'full',
   value,
+  comments,
   onChange,
   formatTranslation = word => word,
 }) => {
@@ -168,26 +173,40 @@ const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
         onClose={handleAlternativeTranslationsMenuClose}
         PaperProps={{ className: classes.menu }}
       >
-        {value &&
-          selectedTranslation &&
-          (value[selectedTranslation.index] as TranslationOutputItem[]).map(
-            ({ word, meanings, preferred }, index) => (
-              <MenuItem
-                key={word}
-                selected={preferred}
-                onClick={createTranslationPreferenceChangeHandler(index)}
-              >
+        {value && selectedTranslation && (
+          <>
+            {(value[selectedTranslation.index] as TranslationOutputItem[]).map(
+              ({ word, meanings, comments, preferred }, index) => (
+                <MenuItem
+                  key={word}
+                  selected={preferred}
+                  onClick={createTranslationPreferenceChangeHandler(index)}
+                >
+                  <div className={classes.alternative}>
+                    <Typography variant="subtitle1">
+                      <strong>{formatTranslation(word, classes)}</strong>
+                    </Typography>
+                    <Typography variant="caption">
+                      {meanings.join(' · ')}
+                    </Typography>
+                    {comments && (
+                      <Typography variant="caption">
+                        <em>{comments}</em>
+                      </Typography>
+                    )}
+                  </div>
+                </MenuItem>
+              ),
+            )}
+            {comments && (
+              <MenuItem className={classes.disabled}>
                 <div className={classes.alternative}>
-                  <Typography variant="subtitle1">
-                    <strong>{formatTranslation(word, classes)}</strong>
-                  </Typography>
-                  <Typography variant="caption">
-                    {meanings.join(' · ')}
-                  </Typography>
+                  <Typography variant="caption">{comments}</Typography>
                 </div>
               </MenuItem>
-            ),
-          )}
+            )}
+          </>
+        )}
       </Menu>
     </>
   );

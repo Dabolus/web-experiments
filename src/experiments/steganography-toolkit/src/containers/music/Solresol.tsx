@@ -36,7 +36,7 @@ import SolresolOutput, {
 import type {
   SolresolWorker,
   SolresolOutputType,
-  TranslationOutput,
+  TranslationOutputItems,
 } from '../../workers/music/solresol.worker';
 
 const solresolWorker = setupWorkerClient<SolresolWorker>(
@@ -125,7 +125,8 @@ const convertToSolresolForm = (
 const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
   const [input, setInput] = useState<string>('');
   const [hint, setHint] = useState<string>('');
-  const [output, setOutput] = useState<TranslationOutput>([]);
+  const [output, setOutput] = useState<TranslationOutputItems>([]);
+  const [comments, setComments] = useState<string>('');
   const [outputType, setOutputType] = useState<SolresolOutputType>('full');
   const [swapped, setSwapped] = useState(false);
 
@@ -136,15 +137,21 @@ const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
       if (!debouncedInput) {
         setHint('');
         setOutput([]);
+        setComments('');
         return;
       }
 
-      const { output: possibleOutput, hint: possibleHint = '' } = swapped
+      const {
+        output: possibleOutput,
+        hint: possibleHint = '',
+        comments: possibleComments = '',
+      } = swapped
         ? await solresolWorker.computeEnglishOutput(debouncedInput)
         : await solresolWorker.computeSolresolOutput(debouncedInput);
 
       setOutput(possibleOutput);
       setHint(possibleHint !== debouncedInput ? possibleHint : '');
+      setComments(possibleComments);
     };
 
     compute();
@@ -165,7 +172,7 @@ const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
     setInput(hint);
   }, [hint]);
 
-  const handleOutputChange = useCallback((output: TranslationOutput) => {
+  const handleOutputChange = useCallback((output: TranslationOutputItems) => {
     setOutput(output);
   }, []);
 
@@ -268,6 +275,7 @@ const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
               </Box>
               <SolresolOutput
                 value={output}
+                comments={comments}
                 onChange={handleOutputChange}
                 formatTranslation={formatTranslation}
               />

@@ -15,22 +15,25 @@ export type SolresolOutputType =
 export interface TranslationOutputItem {
   word: string;
   meanings: string[];
+  comments?: string;
   preferred?: boolean;
 }
 
-export type TranslationOutput = (string | TranslationOutputItem[])[];
+export type TranslationOutputItems = (string | TranslationOutputItem[])[];
 
 export interface DictionaryItem {
   solresol: string;
   english: string[];
+  comments?: string;
 }
 
-export interface TranslationOutputWithHint {
-  output: TranslationOutput;
+export interface TranslationOutput {
+  output: TranslationOutputItems;
+  comments?: string;
   hint?: string;
 }
 
-export type Translator = (input: string) => Promise<TranslationOutputWithHint>;
+export type Translator = (input: string) => Promise<TranslationOutput>;
 
 export interface SolresolWorker {
   computeSolresolOutput: Translator;
@@ -44,29 +47,23 @@ const flattenedSolresolDictionary = solresolDictionary.flatMap(
 
 const wordRegex = /([a-z\d]+)/gi;
 
-const englishFuse = new Fuse<{ solresol: string; english: string }>(
-  flattenedSolresolDictionary,
-  {
-    keys: ['english'],
-    includeScore: true,
-  },
-);
+const englishFuse = new Fuse<DictionaryItem>(flattenedSolresolDictionary, {
+  keys: ['english'],
+  includeScore: true,
+});
 
-const solresolFuse = new Fuse<{ solresol: string; english: string }>(
-  flattenedSolresolDictionary,
-  {
-    keys: ['solresol'],
-    includeScore: true,
-  },
-);
+const solresolFuse = new Fuse<DictionaryItem>(flattenedSolresolDictionary, {
+  keys: ['solresol'],
+  includeScore: true,
+});
 
 export const computeSolresolOutput = async (
   input: string,
 ): Promise<{
-  output: TranslationOutput;
+  output: TranslationOutputItems;
   hint: string;
 }> => {
-  const output: TranslationOutput = [];
+  const output: TranslationOutputItems = [];
   let hint = input;
 
   let previousIndex = 0;
@@ -92,10 +89,13 @@ export const computeSolresolOutput = async (
       );
 
       const [preferredTranslation, ...otherTranslations] =
-        sortedTranslations.map(({ solresol: word, english: meanings }) => ({
-          word,
-          meanings,
-        }));
+        sortedTranslations.map(
+          ({ solresol: word, english: meanings, comments }) => ({
+            word,
+            meanings,
+            comments,
+          }),
+        );
 
       output.push(
         input.slice(previousIndex, wordRegex.lastIndex - word.length),
@@ -119,7 +119,7 @@ export const computeSolresolOutput = async (
 
     const [
       { score = 1, item: { english: possibleWord = undefined } = {} } = {},
-    ] = englishFuse.search<{ solresol: string; english: string }>(word);
+    ] = englishFuse.search<DictionaryItem>(word);
 
     if (
       possibleWord &&
@@ -160,14 +160,12 @@ const detectSolresolInputType = (
 
 export const computeEnglishOutput = async (
   input: string,
-): Promise<{
-  output: TranslationOutput;
-  hint: string;
-}> => {
+): Promise<TranslationOutput> => {
   const inputType = detectSolresolInputType(input);
 
-  const output: TranslationOutput = [];
+  const output: TranslationOutputItems = [];
   let hint = input;
+  let comments: string | undefined;
 
   let previousIndex = 0;
   let hintOffset = 0;
@@ -193,6 +191,7 @@ export const computeEnglishOutput = async (
     );
 
     if (translation) {
+      comments = translation.comments;
       const [preferredTranslation, ...otherTranslations] =
         translation.english?.map(word => ({
           word,
@@ -221,7 +220,7 @@ export const computeEnglishOutput = async (
 
     const [
       { score = 1, item: { solresol: possibleWord = undefined } = {} } = {},
-    ] = solresolFuse.search<{ solresol: string; english: string }>(word);
+    ] = solresolFuse.search<DictionaryItem>(word);
 
     if (
       possibleWord &&
@@ -238,7 +237,7 @@ export const computeEnglishOutput = async (
     }
   }
 
-  return { output, hint };
+  return { output, hint, comments };
 };
 
 setupWorkerServer<SolresolWorker>({

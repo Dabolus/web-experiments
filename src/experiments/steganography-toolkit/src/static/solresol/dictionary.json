@@ -10,7 +10,11 @@
     "solresol": "12",
     "english": ["i", "me", "myself", "personally", "we", "ourselves"]
   },
-  { "solresol": "13", "english": ["you", "yourself", "(singular or plural)"] },
+  {
+    "solresol": "13",
+    "english": ["you", "yourself"],
+    "comments": "Singular or plural"
+  },
   {
     "solresol": "14",
     "english": ["he", "she", "it", "him", "her", "them", "they"]
@@ -25,7 +29,7 @@
   { "solresol": "23", "english": ["your", "yours"] },
   { "solresol": "24", "english": ["his", "her", "its"] },
   { "solresol": "25", "english": ["our", "ours"] },
-  { "solresol": "26", "english": ["your", "yours (plural)"] },
+  { "solresol": "26", "english": ["your", "yours"], "comments": "Plural" },
   { "solresol": "27", "english": ["their", "theirs"] },
   { "solresol": "31", "english": ["for"] },
   { "solresol": "32", "english": ["that", "which", "who"] },
@@ -40,11 +44,13 @@
   { "solresol": "41", "english": ["what?", "what is this?"] },
   {
     "solresol": "42",
-    "english": ["that", "that one", "those (people or things)"]
+    "english": ["that", "that one", "those"],
+    "comments": "People or things"
   },
   {
     "solresol": "43",
-    "english": ["this", "this one", "these (people or things)"]
+    "english": ["this", "this one", "these"],
+    "comments": "People or things"
   },
   { "solresol": "45", "english": ["here", "here is", "this is"] },
   {
@@ -53,10 +59,11 @@
   },
   {
     "solresol": "47",
-    "english": ["much", "very", "a lot", "many (augmentative)"]
+    "english": ["much", "very", "a lot", "many"],
+    "comments": "Augmentative"
   },
   { "solresol": "51", "english": ["nothing", "nil", "naught", "null"] },
-  { "solresol": "52", "english": ["why? what for?"] },
+  { "solresol": "52", "english": ["why?", "what for?"] },
   {
     "solresol": "53",
     "english": ["wrong", "evil"],
@@ -245,7 +252,7 @@
   },
   { "solresol": "313", "english": ["attract", "draw", "appeal to"] },
   { "solresol": "314", "english": ["prefer", "like the most"] },
-  { "solresol": "315", "english": ["trinity"], "comments": "(it's a triad)" },
+  { "solresol": "315", "english": ["trinity"], "comments": "Triad" },
   {
     "solresol": "316",
     "english": ["reciprocity", "mutuality", "respective", "vice versa"]
@@ -292,11 +299,15 @@
   {
     "solresol": "345",
     "english": ["raise", "elevate", "uplift", "high"],
-    "comments": "(Musical sense)"
+    "comments": "Musical sense"
   },
-  { "solresol": "346", "english": ["desire", "wish", "want", "desirous"] },
+  {
+    "solresol": "346",
+    "english": ["desire", "wish", "want", "desirous"],
+    "comments": "For desires and wanting things"
+  },
   { "solresol": "347", "english": ["incorrigible", "unable to be corrected"] },
-  { "solresol": "351", "english": ["the holy spirit"], "comments": "(Triad)" },
+  { "solresol": "351", "english": ["the holy spirit"], "comments": "Triad" },
   { "solresol": "352", "english": ["the grace of god"] },
   {
     "solresol": "353",
@@ -315,8 +326,12 @@
     "english": ["be passionate", "passion", "ardor", "ardently"]
   },
   { "solresol": "364", "english": ["idolize", "dote on", "idolatry"] },
-  { "solresol": "365", "english": ["love (for things)"] },
-  { "solresol": "367", "english": ["love", "cherish", "lover", "enamored"] },
+  { "solresol": "365", "english": ["love"], "comments": "For things" },
+  {
+    "solresol": "367",
+    "english": ["love", "cherish", "lover", "enamored"],
+    "comments": "For people"
+  },
   { "solresol": "371", "english": ["fidelity", "fathfulness", "loyalty"] },
   {
     "solresol": "372",
@@ -371,7 +386,7 @@
     ]
   },
   { "solresol": "421", "english": ["contact", "address", "send a letter"] },
-  { "solresol": "423", "english": ["be", "exist (auxiliary)"] },
+  { "solresol": "423", "english": ["be", "exist"], "comments": "Auxiliary" },
   { "solresol": "424", "english": ["go", "proceed"] },
   {
     "solresol": "425",
@@ -387,10 +402,11 @@
     "solresol": "432",
     "english": ["evil", "wicked", "malignant", "harmful", "maleficence"]
   },
-  { "solresol": "434", "english": ["stamp", "postmark (verb)"] },
+  { "solresol": "434", "english": ["stamp", "postmark"], "comments": "Verb" },
   {
     "solresol": "435",
-    "english": ["have (auxiliary)", "possess", "own", "get"]
+    "english": ["have", "possess", "own", "get"],
+    "comments": "Auxiliary"
   },
   { "solresol": "436", "english": ["postman", "courier", "mail"] },
   { "solresol": "437", "english": ["carry", "bring", "portable"] },
@@ -409,7 +425,7 @@
     "english": ["do", "make", "action", "doable", "commit"]
   },
   { "solresol": "457", "english": ["prepare", "make ready", "preparation"] },
-  { "solresol": "461", "english": ["have to (auxiliary)"] },
+  { "solresol": "461", "english": ["have to"], "comments": "Auxiliary" },
   {
     "solresol": "462",
     "english": ["able", "can", "may", "possible", "practicability"]
@@ -432,10 +448,8 @@
   },
   {
     "solresol": "474",
-    "english": [
-      "want (to do something) (for desires and wanting things",
-      "see \"mifala\")"
-    ]
+    "english": ["want"],
+    "comments": "To do something"
   },
   { "solresol": "475", "english": ["cry", "weep", "sob", "tears"] },
   {
@@ -486,12 +500,12 @@
   {
     "solresol": "532",
     "english": ["verb", "noun", "adjective", "adverb"],
-    "comments": "(Irregular)"
+    "comments": "Irregular"
   },
   {
     "solresol": "534",
     "english": ["article"],
-    "comments": "(grammatic article?)"
+    "comments": "Grammatic article?"
   },
   { "solresol": "535", "english": ["pronoun"] },
   {
@@ -543,7 +557,7 @@
   {
     "solresol": "567",
     "english": ["climb", "mount", "rise", "climbing", "ascent"],
-    "comments": "(musical sense)"
+    "comments": "Musical sense"
   },
   {
     "solresol": "571",
@@ -672,7 +686,7 @@
   {
     "solresol": "657",
     "english": ["draw", "trace"],
-    "comments": "(Also \"linear\" &c. … Probably supposed to be in Lasolla?)"
+    "comments": "Also \"linear\" &c. … Probably supposed to be in Lasolla?"
   },
   { "solresol": "671", "english": ["point", "the main idea"] },
   {
@@ -718,13 +732,13 @@
   {
     "solresol": "717",
     "english": ["learn", "learning", "education", "apprenticeship"],
-    "comments": "(Also teaching?)"
+    "comments": "Also teaching?"
   },
   { "solresol": "721", "english": ["grammar", "syntax", "grammatically"] },
   {
     "solresol": "723",
     "english": ["spell", "spelling", "orthography", "orthographic"],
-    "comments": "(See Laremi - redundancy)"
+    "comments": "See Laremi - redundancy"
   },
   {
     "solresol": "724",
@@ -737,7 +751,7 @@
   {
     "solresol": "726",
     "english": ["attention", "take care", "contemplation", "be careful"],
-    "comments": "(opposite of Laresi)"
+    "comments": "opposite of Laresi"
   },
   {
     "solresol": "727",
@@ -785,7 +799,7 @@
   {
     "solresol": "741",
     "english": ["dictate", "dictation", "read out"],
-    "comments": "(Say?)"
+    "comments": "Say?"
   },
   {
     "solresol": "742",
@@ -800,7 +814,7 @@
   {
     "solresol": "747",
     "english": ["reiterate", "renew", "again"],
-    "comments": "(Redundant with Sifala)"
+    "comments": "Redundant with Sifala"
   },
   { "solresol": "751", "english": ["compete", "contest"] },
   { "solresol": "752", "english": ["encourage", "embolden", "stimulate"] },
@@ -811,12 +825,12 @@
   {
     "solresol": "754",
     "english": ["review", "scrutinize", "investigate"],
-    "comments": "(Redundant with Sisolmi?)"
+    "comments": "Redundant with Sisolmi?"
   },
   {
     "solresol": "756",
     "english": ["analyze", "analysis", "analyst", "analytical"],
-    "comments": "(Redundant with Sisolmi?)"
+    "comments": "Redundant with Sisolmi?"
   },
   { "solresol": "757", "english": ["question", "interrogate", "query"] },
   {
@@ -833,13 +847,13 @@
   {
     "solresol": "763",
     "english": ["hate", "detest", "abhor", "hatred", "animosity", "aversion"],
-    "comments": "(Redundant - see Dolami. Silami makes more sense; it's the opposite of Milasi)"
+    "comments": "Redundant - see Dolami. Silami makes more sense; it's the opposite of Milasi"
   },
   { "solresol": "764", "english": ["unable", "unfit", "incapable", "inept"] },
   {
     "solresol": "765",
     "english": ["down", "descent", "go down"],
-    "comments": "(Redundant  - see Solfami)"
+    "comments": "Redundant  - see Solfami"
   },
   { "solresol": "767", "english": ["medal", "medallion"] },
   { "solresol": "1212", "english": ["birth", "born", "native born"] },
@@ -871,13 +885,13 @@
   {
     "solresol": "1252",
     "english": ["servant", "maid", "valet", "chambermaid"],
-    "comments": "(Also translated as house or domestic, but I think this is the right idea)"
+    "comments": "Also translated as house or domestic, but I think this is the right idea"
   },
   { "solresol": "1253", "english": ["stomach"] },
   {
     "solresol": "1254",
     "english": ["abdomen", "belly"],
-    "comments": "(Redundant with Doresolmi?)"
+    "comments": "Redundant with Doresolmi?"
   },
   {
     "solresol": "1256",
@@ -899,18 +913,18 @@
   {
     "solresol": "1274",
     "english": ["chyle"],
-    "comments": "(Maybe not necessary?)"
+    "comments": "Maybe not necessary?"
   },
   { "solresol": "1275", "english": ["blood", "bloody"] },
   {
     "solresol": "1276",
     "english": ["circulate", "circulation"],
-    "comments": "(Automatically defined as \"travel\" and \"traffic\", but I assumed from context that it meant more along the lines of the circulatory system)"
+    "comments": "Automatically defined as \"travel\" and \"traffic\", but I assumed from context that it meant more along the lines of the circulatory system"
   },
   {
     "solresol": "1312",
     "english": ["members"],
-    "comments": "(Maybe actually means \"body parts\"?)"
+    "comments": "Maybe actually means \"body parts\"?"
   },
   { "solresol": "1313", "english": ["thigh", "knee"] },
   { "solresol": "1314", "english": ["leg", "calf"] },
@@ -964,7 +978,7 @@
   {
     "solresol": "1357",
     "english": ["soul"],
-    "comments": "(Note - this whole family of ideas is derived from the perfect chord that represents God)"
+    "comments": "Note - this whole family of ideas is derived from the perfect chord that represents God"
   },
   {
     "solresol": "1361",
@@ -1031,7 +1045,7 @@
   {
     "solresol": "1372",
     "english": ["pretend", "claim", "pretense"],
-    "comments": "(Also as \"aspire\", but that doesn't seem to fall under the same idea)"
+    "comments": "Also as \"aspire\", but that doesn't seem to fall under the same idea"
   },
   {
     "solresol": "1373",
@@ -1125,7 +1139,7 @@
   {
     "solresol": "1431",
     "english": ["feelings", "principles"],
-    "comments": "(Principles??)"
+    "comments": "Principles?"
   },
   {
     "solresol": "1432",
@@ -1134,7 +1148,7 @@
   {
     "solresol": "1434",
     "english": ["have virtue", "virtue", "virtuous", "virtuously"],
-    "comments": "(Not great translation on the first word - \"Avoir de l'empire sure méme)"
+    "comments": "Not great translation on the first word - \"Avoir de l'empire sure méme"
   },
   { "solresol": "1435", "english": ["wisdom", "wise", "sage", "wisely"] },
   {
@@ -1208,7 +1222,7 @@
       "sincere",
       "truly"
     ],
-    "comments": "(\"Franchise\" and loyalty are also given - I think I got the main idea here)"
+    "comments": "\"Franchise\" and loyalty are also given - I think I got the main idea here"
   },
   { "solresol": "1462", "english": ["goodness", "meekness", "benignity"] },
   {
@@ -1223,7 +1237,7 @@
   {
     "solresol": "1464",
     "english": ["heartfelt", "warmth", "effusion", "profusely"],
-    "comments": "(Not great translation, but I think I got it)"
+    "comments": "Not great translation, but I think I got it"
   },
   {
     "solresol": "1465",
@@ -1266,12 +1280,12 @@
   {
     "solresol": "1476",
     "english": ["delicacy", "tact", "delicate", "gently"],
-    "comments": "(This one was really hard - the other definitions were based on the word \"scruples\")"
+    "comments": "This one was really hard - the other definitions were based on the word \"scruples\""
   },
   {
     "solresol": "1512",
     "english": ["appeal", "evoke"],
-    "comments": "(not very certain about this either… \"Appeler\" also means \"call\")"
+    "comments": "not very certain about this either… \"Appeler\" also means \"call\""
   },
   { "solresol": "1513", "english": ["ask", "request", "demand"] },
   {
@@ -1495,7 +1509,7 @@
   {
     "solresol": "1615",
     "english": ["cover (noun)"],
-    "comments": "(Presumably also a verb &c.?)"
+    "comments": "Presumably also a verb &c.?"
   },
   { "solresol": "1616", "english": ["table"] },
   { "solresol": "1617", "english": ["tablecloth", "napkin"] },
@@ -1523,12 +1537,12 @@
   {
     "solresol": "1634",
     "english": ["thirsty", "thirst", "parched"],
-    "comments": "(Assumed from context (otherwise it was \"alter\")"
+    "comments": "Assumed from context (otherwise it was \"alter\""
   },
   {
     "solresol": "1635",
     "english": ["drink", "drinker"],
-    "comments": "(Drinker possibly has a conotation of being drunk)"
+    "comments": "Drinker possibly has a conotation of being drunk"
   },
   { "solresol": "1636", "english": ["hunger", "appetite", "starvation"] },
   { "solresol": "1637", "english": ["eat", "eating", "eater", "eatable"] },
@@ -1554,7 +1568,7 @@
   {
     "solresol": "1647",
     "english": ["fish", "oysters", "eels", "salmon"],
-    "comments": "(Seafood?)"
+    "comments": "Seafood?"
   },
   { "solresol": "1651", "english": ["meat", "steak", "beef"] },
   {
@@ -1577,7 +1591,7 @@
   {
     "solresol": "1657",
     "english": ["pork", "ham"],
-    "comments": "(Delicatessen?)"
+    "comments": "Delicatessen?"
   },
   {
     "solresol": "1671",
@@ -1608,7 +1622,7 @@
   {
     "solresol": "1716",
     "english": ["juice", "sauce", "juicy"],
-    "comments": "(Too many meanings?)"
+    "comments": "Too many meanings?"
   },
   { "solresol": "1717", "english": ["eggs", "egg shell", "omelette"] },
   {
@@ -1724,7 +1738,7 @@
   {
     "solresol": "1763",
     "english": ["appetizer", "hors d'oeuvres"],
-    "comments": "(\"Entremets\" was defined as \"desserts\", but because of \"hors d'oeuvres\" and the \"entre\" I decided it was wrong)"
+    "comments": "\"Entremets\" was defined as \"desserts\", but because of \"hors d'oeuvres\" and the \"entre\" I decided it was wrong"
   },
   {
     "solresol": "1764",
@@ -1760,7 +1774,7 @@
   {
     "solresol": "2127",
     "english": ["pants", "knickers", "breeches"],
-    "comments": "(Also underpants?)"
+    "comments": "Also underpants?"
   },
   {
     "solresol": "2131",
@@ -1983,17 +1997,17 @@
   {
     "solresol": "2412",
     "english": ["move in", "install"],
-    "comments": "(not sure on this one)"
+    "comments": "Not sure on this one"
   },
   {
     "solresol": "2413",
     "english": ["furniture", "furnishings"],
-    "comments": "(Redundant? Translation?)"
+    "comments": "Redundant? Translation?"
   },
   {
     "solresol": "2414",
     "english": ["household"],
-    "comments": "(household chores, housework?)"
+    "comments": "Household chores, housework?"
   },
   {
     "solresol": "2415",
@@ -2033,7 +2047,8 @@
   { "solresol": "2451", "english": ["fire", "furnace", "incendiary"] },
   {
     "solresol": "2452",
-    "english": ["burn", "kindle", "consume (as in fire)", "burning"]
+    "english": ["burn", "kindle", "consume", "burning"],
+    "comments": "As in fire"
   },
   {
     "solresol": "2453",
@@ -2096,7 +2111,7 @@
   {
     "solresol": "2474",
     "english": ["chisel", "cut", "carving", "scissors"],
-    "comments": "(very different, really)"
+    "comments": "Very different, really"
   },
   {
     "solresol": "2475",
@@ -2106,7 +2121,7 @@
   {
     "solresol": "2512",
     "english": ["pouch", "backpack", "knapsack", "bag"],
-    "comments": "(pocket?)"
+    "comments": "Pocket?"
   },
   {
     "solresol": "2513",
@@ -2155,7 +2170,7 @@
   {
     "solresol": "2527",
     "english": ["remove", "dismiss", "removal", "dismissal", "resignation"],
-    "comments": "(What is the intrinsic difference between this and resolresol?"
+    "comments": "What is the intrinsic difference between this and resolresol"
   },
   {
     "solresol": "2531",
@@ -2238,7 +2253,7 @@
   {
     "solresol": "2562",
     "english": ["undress"],
-    "comments": "(negligee? Neglected? \"Se déshabiller\", \"négligé\", \"déshabillé\")"
+    "comments": "negligee? Neglected? \"Se déshabiller\", \"négligé\", \"déshabillé\""
   },
   { "solresol": "2563", "english": ["lie down", "stretch", "lying down"] },
   {
@@ -2573,7 +2588,7 @@
       "spiritualist",
       "spiritualism"
     ],
-    "comments": "(Too many words?)"
+    "comments": "Too many words?"
   },
   {
     "solresol": "3123",
@@ -2620,7 +2635,7 @@
   {
     "solresol": "3134",
     "english": ["bequeath", "to leave something for someone", "testament"],
-    "comments": "(Translation)"
+    "comments": "Translation"
   },
   {
     "solresol": "3135",
@@ -2700,7 +2715,7 @@
   {
     "solresol": "3157",
     "english": ["fatalism", "fatalist", "inevitably"],
-    "comments": "(Redundant?)"
+    "comments": "Redundant?"
   },
   {
     "solresol": "3161",
@@ -2756,7 +2771,7 @@
       "joy of the heart",
       "glad"
     ],
-    "comments": "(Translation - also \"enchanted\", \"charmed\")"
+    "comments": "Translation - also \"enchanted\", \"charmed\""
   },
   {
     "solresol": "3171",
@@ -2780,7 +2795,7 @@
   {
     "solresol": "3174",
     "english": ["to return", "come back"],
-    "comments": "(Goodbye?)"
+    "comments": "Goodbye?"
   },
   { "solresol": "3175", "english": ["try", "endeavor", "strive"] },
   { "solresol": "3176", "english": ["get", "obtain"] },
@@ -2829,14 +2844,14 @@
   {
     "solresol": "3234",
     "english": ["document", "title", "written evidence"],
-    "comments": "(Too many words? (i.e. not \"title\"))"
+    "comments": "Too many words? (i.e. not \"title\")"
   },
   { "solresol": "3235", "english": ["official", "formal", "officially"] },
   { "solresol": "3236", "english": ["dedicate", "dedication", "dedicatory"] },
   {
     "solresol": "3237",
     "english": ["stanza", "verse"],
-    "comments": "(Categorization??)"
+    "comments": "Categorization??"
   },
   {
     "solresol": "3241",
@@ -2934,12 +2949,12 @@
   {
     "solresol": "3273",
     "english": ["slap", "kick", "punch"],
-    "comments": "(translation)"
+    "comments": "Translation"
   },
   {
     "solresol": "3274",
     "english": ["hurt", "wound", "bruise"],
-    "comments": "(Translation - I think this is what it means, though)"
+    "comments": "Translation - I think this is what it means, though"
   },
   { "solresol": "3275", "english": ["to get angry", "angry", "upset"] },
   {
@@ -3051,7 +3066,7 @@
       "voluptuous",
       "carnal"
     ],
-    "comments": "(probably negative connotation)"
+    "comments": "probably negative connotation"
   },
   {
     "solresol": "3437",
@@ -3067,7 +3082,7 @@
       "vagrant",
       "debauchery"
     ],
-    "comments": "(Sexual immorality)"
+    "comments": "Sexual immorality"
   },
   {
     "solresol": "3452",
@@ -3220,7 +3235,7 @@
   {
     "solresol": "3514",
     "english": ["annoy", "tease", "teasing", "playfulness", "harassing"],
-    "comments": "(Redundant. Also translated as \"mutiny\", \"mutineer\")"
+    "comments": "Redundant. Also translated as \"mutiny\", \"mutineer\""
   },
   {
     "solresol": "3515",
@@ -3274,7 +3289,7 @@
       "admissible",
       "receivable"
     ],
-    "comments": "(Host, welcome, hospitable?)"
+    "comments": "Host, welcome, hospitable?"
   },
   {
     "solresol": "3526",
@@ -3291,7 +3306,7 @@
   {
     "solresol": "3527",
     "english": ["society", "corporation", "company", "member of a society"],
-    "comments": "(e.g. Freemasons)"
+    "comments": "e.g. Freemasons"
   },
   { "solresol": "3531", "english": ["smallness", "pettiness", "petty"] },
   { "solresol": "3532", "english": ["attend", "to frequent", "attendance"] },
@@ -3329,7 +3344,7 @@
   {
     "solresol": "3542",
     "english": ["attitude", "poise", "posture"],
-    "comments": "(How one holds oneself?)"
+    "comments": "How one holds oneself?"
   },
   { "solresol": "3543", "english": ["turn (v.)", "pace (v.)"] },
   {
@@ -3351,7 +3366,7 @@
       "distinction",
       "distinguished"
     ],
-    "comments": "(Kind of redundant - maybe along the lines of \"fashionable\"?)"
+    "comments": "Kind of redundant - maybe along the lines of \"fashionable\"?"
   },
   {
     "solresol": "3547",
@@ -3372,7 +3387,7 @@
   {
     "solresol": "3562",
     "english": ["capricious", "whimsical", "moody"],
-    "comments": "(redundant? I can't remember)"
+    "comments": "redundant? I can't remember"
   },
   {
     "solresol": "3563",
@@ -3399,14 +3414,14 @@
       "to pose oneself",
       "coquettishly"
     ],
-    "comments": "(Generally fake beauty/manners?)"
+    "comments": "Generally fake beauty/manners?"
   },
   { "solresol": "3567", "english": ["to woo", "to court", "courtship"] },
   { "solresol": "3571", "english": ["inaugurate", "inaguration", "inaugural"] },
   {
     "solresol": "3572",
     "english": ["celebrate", "celebration", "ceremony", "ceremonial"],
-    "comments": "(Translation - also \"solemnize\" and related words.)"
+    "comments": "Translation - also \"solemnize\" and related words."
   },
   { "solresol": "3573", "english": ["holiday", "anniversary"] },
   { "solresol": "3574", "english": ["indirect", "indirectly"] },
@@ -3415,7 +3430,7 @@
   {
     "solresol": "3612",
     "english": ["waltz", "waltzer"],
-    "comments": "(Also \"polka\" but that doesn't make any sense)"
+    "comments": "Also \"polka\" but that doesn't make any sense"
   },
   {
     "solresol": "3613",
@@ -3479,7 +3494,7 @@
   {
     "solresol": "3624",
     "english": ["criticize", "find fault with", "criticism"],
-    "comments": "(Translation - also \"censor\" and \"censorship\""
+    "comments": "Translation - also \"censor\" and \"censorship\""
   },
   {
     "solresol": "3625",
@@ -3497,7 +3512,7 @@
   {
     "solresol": "3626",
     "english": ["slander", "slanderer", "slanderously"],
-    "comments": "(Redundant - see milaresol)"
+    "comments": "Redundant - see milaresol"
   },
   { "solresol": "3627", "english": ["compromise", "compromising"] },
   {
@@ -3527,7 +3542,7 @@
   {
     "solresol": "3634",
     "english": ["confidential", "confidence", "confidant", "confidentially"],
-    "comments": "(in private)"
+    "comments": "in private"
   },
   {
     "solresol": "3635",
@@ -3536,7 +3551,7 @@
   {
     "solresol": "3636",
     "english": ["guess", "to divine", "diviner", "guessable"],
-    "comments": "(maybe \"guesser\" more than \"diviner\")"
+    "comments": "maybe \"guesser\" more than \"diviner\""
   },
   {
     "solresol": "3637",
@@ -3554,7 +3569,7 @@
   {
     "solresol": "3641",
     "english": ["insensitivity", "apathy", "insensitive", "apathetic"],
-    "comments": "(covers too many ideas)"
+    "comments": "covers too many ideas"
   },
   {
     "solresol": "3642",
@@ -3660,7 +3675,7 @@
   {
     "solresol": "3673",
     "english": ["review", "report", "extract", "essence of"],
-    "comments": "(I guess this is a suitable definition. French \"Notice\" and \"Extrait\")"
+    "comments": "I guess this is a suitable definition. French \"Notice\" and \"Extrait\""
   },
   {
     "solresol": "3674",
@@ -3888,7 +3903,7 @@
   {
     "solresol": "3756",
     "english": ["believe", "imagine", "credulity", "credulous"],
-    "comments": "(Perhaps more toward the end of believing to a fault - gullibility, etc.)"
+    "comments": "Perhaps more toward the end of believing to a fault - gullibility, etc."
   },
   {
     "solresol": "3757",
@@ -3945,7 +3960,7 @@
       "enchanting",
       "magic"
     ],
-    "comments": "(Presumably not redundant with \"misilado\". A magician in that sense would perhaps be one who simply does tricks? And this one is a real one)"
+    "comments": "Presumably not redundant with \"misilado\". A magician in that sense would perhaps be one who simply does tricks? And this one is a real one"
   },
   {
     "solresol": "3765",
@@ -3955,7 +3970,7 @@
   {
     "solresol": "3767",
     "english": ["colusion", "accomplice (in crime?)", "(accessory)"],
-    "comments": "(Presumably not redundant with misilasol - this word seems to be an accomplice in a negative, criminal sense)"
+    "comments": "Presumably not redundant with misilasol - this word seems to be an accomplice in a negative, criminal sense"
   },
   {
     "solresol": "4121",
@@ -3979,7 +3994,7 @@
   {
     "solresol": "4125",
     "english": ["picturesque", "rugged"],
-    "comments": "(Rugged? Really?)"
+    "comments": "Rugged? Really?"
   },
   {
     "solresol": "4126",
@@ -4049,7 +4064,7 @@
   {
     "solresol": "4145",
     "english": ["tree", "shrub", "bush"],
-    "comments": "(too many meanings)"
+    "comments": "too many meanings"
   },
   { "solresol": "4146", "english": ["foliage", "leaves"] },
   { "solresol": "4147", "english": ["shade", "shadowing", "shadowy", "shady"] },
@@ -4061,7 +4076,7 @@
   {
     "solresol": "4153",
     "english": ["mow", "reap", "trim"],
-    "comments": "(maybe not \"reap\")"
+    "comments": "maybe not \"reap\""
   },
   { "solresol": "4154", "english": ["rake", "harrow"] },
   { "solresol": "4156", "english": ["dig", "spade", "pickaxe"] },
@@ -4086,7 +4101,7 @@
   {
     "solresol": "4167",
     "english": ["hedge", "bush", "undergrowth"],
-    "comments": "(thorny, thorns?)"
+    "comments": "thorny, thorns?"
   },
   {
     "solresol": "4171",
@@ -4102,12 +4117,12 @@
   {
     "solresol": "4173",
     "english": ["bloom", "flower (v.)", "blossom", "florist", "floral"],
-    "comments": "(florist doesn't seem to fit)"
+    "comments": "florist doesn't seem to fit"
   },
   {
     "solresol": "4174",
     "english": ["bouquet", "flower-seller"],
-    "comments": "(use florist here?)"
+    "comments": "use florist here?"
   },
   {
     "solresol": "4175",
@@ -4168,7 +4183,7 @@
   {
     "solresol": "4237",
     "english": ["field", "meadow", "prairie", "plain", "pastoral"],
-    "comments": "(Rural?)"
+    "comments": "Rural?"
   },
   {
     "solresol": "4241",
@@ -4247,7 +4262,7 @@
       "warrant officer",
       "noncommissioned officer"
     ],
-    "comments": "(how does one tell the difference between all these words?)"
+    "comments": "how does one tell the difference between all these words?"
   },
   {
     "solresol": "4314",
@@ -4366,7 +4381,7 @@
   {
     "solresol": "4363",
     "english": ["bivouac"],
-    "comments": "(Redundant? \"camp\" is already a word  - Familado)"
+    "comments": "Redundant? \"camp\" is already a word  - Familado"
   },
   {
     "solresol": "4364",
@@ -4582,9 +4597,9 @@
   {
     "solresol": "4613",
     "english": ["space", "expanse", "area", "spacious", "expansive"],
-    "comments": "(Latitude?)"
+    "comments": "Latitude?"
   },
-  { "solresol": "4614", "english": ["kilometer"], "comments": "(League)" },
+  { "solresol": "4614", "english": ["kilometer"], "comments": "League" },
   {
     "solresol": "4615",
     "english": ["row (v)", "oar", "rowing", "rower", "oarsman"]
@@ -4593,12 +4608,12 @@
   {
     "solresol": "4617",
     "english": ["maneuver", "one who maneuvers"],
-    "comments": "(Translation: \"évolution\", operate, worker?)"
+    "comments": "Translation: \"évolution\", operate, worker?"
   },
   {
     "solresol": "4621",
     "english": ["to board", "access", "dock", "boardable", "accessible"],
-    "comments": "(Also to dock, to land, to come along side (of land)?)"
+    "comments": "Also to dock, to land, to come along side (of land)?"
   },
   {
     "solresol": "4623",
@@ -4609,12 +4624,12 @@
   {
     "solresol": "4626",
     "english": ["coast", "seashore", "sea-cliff"],
-    "comments": "(Redundant? Translation? \"Cote\", \"Falaise\", Littoral\")"
+    "comments": "Redundant? Translation? \"Cote\", \"Falaise\", Littoral\""
   },
   {
     "solresol": "4627",
     "english": ["strait", "peninsula", "isthmus"],
-    "comments": "(Archipelago? Isle?)"
+    "comments": "Archipelago? Isle?"
   },
   {
     "solresol": "4631",
@@ -4624,7 +4639,7 @@
   {
     "solresol": "4634",
     "english": ["depth", "deep", "deeply"],
-    "comments": "(Profound)"
+    "comments": "Profound"
   },
   { "solresol": "4635", "english": ["to fish", "fishing", "fisherman"] },
   { "solresol": "4636", "english": ["fishing line"] },
@@ -4632,7 +4647,7 @@
   {
     "solresol": "4641",
     "english": ["swim", "swimmer", "by swimming"],
-    "comments": "(Fin?)"
+    "comments": "Fin?"
   },
   {
     "solresol": "4642",
@@ -4655,7 +4670,7 @@
   {
     "solresol": "4652",
     "english": ["channel", "canal", "conduit"],
-    "comments": "(Pipeline)"
+    "comments": "Pipeline"
   },
   { "solresol": "4653", "english": ["well (n.)", "sump", "water well"] },
   {
@@ -4739,7 +4754,7 @@
   },
   { "solresol": "4717", "english": ["to absent oneself", "absence", "absent"] },
   { "solresol": "4721", "english": ["railway", "railroad"] },
-  { "solresol": "4723", "english": ["locomotive"], "comments": "(steam?)" },
+  { "solresol": "4723", "english": ["locomotive"], "comments": "Steam?" },
   {
     "solresol": "4724",
     "english": [
@@ -5099,7 +5114,7 @@
       "tastefully"
     ]
   },
-  { "solresol": "5246", "english": ["talent"], "comments": "(Talented)" },
+  { "solresol": "5246", "english": ["talent"], "comments": "Talented" },
   {
     "solresol": "5247",
     "english": [
@@ -7144,7 +7159,7 @@
   {
     "solresol": "6435",
     "english": ["minor key"],
-    "comments": "(Opposite is major key)"
+    "comments": "Opposite is major key"
   },
   { "solresol": "6436", "english": ["discount", "discounted", "discounter"] },
   { "solresol": "6437", "english": ["endorse", "endorsement", "endorser"] },
@@ -7666,7 +7681,7 @@
     "english": ["monotony", "uniformity", "monotonous", "uniform"]
   },
   { "solresol": "7154", "english": ["alley", "avenue", "aisle"] },
-  { "solresol": "7156", "english": ["passage"], "comments": "(Corridor?)" },
+  { "solresol": "7156", "english": ["passage"], "comments": "Corridor?" },
   {
     "solresol": "7157",
     "english": ["corridor", "hallway", "maze", "labyrinth"],
@@ -7882,7 +7897,7 @@
   {
     "solresol": "7272",
     "english": ["politics"],
-    "comments": "(Political, politician, politically, &c.?)"
+    "comments": "Political, politician, politically, &c.?"
   },
   {
     "solresol": "7273",
@@ -8488,7 +8503,7 @@
   {
     "solresol": "7521",
     "english": ["lower", "drop", "decrease", "low"],
-    "comments": "(Of the market/prices)"
+    "comments": "Of the market/prices"
   },
   {
     "solresol": "7523",
@@ -8503,7 +8518,7 @@
   {
     "solresol": "7527",
     "english": ["increase", "bull", "high", "top"],
-    "comments": "(Of the market/prices)"
+    "comments": "Of the market/prices"
   },
   { "solresol": "7531", "english": ["treasury", "the finances"] },
   { "solresol": "7532", "english": ["finance", "financial"] },
@@ -8518,7 +8533,7 @@
   {
     "solresol": "7536",
     "english": ["interest", "the interest of"],
-    "comments": "(on money)"
+    "comments": "On money"
   },
   {
     "solresol": "7537",
@@ -9017,13 +9032,13 @@
   {
     "solresol": "661",
     "english": ["dawn", "twilight"],
-    "comments": "(Opposite meanings in one word?)"
+    "comments": "Opposite meanings in one word?"
   },
   { "solresol": "662", "english": ["day", "daylight", "light"] },
   {
     "solresol": "663",
     "english": ["meteorology", "phenomenon", "meteor"],
-    "comments": "(maybe not necessary? At least not here?)"
+    "comments": "Maybe not necessary? At least not here?"
   },
   { "solresol": "664", "english": ["morning"] },
   { "solresol": "665", "english": ["evening", "twilight"] },
@@ -9053,7 +9068,7 @@
   {
     "solresol": "722",
     "english": ["star", "planet", "comet"],
-    "comments": "(Solresol doesn't lend itself toward discussing astronomy, apparantly)"
+    "comments": "Solresol doesn't lend itself toward discussing astronomy, apparently"
   },
   { "solresol": "733", "english": ["moon", "lunar"] },
   { "solresol": "744", "english": ["sun", "solar"] },
@@ -9089,7 +9104,7 @@
   {
     "solresol": "1135",
     "english": ["paradise", "residence of the blessed", "eden"],
-    "comments": "(Accord parfait - Sens musical, dérivant de Dieu.)"
+    "comments": "Accord parfait - Sens musical, dérivant de Dieu."
   },
   {
     "solresol": "1136",
@@ -9713,7 +9728,7 @@
   {
     "solresol": "2331",
     "english": ["glaze", "glazing", "glazier", "glass", "windows"],
-    "comments": "(Glassmaker? Glass?"
+    "comments": "Glassmaker? Glass?"
   },
   {
     "solresol": "2332",
@@ -12010,7 +12025,7 @@
       "horribly",
       "monstrously"
     ],
-    "comments": "(Principally the act which is commited?)"
+    "comments": "Principally the act which is commited?"
   },
   {
     "solresol": "7764",
@@ -12973,7 +12988,7 @@
   {
     "solresol": "12746",
     "english": ["orca", "killer whale"],
-    "comments": "(Guess)",
+    "comments": "Guess",
     "french": "ourque"
   },
   { "solresol": "12747", "english": ["whale"], "french": "baleine" },
