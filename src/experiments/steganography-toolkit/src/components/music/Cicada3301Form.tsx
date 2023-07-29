@@ -70,7 +70,23 @@ export type MusicalKey =
   | 'Ebm'
   | 'Abm';
 
-export type Language = 'en' | 'it';
+export type Language =
+  | 'en'
+  | 'fr'
+  | 'de'
+  | 'es'
+  | 'pt'
+  | 'eo'
+  | 'it'
+  | 'tr'
+  | 'sv'
+  | 'pl'
+  | 'nl'
+  | 'da'
+  | 'is'
+  | 'fi'
+  | 'cs'
+  | 'hu';
 
 export interface Cicada3301FormValue {
   input: string;
@@ -348,7 +364,21 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
             onChange={handleLanguageChange}
           >
             <option value="en">English (original)</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="es">Spanish</option>
+            <option value="pt">Portuguese</option>
+            <option value="eo">Esperanto</option>
             <option value="it">Italian</option>
+            <option value="tr">Turkish</option>
+            <option value="sv">Swedish</option>
+            <option value="pl">Polish</option>
+            <option value="nl">Dutch</option>
+            <option value="da">Danish</option>
+            <option value="is">Icelandic</option>
+            <option value="fi">Finnish</option>
+            <option value="cs">Czech</option>
+            <option value="hu">Hungarian</option>
           </Select>
         </FormControl>
       </Grid>
