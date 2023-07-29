@@ -58,6 +58,12 @@ const useStyles = makeStyles<Theme, Pick<SolresolOutputProps, 'type'>>(
       height: '.8rem',
       borderRadius: '3px',
     },
+    stenographicTranslation: {
+      borderRadius: '3px',
+      fill: 'transparent',
+      stroke: theme.palette.text.primary,
+      strokeWidth: 4,
+    },
     menu: {
       width: 280,
       minHeight: 72,

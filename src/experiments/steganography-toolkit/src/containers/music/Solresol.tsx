@@ -78,6 +78,49 @@ const colorSolresolCodes = [
   'indigo',
   'violet',
 ];
+const stenographicSolresolCodes = [
+  undefined,
+  // do
+  {
+    path: `
+      a 25,25 0 1,1 50,0
+      a 25,25 0 1,1 -50,0
+      m 50, 0
+    `,
+    // m 42.7, 17.7
+    area: [0, -25, 50, 25],
+  },
+  // re
+  {
+    path: `l 0, 50`,
+    area: [0, 0, 0, 50],
+  },
+  // mi
+  {
+    path: `a 25,25 0 1,1 50,0`,
+    area: [0, -25, 50, 0],
+  },
+  // fa
+  {
+    path: `l 50, 50`,
+    area: [0, 0, 50, 50],
+  },
+  // sol
+  {
+    path: `l 50, 0`,
+    area: [0, 0, 50, 0],
+  },
+  // la
+  {
+    path: `a 25,25 0 0,0 0,50`,
+    area: [-25, 0, 0, 50],
+  },
+  // si
+  {
+    path: `l 50, -50`,
+    area: [0, -50, 50, 0],
+  },
+];
 
 const convertToSolresolForm = (
   word: string,
@@ -117,8 +160,34 @@ const convertToSolresolForm = (
         </svg>
       );
     case 'stenographic':
-      // TODO
-      return;
+      let [minX, minY, maxX, maxY] = [0, 0, 0, 0];
+      const path = [...word]
+        .map(code => {
+          const { path = '', area = [0, 0, 0, 0] } =
+            stenographicSolresolCodes[Number(code)] || {};
+          minX += area[0];
+          minY += area[1];
+          maxX += area[2];
+          maxY += area[3];
+          return path;
+        })
+        .join(' ');
+      const width = maxX - minX;
+      const height = maxY - minY;
+      return (
+        <svg
+          viewBox={`${minX - 2} ${minY - 2} ${width + 4} ${height + 4}`}
+          role="img"
+          aria-labelledby={`${word}-title`}
+          className={classes.stenographicTranslation}
+          style={{ height: `${height / 50}rem` }}
+        >
+          <title id={`${word}-title`}>
+            {convertToSolresolForm(word, classes, 'full')}
+          </title>
+          <path d={`m 0,0 ${path}`} />
+        </svg>
+      );
   }
 };
 
@@ -268,7 +337,7 @@ const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
                       <option value="english">English</option>
                       <option value="numeric">Numeric</option>
                       <option value="color">Color</option>
-                      {/* <option value="stenographic">Stenographic</option> */}
+                      <option value="stenographic">Stenographic</option>
                     </Select>
                   </FormControl>
                 )}
