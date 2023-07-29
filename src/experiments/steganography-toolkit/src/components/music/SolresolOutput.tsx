@@ -7,7 +7,7 @@ import React, {
   ReactNode,
 } from 'react';
 
-import { Menu, MenuItem, Typography, Theme } from '@mui/material';
+import { Menu, MenuItem, Typography, Theme, alpha } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import type {
@@ -32,7 +32,7 @@ const useStyles = makeStyles<Theme, Pick<SolresolOutputProps, 'type'>>(
       fontSize: '1rem',
       borderRadius: '4px',
       lineHeight: '23px',
-      border: '1px solid rgba(0, 0, 0, 0.23)',
+      border: `1px solid ${alpha(theme.palette.divider, 0.23)}`,
       height: '9.25rem',
       cursor: 'text',
       overflowX: 'auto',
@@ -42,6 +42,7 @@ const useStyles = makeStyles<Theme, Pick<SolresolOutputProps, 'type'>>(
       cursor: 'pointer',
       fontSize: '1rem',
       border: `1px solid ${theme.palette.divider}`,
+      color: theme.palette.text.primary,
       borderRadius: '4px',
       background: 'transparent',
       outline: 'none',
