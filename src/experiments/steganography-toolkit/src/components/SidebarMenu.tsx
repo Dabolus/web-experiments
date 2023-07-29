@@ -6,11 +6,11 @@ import React, {
   useCallback,
 } from 'react';
 
-import { NavLink, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import {
   List,
-  ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Collapse,
@@ -165,71 +165,74 @@ const SidebarMenu: FunctionComponent<SidebarMenuProps> = ({ onItemClick }) => {
 
   return (
     <List component="nav">
-      {MENU_ITEMS.map(({ key, title, icon, link, subitems }) => (
-        <Fragment key={key}>
-          <ListItem
-            button
-            {...(subitems
-              ? {
-                  onClick: createToggleableListItemClickHandler(
-                    key as keyof OpenedTogglesState,
-                  ),
-                }
-              : {
-                  component: NavLink,
-                  exact: true,
-                  to: link || `/${key}`,
-                  activeClassName: classes.active,
-                  onClick: handleListItemClick,
-                })}
-          >
-            <ListItemIcon>{icon}</ListItemIcon>
-            <ListItemText>{title}</ListItemText>
-            {subitems && (
-              <>
-                {openedToggles[key as keyof OpenedTogglesState] ? (
-                  <ExpandLessIcon />
-                ) : (
-                  <ExpandMoreIcon />
-                )}
-              </>
-            )}
-          </ListItem>
-          {subitems && (
-            <Collapse
-              in={openedToggles[key as keyof OpenedTogglesState]}
-              timeout="auto"
-              unmountOnExit
+      {MENU_ITEMS.map(({ key, title, icon, link, subitems }) => {
+        const ListItem = (
+          subitems ? ListItemButton : ListItemLink
+        ) as typeof ListItemButton;
+        return (
+          <Fragment key={key}>
+            <ListItem
+              {...(subitems
+                ? {
+                    onClick: createToggleableListItemClickHandler(
+                      key as keyof OpenedTogglesState,
+                    ),
+                  }
+                : {
+                    exact: true,
+                    to: link || `/${key}`,
+                    activeClassName: classes.active,
+                    onClick: handleListItemClick,
+                  })}
             >
-              <List component="div" disablePadding>
-                {subitems.map(
-                  ({
-                    key: subkey,
-                    title: subtitle,
-                    link: sublink,
-                    available = true,
-                  }) => (
-                    <ListItemLink
-                      className={clsx(
-                        classes.nested,
-                        !available && classes.disabled,
-                      )}
-                      key={`${key}-${subkey}`}
-                      to={`${sublink || `/${key}/${subkey}`}`}
-                      activeClassName={classes.active}
-                      onClick={handleListItemClick}
-                    >
-                      <ListItemText>
-                        {subtitle} {available ? null : <sup>Coming Soon</sup>}
-                      </ListItemText>
-                    </ListItemLink>
-                  ),
-                )}
-              </List>
-            </Collapse>
-          )}
-        </Fragment>
-      ))}
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText>{title}</ListItemText>
+              {subitems && (
+                <>
+                  {openedToggles[key as keyof OpenedTogglesState] ? (
+                    <ExpandLessIcon />
+                  ) : (
+                    <ExpandMoreIcon />
+                  )}
+                </>
+              )}
+            </ListItem>
+            {subitems && (
+              <Collapse
+                in={openedToggles[key as keyof OpenedTogglesState]}
+                timeout="auto"
+                unmountOnExit
+              >
+                <List component="div" disablePadding>
+                  {subitems.map(
+                    ({
+                      key: subkey,
+                      title: subtitle,
+                      link: sublink,
+                      available = true,
+                    }) => (
+                      <ListItemLink
+                        className={clsx(
+                          classes.nested,
+                          !available && classes.disabled,
+                        )}
+                        key={`${key}-${subkey}`}
+                        to={`${sublink || `/${key}/${subkey}`}`}
+                        activeClassName={classes.active}
+                        onClick={handleListItemClick}
+                      >
+                        <ListItemText>
+                          {subtitle} {available ? null : <sup>Coming Soon</sup>}
+                        </ListItemText>
+                      </ListItemLink>
+                    ),
+                  )}
+                </List>
+              </Collapse>
+            )}
+          </Fragment>
+        );
+      })}
     </List>
   );
 };

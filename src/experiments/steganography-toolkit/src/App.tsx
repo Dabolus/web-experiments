@@ -8,22 +8,25 @@ import {
   CssBaseline,
 } from '@mui/material';
 
-import lightTheme from './themes/light';
-
 import Root from './containers/Root';
 import ServiceWorkerProvider from './providers/ServiceWorkerProvider';
+import useTheme from './hooks/useTheme';
 
-const App: FunctionComponent = () => (
-  <StyledEngineProvider injectFirst>
-    <ThemeProvider theme={lightTheme}>
-      <CssBaseline />
-      <ServiceWorkerProvider>
-        <BrowserRouter basename="/steganography-toolkit/">
-          <Root />
-        </BrowserRouter>
-      </ServiceWorkerProvider>
-    </ThemeProvider>
-  </StyledEngineProvider>
-);
+const App: FunctionComponent = () => {
+  const { theme } = useTheme();
+
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <ServiceWorkerProvider>
+          <BrowserRouter basename="/steganography-toolkit/">
+            <Root />
+          </BrowserRouter>
+        </ServiceWorkerProvider>
+      </ThemeProvider>
+    </StyledEngineProvider>
+  );
+};
 
 export default App;
