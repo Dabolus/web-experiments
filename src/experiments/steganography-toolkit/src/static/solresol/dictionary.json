@@ -19,7 +19,7 @@
     "solresol": "14",
     "english": ["he", "she", "it", "him", "her", "them", "they"]
   },
-  { "solresol": "15", "english": ["self", "oneself"] },
+  { "solresol": "15", "english": ["self", "oneself", "himself", "herself"] },
   { "solresol": "16", "english": ["one", "someone", "another person"] },
   {
     "solresol": "17",
