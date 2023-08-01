@@ -275,7 +275,7 @@ const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
                 <OutlinedInput readOnly multiline rows={8} value={output} />
               </FormControl>
               <Box mt={2} display="flex" justifyContent="flex-end">
-                <Tooltip title={copyToClipboardText}>
+                <Tooltip title={output ? copyToClipboardText : ''}>
                   <IconButton
                     onClick={handleEncodedOutputCopyToClipboard}
                     disabled={!output}
@@ -283,7 +283,7 @@ const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
                     <FileCopyIcon />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title="Download as .txt">
+                <Tooltip title={output ? 'Download as .txt' : ''}>
                   <IconButton
                     onClick={handleEncodedOutputDownload}
                     disabled={!output}
