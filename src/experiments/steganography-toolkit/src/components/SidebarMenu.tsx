@@ -27,7 +27,7 @@ import { ListItemLink } from './ListItemLink';
 
 const NestedListItemLink = styled(ListItemLink)<{ available?: boolean }>(
   ({ theme, available }) => ({
-    background: theme.palette.background.default,
+    background: theme.palette.background.paper,
     paddingLeft: theme.spacing(4),
     ...(available
       ? {}

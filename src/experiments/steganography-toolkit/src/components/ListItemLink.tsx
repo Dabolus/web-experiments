@@ -10,11 +10,9 @@ export type ListItemLinkProps = Omit<
 const ListItemNavLink = styled(ListItemButton)<
   ListItemLinkProps & { component: typeof NavLink }
 >(({ theme }) => ({
-  '&.active': {
-    '& *': {
-      color: theme.palette.primary.main,
-      fontWeight: theme.typography.fontWeightBold,
-    },
+  '&.active *': {
+    color: theme.palette.primary.main,
+    fontWeight: theme.typography.fontWeightBold,
   },
 }));
 

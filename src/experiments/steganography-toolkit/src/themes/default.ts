@@ -25,6 +25,10 @@ const createDefaultTheme = (mode?: PaletteMode) =>
         secondary: {
           main: '#00c853',
         },
+        background: {
+          default: mode === 'dark' ? '#121212' : '#fff',
+          paper: mode === 'dark' ? '#212121' : '#fff',
+        },
       },
       components: {
         MuiLink: {
