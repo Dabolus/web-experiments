@@ -6,10 +6,13 @@ import React, {
   useState,
   ReactNode,
 } from 'react';
-
-import { Menu, MenuItem, Typography, Theme, alpha } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-
+import {
+  Menu as MuiMenu,
+  MenuItem,
+  Typography,
+  alpha,
+  styled,
+} from '@mui/material';
 import type {
   TranslationOutputItems as SolresolWorkerOutput,
   TranslationOutputItem,
@@ -17,82 +20,74 @@ import type {
 } from '../../workers/music/solresol.worker';
 
 export interface SolresolOutputProps {
-  type?: SolresolOutputType;
+  outputType?: SolresolOutputType;
   value?: SolresolWorkerOutput;
   comments?: string;
   onChange?(output: SolresolWorkerOutput): void;
-  formatTranslation?(word: string, classes: Record<string, string>): ReactNode;
+  formatTranslation?(word: string): ReactNode;
 }
 
-const useStyles = makeStyles<Theme, Pick<SolresolOutputProps, 'type'>>(
-  theme => ({
-    container: {
-      whiteSpace: 'pre-wrap',
-      padding: '16.5px 14px',
-      fontSize: '1rem',
-      borderRadius: '4px',
-      lineHeight: '23px',
-      border: `1px solid ${alpha(theme.palette.divider, 0.23)}`,
-      height: '9.25rem',
-      cursor: 'text',
-      overflowX: 'auto',
-    },
-    translation: ({ type }) => ({
-      appearance: 'none',
-      cursor: 'pointer',
-      fontSize: '1rem',
-      border: `1px solid ${theme.palette.divider}`,
-      color: theme.palette.text.primary,
-      borderRadius: '4px',
-      background: 'transparent',
-      outline: 'none',
-      transition: '.3s border-color',
-      fontWeight: theme.typography.fontWeightBold,
-      lineHeight: type === 'color' ? 0 : 0.9,
-      ...(type === 'color' && { padding: 0 }),
+const Container = styled('div')(({ theme }) => ({
+  whiteSpace: 'pre-wrap',
+  padding: '16.5px 14px',
+  fontSize: '1rem',
+  borderRadius: '4px',
+  lineHeight: '23px',
+  border: `1px solid ${alpha(theme.palette.divider, 0.23)}`,
+  height: '9.25rem',
+  cursor: 'text',
+  overflowX: 'auto',
+}));
 
-      '&:hover, &:focus': {
-        borderColor: theme.palette.text.disabled,
-      },
-    }),
-    colorTranslation: {
-      height: '.8rem',
-      borderRadius: '3px',
-    },
-    stenographicTranslation: {
-      borderRadius: '3px',
-      fill: 'transparent',
-      stroke: theme.palette.text.primary,
-      strokeWidth: 4,
-    },
-    menu: {
-      width: 280,
-      minHeight: 72,
-    },
-    alternative: {
-      display: 'flex',
-      flexDirection: 'column',
-      width: '100%',
+const Translation = styled('button')<Pick<SolresolOutputProps, 'outputType'>>(
+  ({ theme, outputType }) => ({
+    appearance: 'none',
+    cursor: 'pointer',
+    fontSize: '1rem',
+    border: `1px solid ${theme.palette.divider}`,
+    color: theme.palette.text.primary,
+    borderRadius: '4px',
+    background: 'transparent',
+    outline: 'none',
+    transition: '.3s border-color',
+    fontWeight: theme.typography.fontWeightBold,
+    lineHeight: outputType === 'color' ? 0 : 0.9,
+    ...(outputType === 'color' && { padding: 0 }),
 
-      '& > *': {
-        whiteSpace: 'normal',
-      },
-    },
-    disabled: {
-      pointerEvents: 'none',
+    '&:hover, &:focus': {
+      borderColor: theme.palette.text.disabled,
     },
   }),
 );
 
+const AlternativeTranslation = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+
+  '& > *': {
+    whiteSpace: 'normal',
+  },
+});
+
+const Menu = styled(MuiMenu)({
+  '& .MuiMenu-paper': {
+    width: 280,
+    minHeight: 72,
+  },
+});
+
+const DisabledMenuItem = styled(MenuItem)({
+  pointerEvents: 'none',
+});
+
 const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
-  type = 'full',
+  outputType = 'full',
   value,
   comments,
   onChange,
   formatTranslation = word => word,
 }) => {
-  const classes = useStyles({ type });
-
   const [selectedTranslation, setSelectedTranslation] = useState<{
     index: number;
     anchor: HTMLElement;
@@ -142,28 +137,27 @@ const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
 
   return (
     <>
-      <div className={classes.container}>
+      <Container>
         {value?.map((part, index) => {
           if (typeof part === 'string') {
             return <Fragment key={index}>{part}</Fragment>;
           }
 
           return (
-            <button
+            <Translation
               key={index}
+              outputType={outputType}
               aria-controls="alternative-translations-menu"
               aria-haspopup="true"
               onClick={createTranslationClickHandler(index)}
-              className={classes.translation}
             >
               {formatTranslation(
                 part.find(({ preferred }) => preferred)?.word || '',
-                classes,
               )}
-            </button>
+            </Translation>
           );
         })}
-      </div>
+      </Container>
       <Menu
         id="alternative-translations-menu"
         anchorEl={selectedTranslation?.anchor}
@@ -178,7 +172,6 @@ const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
         keepMounted
         open={Boolean(selectedTranslation)}
         onClose={handleAlternativeTranslationsMenuClose}
-        PaperProps={{ className: classes.menu }}
       >
         {value && selectedTranslation && (
           <>
@@ -189,9 +182,9 @@ const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
                   selected={preferred}
                   onClick={createTranslationPreferenceChangeHandler(index)}
                 >
-                  <div className={classes.alternative}>
+                  <AlternativeTranslation>
                     <Typography variant="subtitle1">
-                      <strong>{formatTranslation(word, classes)}</strong>
+                      <strong>{formatTranslation(word)}</strong>
                     </Typography>
                     <Typography variant="caption">
                       {meanings.join(' · ')}
@@ -201,16 +194,16 @@ const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
                         <em>{comments}</em>
                       </Typography>
                     )}
-                  </div>
+                  </AlternativeTranslation>
                 </MenuItem>
               ),
             )}
             {comments && (
-              <MenuItem className={classes.disabled}>
-                <div className={classes.alternative}>
+              <DisabledMenuItem>
+                <AlternativeTranslation>
                   <Typography variant="caption">{comments}</Typography>
-                </div>
-              </MenuItem>
+                </AlternativeTranslation>
+              </DisabledMenuItem>
             )}
           </>
         )}

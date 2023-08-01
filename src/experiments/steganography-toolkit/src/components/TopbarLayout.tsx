@@ -4,18 +4,16 @@ import React, {
   ReactNode,
   PropsWithChildren,
 } from 'react';
-
 import {
-  AppBar,
+  AppBar as MuiAppBar,
   Toolbar,
   IconButton,
   Typography,
   useMediaQuery,
   useTheme,
   Link,
+  styled,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-
 import { Menu as MenuIcon } from '@mui/icons-material';
 
 export interface TopbarLayoutProps {
@@ -24,45 +22,39 @@ export interface TopbarLayoutProps {
   onMenuButtonClick?(): void;
 }
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '100vh',
-  },
-  appBar: {
-    flex: '0 0 auto',
-  },
-  content: {
-    flex: '1 1 auto',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  footer: {
-    flex: '0 0 auto',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 56,
-    background: theme.palette.background.paper,
-    color: theme.palette.text.secondary,
-    borderTop: `1px solid ${theme.palette.divider}`,
+const Root = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  minHeight: '100vh',
+});
 
-    '& a, & strong': {
-      fontWeight: theme.typography.fontWeightBold,
-      color: theme.palette.text.primary,
-    },
-  },
-  menuButton: {
-    marginRight: theme.spacing(0.5),
-  },
-  toolbar: theme.mixins.toolbar,
-  menu: {
-    width: 'min(100vw - 56px, 280px)',
+const AppBar = styled(MuiAppBar)({
+  flex: '0 0 auto',
+});
 
-    [theme.breakpoints.up('sm')]: {
-      width: 'min(100vw - 64px, 320px)',
-    },
+const MenuButton = styled(IconButton)(({ theme }) => ({
+  marginRight: theme.spacing(0.5),
+}));
+
+const Content = styled('div')({
+  flex: '1 1 auto',
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+const Footer = styled('footer')(({ theme }) => ({
+  flex: '0 0 auto',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: 56,
+  background: theme.palette.background.paper,
+  color: theme.palette.text.secondary,
+  borderTop: `1px solid ${theme.palette.divider}`,
+
+  '& a, & strong': {
+    fontWeight: theme.typography.fontWeightBold,
+    color: theme.palette.text.primary,
   },
 }));
 
@@ -73,9 +65,6 @@ const TopbarLayout: FunctionComponent<PropsWithChildren<TopbarLayoutProps>> = ({
   children,
 }) => {
   const theme = useTheme();
-
-  const classes = useStyles();
-
   const isNarrow = useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleMenuButtonClick = useCallback(() => {
@@ -83,37 +72,33 @@ const TopbarLayout: FunctionComponent<PropsWithChildren<TopbarLayoutProps>> = ({
   }, [onMenuButtonClick]);
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static" className={classes.appBar}>
+    <Root>
+      <AppBar position="static">
         <Toolbar>
           {!isNarrow && (
-            <IconButton
+            <MenuButton
               edge="start"
               color="inherit"
               aria-label="menu"
               onClick={handleMenuButtonClick}
-              className={classes.menuButton}
             >
               <MenuIcon />
-            </IconButton>
+            </MenuButton>
           )}
           <Typography variant="h6">{title}</Typography>
         </Toolbar>
-
         {topbarContent}
       </AppBar>
-
-      <div className={classes.content}>{children}</div>
-
-      <footer className={classes.footer}>
+      <Content>{children}</Content>
+      <Footer>
         <div>
           Brought to you with <strong>❤</strong> by{' '}
           <Link href="https://github.com/Dabolus" target="my-github">
             Dabolus
           </Link>
         </div>
-      </footer>
-    </div>
+      </Footer>
+    </Root>
   );
 };
 export default TopbarLayout;

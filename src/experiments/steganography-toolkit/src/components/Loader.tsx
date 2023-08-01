@@ -1,29 +1,22 @@
 import React, { FunctionComponent } from 'react';
-import { Theme, CircularProgress, CircularProgressProps } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { CircularProgress, CircularProgressProps, styled } from '@mui/material';
 
 export interface LoaderProps extends CircularProgressProps {
   size?: number;
 }
 
-const useStyles = makeStyles<Theme, { size: number }>(() => ({
-  root: ({ size }) => ({
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: `-${size / 2}px`,
-    marginLeft: `-${size / 2}px`,
-  }),
+const Container = styled('div')<{ size: number }>(({ size }) => ({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  marginTop: `-${size / 2}px`,
+  marginLeft: `-${size / 2}px`,
 }));
 
-const Loader: FunctionComponent<LoaderProps> = ({ size = 32, ...props }) => {
-  const classes = useStyles({ size });
-
-  return (
-    <div className={classes.root}>
-      <CircularProgress size={size} {...props} />
-    </div>
-  );
-};
+const Loader: FunctionComponent<LoaderProps> = ({ size = 32, ...props }) => (
+  <Container size={size}>
+    <CircularProgress size={size} {...props} />
+  </Container>
+);
 
 export default Loader;

@@ -7,7 +7,6 @@ import React, {
   useState,
   useEffect,
 } from 'react';
-
 import {
   Grid,
   FormControl,
@@ -18,22 +17,22 @@ import {
   Select,
   SelectProps,
   FormHelperText,
+  styled,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles(theme => ({
-  label: {
-    marginBottom: theme.spacing(1),
-  },
-  meterContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    marginTop: theme.spacing(0.5),
-  },
-  meterPart: {
-    flex: '1 1 auto',
-  },
+const Label = styled(FormLabel)(({ theme }) => ({
+  marginBottom: theme.spacing(1),
 }));
+
+const MeterContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  marginTop: theme.spacing(0.5),
+}));
+
+const MeterPart = styled(OutlinedInput)({
+  flex: '1 1 auto',
+});
 
 export type MusicalKey =
   // Major
@@ -165,8 +164,6 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
   defaultValue,
   onChange,
 }) => {
-  const classes = useStyles();
-
   const initialState: Cicada3301FormState = useMemo(() => {
     const { meter, tempo, key, ...rest } = defaultValue || {};
 
@@ -245,7 +242,7 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
     <Grid container spacing={3} component="form">
       <Grid item xs={12}>
         <FormControl fullWidth>
-          <FormLabel className={classes.label}>Input</FormLabel>
+          <Label>Input</Label>
           <OutlinedInput
             multiline
             rows={4}
@@ -261,7 +258,7 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
       </Grid>
       <Grid item xs={12}>
         <FormControl fullWidth>
-          <FormLabel className={classes.label}>Title</FormLabel>
+          <Label>Title</Label>
           <OutlinedInput
             value={state.title}
             onInput={createTextFieldInputHandler('title')}
@@ -269,34 +266,30 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
         </FormControl>
       </Grid>
       <Grid item xs={12} sm={6}>
-        <FormLabel focused={isTempoFocused} className={classes.label}>
-          Meter
-        </FormLabel>
-        <div className={classes.meterContainer}>
-          <OutlinedInput
+        <Label focused={isTempoFocused}>Meter</Label>
+        <MeterContainer>
+          <MeterPart
             type="number"
             inputProps={{ min: 1 }}
             value={state.meterBeats}
             onInput={createTextFieldInputHandler('meterBeats')}
             onFocus={handleTempoFocus}
             onBlur={handleTempoBlur}
-            className={classes.meterPart}
           />
           <Box marginX={1}>/</Box>
-          <OutlinedInput
+          <MeterPart
             type="number"
             inputProps={{ min: 1 }}
             value={state.meterNoteValue}
             onInput={createTextFieldInputHandler('meterNoteValue')}
             onFocus={handleTempoFocus}
             onBlur={handleTempoBlur}
-            className={classes.meterPart}
           />
-        </div>
+        </MeterContainer>
       </Grid>
       <Grid item xs={12} sm={6}>
         <FormControl fullWidth>
-          <FormLabel className={classes.label}>Key</FormLabel>
+          <Label>Key</Label>
           <Select
             native
             variant="outlined"
@@ -345,7 +338,7 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
       </Grid>
       <Grid item xs={12} sm={6}>
         <FormControl fullWidth>
-          <FormLabel className={classes.label}>Tempo</FormLabel>
+          <Label>Tempo</Label>
           <OutlinedInput
             type="number"
             inputProps={{ min: 1 }}
@@ -356,7 +349,7 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
       </Grid>
       <Grid item xs={12} sm={6}>
         <FormControl fullWidth>
-          <FormLabel className={classes.label}>Language</FormLabel>
+          <Label>Language</Label>
           <Select
             native
             variant="outlined"

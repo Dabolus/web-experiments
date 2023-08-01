@@ -5,17 +5,15 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-
 import { useLocation } from 'react-router-dom';
-
 import {
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   Collapse,
+  styled,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import {
   Home as HomeIcon,
@@ -26,24 +24,19 @@ import {
   ExpandLess as ExpandLessIcon,
 } from '@mui/icons-material';
 import { ListItemLink } from './ListItemLink';
-import clsx from 'clsx';
 
-const useStyles = makeStyles(theme => ({
-  active: {
-    '& *': {
-      color: theme.palette.primary.main,
-      fontWeight: theme.typography.fontWeightBold,
-    },
-  },
-  nested: {
+const NestedListItemLink = styled(ListItemLink)<{ available?: boolean }>(
+  ({ theme, available }) => ({
     background: theme.palette.background.default,
     paddingLeft: theme.spacing(4),
-  },
-  disabled: {
-    opacity: 0.5,
-    pointerEvents: 'none',
-  },
-}));
+    ...(available
+      ? {}
+      : {
+          opacity: 0.5,
+          pointerEvents: 'none',
+        }),
+  }),
+);
 
 interface MenuItem {
   key: string;
@@ -135,12 +128,8 @@ const isToggleablePage = (key: string): key is keyof OpenedTogglesState =>
   key === 'text' || key === 'image' || key === 'music';
 
 const SidebarMenu: FunctionComponent<SidebarMenuProps> = ({ onItemClick }) => {
-  const classes = useStyles();
-
   const { pathname } = useLocation();
-
   const [, pathnameKey] = pathname.split('/');
-
   const [openedToggles, setOpenedToggles] = useState<OpenedTogglesState>(
     isToggleablePage(pathnameKey)
       ? {
@@ -181,7 +170,6 @@ const SidebarMenu: FunctionComponent<SidebarMenuProps> = ({ onItemClick }) => {
                 : {
                     exact: true,
                     to: link || `/${key}`,
-                    activeClassName: classes.active,
                     onClick: handleListItemClick,
                   })}
             >
@@ -203,7 +191,7 @@ const SidebarMenu: FunctionComponent<SidebarMenuProps> = ({ onItemClick }) => {
                 timeout="auto"
                 unmountOnExit
               >
-                <List component="div" disablePadding>
+                <List disablePadding>
                   {subitems.map(
                     ({
                       key: subkey,
@@ -211,20 +199,16 @@ const SidebarMenu: FunctionComponent<SidebarMenuProps> = ({ onItemClick }) => {
                       link: sublink,
                       available = true,
                     }) => (
-                      <ListItemLink
-                        className={clsx(
-                          classes.nested,
-                          !available && classes.disabled,
-                        )}
+                      <NestedListItemLink
                         key={`${key}-${subkey}`}
+                        available={available}
                         to={`${sublink || `/${key}/${subkey}`}`}
-                        activeClassName={classes.active}
                         onClick={handleListItemClick}
                       >
                         <ListItemText>
                           {subtitle} {available ? null : <sup>Coming Soon</sup>}
                         </ListItemText>
-                      </ListItemLink>
+                      </NestedListItemLink>
                     ),
                   )}
                 </List>

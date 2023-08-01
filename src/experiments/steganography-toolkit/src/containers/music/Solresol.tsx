@@ -5,7 +5,6 @@ import React, {
   useEffect,
   ReactNode,
 } from 'react';
-
 import {
   OutlinedInputProps,
   Grid,
@@ -19,16 +18,13 @@ import {
   InputLabel,
   SelectProps,
   IconButton,
+  styled,
 } from '@mui/material';
-
 import { SwapHoriz as SwapHorizIcon } from '@mui/icons-material';
-
 import { useDebounce } from 'use-debounce';
-
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
 import Page from '../../components/Page';
 import { setupWorkerClient } from '../../workers/utils';
-
 import SolresolOutput, {
   SolresolOutputProps,
 } from '../../components/music/SolresolOutput';
@@ -122,9 +118,20 @@ const stenographicSolresolCodes = [
   },
 ];
 
+const ColorTranslation = styled('svg')({
+  height: '.8rem',
+  borderRadius: '3px',
+});
+
+const StenographicTranslation = styled('svg')(({ theme }) => ({
+  borderRadius: '3px',
+  fill: 'transparent',
+  stroke: theme.palette.text.primary,
+  strokeWidth: 4,
+}));
+
 const convertToSolresolForm = (
   word: string,
-  classes: Record<string, string>,
   type: SolresolOutputType,
 ): ReactNode => {
   switch (type) {
@@ -138,14 +145,13 @@ const convertToSolresolForm = (
       return word;
     case 'color':
       return (
-        <svg
+        <ColorTranslation
           viewBox={`0 0 ${word.length * 3} 4`}
           role="img"
           aria-labelledby={`${word}-title`}
-          className={classes.colorTranslation}
         >
           <title id={`${word}-title`}>
-            {convertToSolresolForm(word, classes, 'full')}
+            {convertToSolresolForm(word, 'full')}
           </title>
           {[...word].map((code, index) => (
             <rect
@@ -157,7 +163,7 @@ const convertToSolresolForm = (
               fill={colorSolresolCodes[Number(code)]}
             />
           ))}
-        </svg>
+        </ColorTranslation>
       );
     case 'stenographic':
       let [minX, minY, maxX, maxY] = [0, 0, 0, 0];
@@ -175,18 +181,17 @@ const convertToSolresolForm = (
       const width = maxX - minX;
       const height = maxY - minY;
       return (
-        <svg
+        <StenographicTranslation
           viewBox={`${minX - 2} ${minY - 2} ${width + 4} ${height + 4}`}
           role="img"
           aria-labelledby={`${word}-title`}
-          className={classes.stenographicTranslation}
           style={{ height: `${height / 50}rem` }}
         >
           <title id={`${word}-title`}>
-            {convertToSolresolForm(word, classes, 'full')}
+            {convertToSolresolForm(word, 'full')}
           </title>
           <path d={`m 0,0 ${path}`} />
-        </svg>
+        </StenographicTranslation>
       );
   }
 };
@@ -254,8 +259,7 @@ const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
   const formatTranslation = useCallback<
     NonNullable<SolresolOutputProps['formatTranslation']>
   >(
-    (word, classes) =>
-      swapped ? word : convertToSolresolForm(word, classes, outputType),
+    word => (swapped ? word : convertToSolresolForm(word, outputType)),
     [outputType, swapped],
   );
 

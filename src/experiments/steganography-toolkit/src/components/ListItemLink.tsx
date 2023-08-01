@@ -1,42 +1,29 @@
-import React, { FunctionComponent, PropsWithChildren, forwardRef } from 'react';
-import clsx from 'clsx';
-import { ListItemButton, ListItemButtonProps } from '@mui/material';
+import React, { FunctionComponent, PropsWithChildren } from 'react';
+import { ListItemButton, ListItemButtonProps, styled } from '@mui/material';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 
-export interface ListItemLinkProps {
-  to: string;
-  className?: string;
-  activeClassName?: string;
-  onClick?(): void;
-}
+export type ListItemLinkProps = Omit<
+  ListItemButtonProps & NavLinkProps,
+  'component'
+>;
+
+const ListItemNavLink = styled(ListItemButton)<
+  ListItemLinkProps & { component: typeof NavLink }
+>(({ theme }) => ({
+  '&.active': {
+    '& *': {
+      color: theme.palette.primary.main,
+      fontWeight: theme.typography.fontWeightBold,
+    },
+  },
+}));
 
 export const ListItemLink: FunctionComponent<
   PropsWithChildren<ListItemLinkProps>
-> = ({ to, activeClassName, ...props }) => {
-  const renderLink = React.useMemo(
-    () =>
-      forwardRef<HTMLAnchorElement, Omit<NavLinkProps, 'to'>>(function Link(
-        { className, ...itemProps },
-        ref,
-      ) {
-        return (
-          <NavLink
-            to={to}
-            ref={ref}
-            className={({ isActive }) =>
-              clsx(className, isActive && activeClassName)
-            }
-            {...itemProps}
-            role={undefined}
-          />
-        );
-      }),
-    [to],
-  );
-
+> = props => {
   return (
     <li>
-      <ListItemButton component={renderLink} {...props} />
+      <ListItemNavLink component={NavLink} {...props} />
     </li>
   );
 };
