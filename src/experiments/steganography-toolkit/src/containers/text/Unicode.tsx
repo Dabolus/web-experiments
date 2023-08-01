@@ -5,13 +5,9 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-
 import { useDropzone } from 'react-dropzone';
-
 import { useDebounce } from 'use-debounce';
-
 import { saveAs } from 'file-saver';
-
 import {
   Box,
   Grid,
@@ -24,14 +20,13 @@ import {
   IconButton,
   Tooltip,
   Link,
+  alpha,
 } from '@mui/material';
-
 import {
   FileCopy as FileCopyIcon,
   FileDownload as FileDownloadIcon,
   SimCardDownload as SimCardDownloadIcon,
 } from '@mui/icons-material';
-
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
 import Page from '../../components/Page';
 import { setupWorkerClient } from '../../workers/utils';
@@ -57,25 +52,26 @@ const Label = styled(FormLabel)(({ theme }) => ({
 }));
 
 const FileContainer = styled('p')<{ isDragActive?: boolean }>(
-  ({ isDragActive }) => ({
+  ({ theme, isDragActive }) => ({
     padding: '16.5px 14px',
     margin: 0,
     fontSize: '1rem',
     borderRadius: '4px',
-    border: '1px solid rgba(0, 0, 0, 0.23)',
+    border: `1px solid ${alpha(theme.palette.divider, 0.23)}`,
     height: '3.75rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    cursor: 'pointer',
     '&:hover': {
-      borderColor: '#000',
+      borderColor: theme.palette.text.primary,
     },
     '&:active, &:focus': {
-      borderColor: '#000',
+      borderColor: theme.palette.text.primary,
       borderWidth: '2px',
     },
     ...(isDragActive && {
-      borderColor: '#000',
+      borderColor: theme.palette.text.primary,
       borderWidth: '2px',
     }),
   }),
