@@ -350,7 +350,7 @@ const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
                   )}
                 </Box>
                 <Box flex="0 0 auto">
-                  <Tooltip title={copyToClipboardText}>
+                  <Tooltip title={payload ? copyToClipboardText : ''}>
                     <IconButton
                       onClick={handleDecodedOutputCopyToClipboard}
                       disabled={!payload}
@@ -358,7 +358,7 @@ const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
                       <FileCopyIcon />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Download as .txt">
+                  <Tooltip title={payload ? 'Download as .txt' : ''}>
                     <IconButton
                       onClick={handleDecodedOutputDownloadAsTxt}
                       disabled={!payload}
@@ -366,7 +366,7 @@ const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
                       <SimCardDownloadIcon />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Download as file">
+                  <Tooltip title={payload ? 'Download as file' : ''}>
                     <IconButton
                       onClick={handleDecodedOutputDownloadAsFile}
                       disabled={!payload}
