@@ -1,10 +1,5 @@
-import { createTheme, Theme, PaletteMode } from '@mui/material';
-
+import { createTheme, PaletteMode } from '@mui/material';
 import { enUS } from '@mui/material/locale';
-
-declare module '@mui/styles' {
-  interface DefaultTheme extends Theme {}
-}
 
 const createDefaultTheme = (mode?: PaletteMode) =>
   createTheme(
