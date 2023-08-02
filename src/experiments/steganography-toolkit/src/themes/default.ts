@@ -6,12 +6,12 @@ const createDefaultTheme = (mode?: PaletteMode) =>
     {
       typography: {
         fontFamily: "'Jost', sans-serif",
-        h1: {
+        h3: {
           fontSize: '2rem',
           fontWeight: 800,
           margin: '1.2rem 0 0.6rem 0',
         },
-        h2: {
+        h4: {
           fontSize: '1.17rem',
           fontWeight: 700,
           margin: '1rem 0 0.5rem 0',

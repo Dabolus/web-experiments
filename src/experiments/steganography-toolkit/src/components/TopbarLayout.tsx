@@ -85,7 +85,9 @@ const TopbarLayout: FunctionComponent<PropsWithChildren<TopbarLayoutProps>> = ({
               <MenuIcon />
             </MenuButton>
           )}
-          <Typography variant="h6">{title}</Typography>
+          <Typography variant="h6" component="h2">
+            {title}
+          </Typography>
         </Toolbar>
         {topbarContent}
       </AppBar>

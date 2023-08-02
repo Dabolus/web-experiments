@@ -16,7 +16,7 @@ export interface SidebarLayoutProps extends DrawerProps {
 
 const Toolbar = styled(MuiToolbar)(({ theme }) => theme.mixins.toolbar);
 
-const Menu = styled('div')(({ theme }) => ({
+const Menu = styled('nav')(({ theme }) => ({
   width: 'min(100vw - 56px, 280px)',
 
   [theme.breakpoints.up('sm')]: {
@@ -50,7 +50,9 @@ const SidebarLayout: FunctionComponent<
         {...props}
       >
         <Toolbar>
-          <Typography variant="h6">Steganography Toolkit</Typography>
+          <Typography variant="h6" component="h1">
+            Steganography Toolkit
+          </Typography>
         </Toolbar>
         <Divider />
         <Menu>{menuContent}</Menu>

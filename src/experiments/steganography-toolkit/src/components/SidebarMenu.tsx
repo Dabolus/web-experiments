@@ -153,7 +153,7 @@ const SidebarMenu: FunctionComponent<SidebarMenuProps> = ({ onItemClick }) => {
   );
 
   return (
-    <List component="nav">
+    <List>
       {MENU_ITEMS.map(({ key, title, icon, link, subitems }) => {
         const ListItem = (
           subitems ? ListItemButton : ListItemLink
@@ -204,6 +204,7 @@ const SidebarMenu: FunctionComponent<SidebarMenuProps> = ({ onItemClick }) => {
                         available={available}
                         to={`${sublink || `/${key}/${subkey}`}`}
                         onClick={handleListItemClick}
+                        tabIndex={available ? 0 : -1}
                       >
                         <ListItemText>
                           {subtitle} {available ? null : <sup>Coming Soon</sup>}

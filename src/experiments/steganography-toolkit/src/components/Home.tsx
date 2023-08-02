@@ -17,14 +17,14 @@ const Home: FunctionComponent<TopbarLayoutProps> = props => (
   <TopbarLayout title="Home" {...props}>
     <Page>
       <section>
-        <Text variant="h1">Welcome to Steganography Toolkit</Text>
-        <Text variant="h2">What's this?</Text>
+        <Text variant="h3">Welcome to Steganography Toolkit</Text>
+        <Text variant="h4">What's this?</Text>
         <Text>
           Steganography Toolkit is an app aimed to provide a fast and easy way
           to hide messages in either text, image, audio or video files using
           various steganographic techniques.
         </Text>
-        <Text variant="h2">What is steganography?</Text>
+        <Text variant="h4">What is steganography?</Text>
         <Text>From Wikipedia:</Text>
         <Text
           variant="quote"
@@ -41,11 +41,11 @@ const Home: FunctionComponent<TopbarLayoutProps> = props => (
           way and requires a different technique for the hidden message to be
           decrypted.
         </Text>
-        <Text variant="h2">What can I use it for?</Text>
+        <Text variant="h4">What can I use it for?</Text>
         <Text>
           Steganography can be used to exchange secret messages and/or files.
         </Text>
-        <Text variant="h2">
+        <Text variant="h4">
           What's the difference between steganography and cryptography?
         </Text>
         <Text>
@@ -104,7 +104,7 @@ const Home: FunctionComponent<TopbarLayoutProps> = props => (
           you want to send something secret and you don't expect anyone to know
           that you want to, use steganography.
         </Text>
-        <Text variant="h2">
+        <Text variant="h4">
           In which cases steganography is better than crypthography?
         </Text>
         <Text>
@@ -112,12 +112,12 @@ const Home: FunctionComponent<TopbarLayoutProps> = props => (
           <strong>does not guarantee</strong> that your message won't be read by
           a third party. Use steganography at your own risk.
         </Text>
-        <Text variant="h2">So, what can I use steganography for?</Text>
+        <Text variant="h4">So, what can I use steganography for?</Text>
         <Text>
           Steganography might be used to exchange secret messages with your
           friends and/or family or to create IQ tests.
         </Text>
-        <Text variant="h2">Ok then. How do I get started?</Text>
+        <Text variant="h4">Ok then. How do I get started?</Text>
         <Text>
           Now that you know exactly whether you should use steganography or not,
           open up the app drawer using the button on the top-left of the page
