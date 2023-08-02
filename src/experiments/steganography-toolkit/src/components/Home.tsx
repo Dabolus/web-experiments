@@ -105,7 +105,7 @@ const Home: FunctionComponent<TopbarLayoutProps> = props => (
           that you want to, use steganography.
         </Text>
         <Text variant="h4">
-          In which cases steganography is better than crypthography?
+          In which cases is steganography better than cryptography?
         </Text>
         <Text>
           <strong>Never.</strong> Steganography{' '}
