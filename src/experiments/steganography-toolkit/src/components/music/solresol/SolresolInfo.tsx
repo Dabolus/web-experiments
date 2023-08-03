@@ -15,6 +15,9 @@ const StenographicExampleContainer = styled('div')(({ theme }) => ({
   margin: theme.spacing(1, 0),
 }));
 
+const testNotes = '1234567';
+const testNotesArray = Array.from(testNotes);
+
 const SolresolInfo: FunctionComponent = () => (
   <Page>
     <section>
@@ -61,35 +64,54 @@ const SolresolInfo: FunctionComponent = () => (
         <li>Singing or playing notes on a musical instrument</li>
         <li>
           Using the colors of the rainbow, one for each syllable:{' '}
-          {convertToSolresolForm('1234567', 'color')}
+          {convertToSolresolForm(testNotes, 'color')}
         </li>
       </ul>
       <Text variant="h5">Written forms</Text>
       <ul>
         <li>
-          Latin alphabet: <strong>do, re, mi, fa, sol, la, si</strong>
+          Latin alphabet:{' '}
+          <strong>
+            {testNotesArray
+              .map(char => convertToSolresolForm(char, 'full'))
+              .join(', ')}
+          </strong>
         </li>
         <li>
           Latin alphabet without the vowels{' '}
           <em>(except the o of sol to distinguish it from si)</em>:{' '}
-          <strong>d, r, m, f, so, l, s</strong>
+          <strong>
+            {testNotesArray
+              .map(char => convertToSolresolForm(char, 'abbreviated'))
+              .join(', ')}
+          </strong>
         </li>
         <li>
-          English notes: <strong>C, D, E, F, G, A, B</strong>
+          English notes:{' '}
+          <strong>
+            {testNotesArray
+              .map(char => convertToSolresolForm(char, 'english'))
+              .join(', ')}
+          </strong>
         </li>
         <li>
-          Numerals: <strong>1, 2, 3, 4, 5, 6, 7</strong>
+          Numerals:{' '}
+          <strong>
+            {testNotesArray
+              .map(char => convertToSolresolForm(char, 'numeric'))
+              .join(', ')}
+          </strong>
         </li>
         <li>
           Notes on a musical scale of just three lines:
           <MusicalScaleExampleContainer>
-            {convertToSolresolForm('1234567', 'scale')}
+            {convertToSolresolForm(testNotes, 'scale')}
           </MusicalScaleExampleContainer>
         </li>
         <li>
           Using the stenographic script invented by Vincent Gajewski:
           <StenographicExampleContainer>
-            {Array.from('1234567', char => (
+            {testNotesArray.map(char => (
               <Fragment key={char}>
                 {convertToSolresolForm(char, 'stenographic')}
               </Fragment>
