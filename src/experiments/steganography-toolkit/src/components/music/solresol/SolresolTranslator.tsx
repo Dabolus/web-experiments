@@ -183,6 +183,7 @@ const SolresolTranslator: FunctionComponent = () => {
                     <option value="english">English</option>
                     <option value="numeric">Numeric</option>
                     <option value="color">Color</option>
+                    <option value="scale">Musical scale</option>
                     <option value="stenographic">Stenographic</option>
                   </Select>
                 </FormControl>

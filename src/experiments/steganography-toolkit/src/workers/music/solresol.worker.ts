@@ -10,6 +10,7 @@ export type SolresolOutputType =
   | 'english'
   | 'numeric'
   | 'color'
+  | 'scale'
   | 'stenographic';
 
 export interface TranslationOutputItem {

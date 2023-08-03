@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { Fragment, ReactNode } from 'react';
 import { styled } from '@mui/material';
 import type { SolresolOutputType } from '../../../workers/music/solresol.worker';
 
@@ -75,15 +75,19 @@ export const convertToSolresolForm = (
 ): ReactNode => {
   const normalizedWord = Array.from(word, char => Number(char) - 1);
   switch (type) {
-    case 'full':
+    case 'full': {
       return normalizedWord.map(code => fullSolresolCodes[code]);
-    case 'abbreviated':
+    }
+    case 'abbreviated': {
       return normalizedWord.map(code => abbreviatedSolresolCodes[code]);
-    case 'english':
+    }
+    case 'english': {
       return normalizedWord.map(code => englishSolresolCodes[code]);
-    case 'numeric':
+    }
+    case 'numeric': {
       return word;
-    case 'color':
+    }
+    case 'color': {
       return (
         <ColorTranslation
           viewBox={`0 0 ${word.length * 3} 4`}
@@ -105,7 +109,42 @@ export const convertToSolresolForm = (
           ))}
         </ColorTranslation>
       );
-    case 'stenographic':
+    }
+    case 'scale': {
+      const includesDo = normalizedWord.includes(0);
+      const includesRe = normalizedWord.includes(1);
+      const width = word.length * 4;
+      const height =
+        10 - (!includesDo ? 1 : 0) - (!includesDo && !includesRe ? 1 : 0);
+      return (
+        <svg
+          viewBox={`0 0 ${width} ${height}`}
+          role="img"
+          aria-labelledby={`${word}-title`}
+          width={`${width * 0.3}rem`}
+          height={`${height * 0.3}rem`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={0.2}
+        >
+          <title id={`${word}-title`}>
+            {convertToSolresolForm(word, 'full')}
+          </title>
+          {normalizedWord.map((code, index) => (
+            <Fragment key={index}>
+              <circle cx={index * 4 + 2} cy={8 - code} r="1" />
+              {code === 0 && (
+                <line x1={index * 4} y1="8" x2={(index + 1) * 4} y2="8" />
+              )}
+            </Fragment>
+          ))}
+          <line x1="0" y1="6" x2={width} y2="6" />
+          <line x1="0" y1="4" x2={width} y2="4" />
+          <line x1="0" y1="2" x2={width} y2="2" />
+        </svg>
+      );
+    }
+    case 'stenographic': {
       let [minX, minY, maxX, maxY] = [0, 0, 0, 0];
       const path = normalizedWord
         .map(code => {
@@ -133,5 +172,6 @@ export const convertToSolresolForm = (
           <path d={`m 0,0 ${path}`} />
         </StenographicTranslation>
       );
+    }
   }
 };
