@@ -44,7 +44,7 @@ const solresolWorker = setupWorkerClient<SolresolWorker>(
 const SolresolTranslator: FunctionComponent = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const input = searchParams.get('input') ?? '';
-  const outputType = searchParams.get('type') as SolresolOutputType;
+  const outputType = (searchParams.get('type') ?? 'full') as SolresolOutputType;
   const swapped = searchParams.get('swap') === 'true';
   const [hint, setHint] = useState<string>('');
   const [output, setOutput] = useState<TranslationOutputItems>([]);
