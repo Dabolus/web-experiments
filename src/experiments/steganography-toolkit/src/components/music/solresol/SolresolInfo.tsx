@@ -4,6 +4,10 @@ import Page from '../../Page';
 import Text from '../../Text';
 import { convertToSolresolForm } from './helpers';
 
+const MusicalScaleExampleContainer = styled('div')(({ theme }) => ({
+  margin: theme.spacing(1, 0),
+}));
+
 const StenographicExampleContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -78,7 +82,9 @@ const SolresolInfo: FunctionComponent = () => (
         </li>
         <li>
           Notes on a musical scale of just three lines:
-          {/* TODO */}
+          <MusicalScaleExampleContainer>
+            {convertToSolresolForm('1234567', 'scale')}
+          </MusicalScaleExampleContainer>
         </li>
         <li>
           Using the stenographic script invented by Vincent Gajewski:
