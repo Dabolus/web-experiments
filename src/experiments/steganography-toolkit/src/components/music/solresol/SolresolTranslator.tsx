@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useEffect,
 } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   OutlinedInputProps,
   Grid,
@@ -41,12 +42,13 @@ const solresolWorker = setupWorkerClient<SolresolWorker>(
 );
 
 const SolresolTranslator: FunctionComponent = () => {
-  const [input, setInput] = useState<string>('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const input = searchParams.get('input') ?? '';
+  const outputType = searchParams.get('type') as SolresolOutputType;
+  const swapped = searchParams.get('swap') === 'true';
   const [hint, setHint] = useState<string>('');
   const [output, setOutput] = useState<TranslationOutputItems>([]);
   const [comments, setComments] = useState<string>('');
-  const [outputType, setOutputType] = useState<SolresolOutputType>('full');
-  const [swapped, setSwapped] = useState(false);
   const [debouncedInput] = useDebounce(input, 300);
 
   useEffect(() => {
@@ -75,18 +77,28 @@ const SolresolTranslator: FunctionComponent = () => {
   }, [debouncedInput, swapped]);
 
   const handleSwapClick = useCallback(() => {
-    setSwapped(prev => !prev);
+    setSearchParams(prev => {
+      const prevSwapped = prev.get('swap') === 'true';
+      prev.set('swap', (!prevSwapped).toString());
+      return prev;
+    });
   }, []);
 
   const handleInput = useCallback<NonNullable<OutlinedInputProps['onInput']>>(
     event => {
-      setInput((event.target as HTMLTextAreaElement).value);
+      setSearchParams(prev => {
+        prev.set('input', (event.target as HTMLTextAreaElement).value);
+        return prev;
+      });
     },
     [],
   );
 
   const handleHintClick = useCallback(() => {
-    setInput(hint);
+    setSearchParams(prev => {
+      prev.set('input', hint);
+      return prev;
+    });
   }, [hint]);
 
   const handleOutputChange = useCallback((output: TranslationOutputItems) => {
@@ -96,7 +108,10 @@ const SolresolTranslator: FunctionComponent = () => {
   const handleOutputTypeChange = useCallback<
     NonNullable<SelectProps['onChange']>
   >(event => {
-    setOutputType(event.target.value as SolresolOutputType);
+    setSearchParams(prev => {
+      prev.set('type', event.target.value as SolresolOutputType);
+      return prev;
+    });
   }, []);
 
   const formatTranslation = useCallback<
