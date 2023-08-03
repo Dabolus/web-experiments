@@ -40,9 +40,7 @@ const solresolWorker = setupWorkerClient<SolresolWorker>(
   ['computeSolresolOutput', 'computeEnglishOutput'],
 );
 
-export interface SolresolTranslatorProps {}
-
-const SolresolTranslator: FunctionComponent<SolresolTranslatorProps> = () => {
+const SolresolTranslator: FunctionComponent = () => {
   const [input, setInput] = useState<string>('');
   const [hint, setHint] = useState<string>('');
   const [output, setOutput] = useState<TranslationOutputItems>([]);
