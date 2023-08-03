@@ -1,5 +1,7 @@
-import React, { FunctionComponent, useState } from 'react';
-import { Tabs, Tab, Typography } from '@mui/material';
+import React, { FunctionComponent } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { Tab, Typography } from '@mui/material';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
 import SolresolInfo from '../../components/music/solresol/SolresolInfo';
 import SolresolTranslator from '../../components/music/solresol/SolresolTranslator';
@@ -10,42 +12,44 @@ const enum SolresolTab {
 }
 
 const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
-  const [currentTab, setCurrentTab] = useState(SolresolTab.INFO);
+  const { tab = SolresolTab.INFO } = useParams();
 
   return (
-    <TopbarLayout
-      title="Solresol"
-      topbarContent={
-        <Tabs
-          value={currentTab}
-          onChange={(_, newTab) => setCurrentTab(newTab)}
-          textColor="inherit"
-          indicatorColor="secondary"
-          centered
-        >
-          <Tab
-            value={SolresolTab.INFO}
-            label={
-              <Typography variant="button" component="h3">
-                Info
-              </Typography>
-            }
-          />
-          <Tab
-            value={SolresolTab.TRANSLATE}
-            label={
-              <Typography variant="button" component="h3">
-                Translate
-              </Typography>
-            }
-          />
-        </Tabs>
-      }
-      {...props}
-    >
-      {currentTab === SolresolTab.INFO && <SolresolInfo />}
-      {currentTab === SolresolTab.TRANSLATE && <SolresolTranslator />}
-    </TopbarLayout>
+    <TabContext value={tab}>
+      <TopbarLayout
+        title="Solresol"
+        topbarContent={
+          <TabList textColor="inherit" indicatorColor="secondary" centered>
+            <Tab
+              component={Link}
+              to={`../solresol/${SolresolTab.INFO}`}
+              value={SolresolTab.INFO}
+              label={
+                <Typography variant="button" component="h3">
+                  Info
+                </Typography>
+              }
+            />
+            <Tab
+              component={Link}
+              to={`../solresol/${SolresolTab.TRANSLATE}`}
+              value={SolresolTab.TRANSLATE}
+              label={
+                <Typography variant="button" component="h3">
+                  Translate
+                </Typography>
+              }
+            />
+          </TabList>
+        }
+        {...props}
+      >
+        <TabPanel value={SolresolTab.INFO}>{<SolresolInfo />}</TabPanel>
+        <TabPanel value={SolresolTab.TRANSLATE}>
+          {<SolresolTranslator />}
+        </TabPanel>
+      </TopbarLayout>
+    </TabContext>
   );
 };
 
