@@ -16,6 +16,11 @@ const createDefaultTheme = (mode?: PaletteMode) =>
           fontWeight: 700,
           margin: '1rem 0 0.5rem 0',
         },
+        h5: {
+          fontSize: '1.05rem',
+          fontWeight: 600,
+          margin: '0.8rem 0 0.4rem 0',
+        },
       },
       palette: {
         mode,

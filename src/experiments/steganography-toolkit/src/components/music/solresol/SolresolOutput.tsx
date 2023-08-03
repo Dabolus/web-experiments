@@ -17,7 +17,7 @@ import type {
   TranslationOutputItems as SolresolWorkerOutput,
   TranslationOutputItem,
   SolresolOutputType,
-} from '../../workers/music/solresol.worker';
+} from '../../../workers/music/solresol.worker';
 
 export interface SolresolOutputProps {
   outputType?: SolresolOutputType;
