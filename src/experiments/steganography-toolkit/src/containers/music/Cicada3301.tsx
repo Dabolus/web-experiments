@@ -8,10 +8,6 @@ import React, {
 
 import { useDebounce } from 'use-debounce';
 
-import ABCJS from 'abcjs';
-
-import { saveAs } from 'file-saver';
-
 import { Button, Menu, MenuItem, Box, Grid } from '@mui/material';
 
 import {
@@ -25,30 +21,37 @@ import Cicada3301Form, {
   Cicada3301FormProps,
   Cicada3301FormValue,
 } from '../../components/music/Cicada3301Form';
-import Abc, { AbcProps } from '../../components/music/Abc';
+import Abc from '../../components/music/Abc';
 import Loader from '../../components/Loader';
 import { setupWorkerClient } from '../../workers/utils';
 import type { Cicada3301Worker } from '../../workers/music/cicada3301.worker';
+import useAudioExporter from '../../hooks/useAudioExporter';
 
 const cicada3301Worker = setupWorkerClient<Cicada3301Worker>(
   new Worker(
     new URL('../../workers/music/cicada3301.worker.ts', import.meta.url),
     { type: 'module' },
   ),
-  ['computeAbc', 'encodeMp3'],
+  ['computeAbc'],
 );
 
 const Cicada3301: FunctionComponent<TopbarLayoutProps> = props => {
   const [data, setData] = useState<Cicada3301FormValue>();
   const [input, setInput] = useState<string>();
-  const [abcRenderOutput, setAbcRenderOutput] = useState<any>();
   const [exportMenuOpen, setExportMenuOpen] = useState(false);
-  const [isExporting, setIsExporting] = useState(false);
 
   const [debouncedData] = useDebounce(data, 300);
 
   const exportButtonRef = useRef<HTMLButtonElement>(null);
-  const abcRef = useRef<HTMLDivElement>(null);
+
+  const {
+    isExporting,
+    getAbcProps,
+    exportAbc,
+    exportSvg,
+    exportWav,
+    exportMp3,
+  } = useAudioExporter();
 
   useEffect(() => {
     const compute = async () => {
@@ -68,13 +71,6 @@ const Cicada3301: FunctionComponent<TopbarLayoutProps> = props => {
     setData(data);
   }, []);
 
-  const handleAbcRender = useCallback<NonNullable<AbcProps['onRender']>>(
-    ([output]) => {
-      setAbcRenderOutput(output);
-    },
-    [],
-  );
-
   const handleExportButtonClick = useCallback(async () => {
     setExportMenuOpen(true);
   }, []);
@@ -83,101 +79,13 @@ const Cicada3301: FunctionComponent<TopbarLayoutProps> = props => {
     setExportMenuOpen(false);
   }, []);
 
-  const handleAbcExport = useCallback(() => {
-    if (!input) {
-      return;
-    }
-
-    handleExportMenuClose();
-
-    setIsExporting(true);
-
-    const blob = new Blob([input], { type: 'text/vnd.abc' });
-
-    saveAs(blob, `${data?.title || 'song'}.abc`);
-
-    setIsExporting(false);
-  }, [data, handleExportMenuClose, input]);
-
-  const handleSvgExport = useCallback(() => {
-    if (!abcRenderOutput || !abcRef.current) {
-      return;
-    }
-
-    handleExportMenuClose();
-
-    setIsExporting(true);
-
-    const svg = abcRef.current.querySelector('svg')?.outerHTML;
-
-    if (!svg) {
-      return;
-    }
-
-    const transformedSvg = svg.replace(
-      '<svg',
-      '<svg xmlns="http://www.w3.org/2000/svg"',
-    );
-
-    const blob = new Blob([transformedSvg], { type: 'image/svg+xml' });
-
-    saveAs(blob, `${data?.title || 'song'}.svg`);
-
-    setIsExporting(false);
-  }, [abcRenderOutput, data, handleExportMenuClose]);
-
-  const getWavUrl = useCallback(async (): Promise<string> => {
-    const audioContext = new AudioContext();
-    await audioContext.resume();
-
-    const midiBuffer = new ABCJS.synth.CreateSynth();
-    await midiBuffer.init({
-      visualObj: abcRenderOutput,
-      audioContext,
-      millisecondsPerMeasure: abcRenderOutput.millisecondsPerMeasure(),
-      options: {
-        soundFontUrl: `${process.env.PUBLIC_URL}/sounds/`,
-        program: 0,
-      },
-    });
-    await midiBuffer.prime();
-
-    return midiBuffer.download();
-  }, [abcRenderOutput]);
-
-  const handleWavExport = useCallback(async () => {
-    if (!abcRenderOutput) {
-      return;
-    }
-
-    handleExportMenuClose();
-
-    setIsExporting(true);
-
-    const wavUrl = await getWavUrl();
-
-    saveAs(wavUrl, `${data?.title || 'song'}.wav`);
-
-    setIsExporting(false);
-  }, [abcRenderOutput, data, getWavUrl, handleExportMenuClose]);
-
-  const handleMp3Export = useCallback(async () => {
-    if (!abcRenderOutput) {
-      return;
-    }
-
-    handleExportMenuClose();
-
-    setIsExporting(true);
-
-    const wavUrl = await getWavUrl();
-
-    const mp3 = await cicada3301Worker.encodeMp3(wavUrl);
-
-    saveAs(mp3, `${data?.title || 'song'}.mp3`);
-
-    setIsExporting(false);
-  }, [abcRenderOutput, data, getWavUrl, handleExportMenuClose]);
+  const handleExport = useCallback(
+    (exportFn: (title?: string) => Promise<void>) => async () => {
+      handleExportMenuClose();
+      await exportFn(data?.title);
+    },
+    [data],
+  );
 
   return (
     <TopbarLayout title="Cicada 3301" {...props}>
@@ -218,15 +126,15 @@ const Cicada3301: FunctionComponent<TopbarLayoutProps> = props => {
                 open={exportMenuOpen}
                 onClose={handleExportMenuClose}
               >
-                <MenuItem onClick={handleAbcExport}>abc</MenuItem>
-                <MenuItem onClick={handleSvgExport}>SVG</MenuItem>
-                <MenuItem onClick={handleWavExport}>WAV</MenuItem>
-                <MenuItem onClick={handleMp3Export}>MP3</MenuItem>
+                <MenuItem onClick={handleExport(exportAbc)}>abc</MenuItem>
+                <MenuItem onClick={handleExport(exportSvg)}>SVG</MenuItem>
+                <MenuItem onClick={handleExport(exportWav)}>WAV</MenuItem>
+                <MenuItem onClick={handleExport(exportMp3)}>MP3</MenuItem>
               </Menu>
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <Abc ref={abcRef} src={input} onRender={handleAbcRender} />
+            <Abc {...getAbcProps({ src: input })} />
           </Grid>
         </Grid>
       </Page>

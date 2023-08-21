@@ -6,18 +6,27 @@ import React, {
   memo,
 } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 import ABCJS from 'abcjs';
+
+const Container = styled('div')<{ hidden?: boolean }>(({ hidden }) => ({
+  minHeight: 26,
+  ...(hidden && { display: 'none' }),
+}));
 
 export interface AbcProps extends HTMLAttributes<HTMLDivElement> {
   src?: string;
   params?: any;
   onRender?(output: any): void;
+  hidden?: boolean;
 }
 
 const Abc = forwardRef<HTMLDivElement, AbcProps>(
-  ({ src, params = { responsive: 'resize' }, onRender, ...props }, ref) => {
+  (
+    { src, params = { responsive: 'resize' }, onRender, hidden, ...props },
+    ref,
+  ) => {
     const [id, setId] = useState<string | null>(null);
 
     useEffect(() => {
@@ -30,12 +39,12 @@ const Abc = forwardRef<HTMLDivElement, AbcProps>(
       }
 
       onRender?.(ABCJS.renderAbc(id, src, params));
-    }, [id, onRender, params, src]);
+    }, [id, src]);
 
     return (
-      <div ref={ref} {...props}>
+      <Container ref={ref} hidden={hidden} {...props}>
         {id ? <Box id={id} width={1} /> : null}
-      </div>
+      </Container>
     );
   },
 );
