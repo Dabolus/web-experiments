@@ -147,7 +147,10 @@ const UnicodeConcealer: FunctionComponent = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
-            <Label>Text in which to hide the message</Label>
+            <Label>
+              Text in which to hide the message
+              {carrier ? ` (length: ${carrier.length})` : ''}
+            </Label>
             <OutlinedInput
               multiline
               rows={8}
@@ -160,7 +163,10 @@ const UnicodeConcealer: FunctionComponent = () => {
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <Label>Text to hide</Label>
+                <Label>
+                  Text to hide
+                  {payloadText ? ` (length: ${payloadText.length})` : ''}
+                </Label>
                 <OutlinedInput
                   multiline
                   rows={4}
@@ -174,7 +180,12 @@ const UnicodeConcealer: FunctionComponent = () => {
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <div {...getRootProps()}>
-                  <Label>Or select a file instead</Label>
+                  <Label>
+                    Or select a file instead
+                    {payloadFile
+                      ? ` (size: ${payloadFile.content.length}B)`
+                      : ''}
+                  </Label>
                   <input {...getInputProps()} />
                   <FileContainer isDragActive={isDragActive}>
                     {payloadFile?.name ||
@@ -187,7 +198,14 @@ const UnicodeConcealer: FunctionComponent = () => {
         </Grid>
         <Grid item xs={12}>
           <FormControl fullWidth>
-            <Label>Output text</Label>
+            <Label>
+              Output text
+              {output
+                ? ` (length: ${output.length}, +${Math.round(
+                    (output.length / carrier.length) * 100 - 100,
+                  )}%)`
+                : ''}
+            </Label>
             <OutlinedInput readOnly multiline rows={8} value={output} />
           </FormControl>
           <Box mt={2} display="flex" justifyContent="flex-end">

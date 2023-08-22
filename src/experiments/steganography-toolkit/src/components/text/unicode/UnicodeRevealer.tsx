@@ -107,7 +107,12 @@ const UnicodeRevealer: FunctionComponent = () => {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <FormControl fullWidth>
-            <Label>Text with hidden message</Label>
+            <Label>
+              Text with hidden message
+              {carrierWithPayload
+                ? ` (length: ${carrierWithPayload.length})`
+                : ''}
+            </Label>
             <OutlinedInput
               multiline
               rows={8}
@@ -120,7 +125,12 @@ const UnicodeRevealer: FunctionComponent = () => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
-            <Label>Original text</Label>
+            <Label>
+              Original text
+              {payload?.originalText
+                ? ` (length: ${payload.originalText.length})`
+                : ''}
+            </Label>
             <OutlinedInput
               readOnly
               multiline
@@ -131,7 +141,12 @@ const UnicodeRevealer: FunctionComponent = () => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
-            <Label>Hidden text/file</Label>
+            <Label>
+              Hidden text/file
+              {payload?.hiddenText
+                ? ` (length: ${payload.hiddenText.length})`
+                : ''}
+            </Label>
             <OutlinedInput
               readOnly
               multiline
