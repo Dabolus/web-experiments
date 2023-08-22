@@ -3,16 +3,18 @@ import { useParams, Link as RouterLink } from 'react-router-dom';
 import { Tab, Typography } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
+import UnicodeInfo from '../../components/text/unicode/UnicodeInfo';
 import UnicodeConcealer from '../../components/text/unicode/UnicodeConcealer';
 import UnicodeRevealer from '../../components/text/unicode/UnicodeRevealer';
 
 enum UnicodeTab {
+  INFO = 'info',
   CONCEAL = 'conceal',
   REVEAL = 'reveal',
 }
 
 const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
-  const { tab = UnicodeTab.CONCEAL } = useParams();
+  const { tab = UnicodeTab.INFO } = useParams();
 
   return (
     <TabContext value={tab}>
@@ -20,6 +22,16 @@ const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
         title="Unicode"
         topbarContent={
           <TabList textColor="inherit" indicatorColor="secondary" centered>
+            <Tab
+              component={RouterLink}
+              to={`../unicode/${UnicodeTab.INFO}`}
+              value={UnicodeTab.INFO}
+              label={
+                <Typography variant="button" component="h3">
+                  Info
+                </Typography>
+              }
+            />
             <Tab
               component={RouterLink}
               to={`../unicode/${UnicodeTab.CONCEAL}`}
@@ -44,6 +56,9 @@ const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
         }
         {...props}
       >
+        <TabPanel value={UnicodeTab.INFO}>
+          <UnicodeInfo />
+        </TabPanel>
         <TabPanel value={UnicodeTab.CONCEAL}>
           <UnicodeConcealer />
         </TabPanel>
