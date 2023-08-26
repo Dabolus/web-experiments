@@ -126,7 +126,7 @@ const Cicada3301: FunctionComponent<TopbarLayoutProps> = props => {
                 open={exportMenuOpen}
                 onClose={handleExportMenuClose}
               >
-                <MenuItem onClick={handleExport(exportAbc)}>abc</MenuItem>
+                <MenuItem onClick={handleExport(exportAbc)}>ABC</MenuItem>
                 <MenuItem onClick={handleExport(exportSvg)}>SVG</MenuItem>
                 <MenuItem onClick={handleExport(exportWav)}>WAV</MenuItem>
                 <MenuItem onClick={handleExport(exportMp3)}>MP3</MenuItem>
