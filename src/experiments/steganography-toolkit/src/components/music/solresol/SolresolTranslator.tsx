@@ -280,16 +280,13 @@ const SolresolTranslator: FunctionComponent = () => {
               <FormLabel>Output</FormLabel>
               {!swapped && (
                 <FormControl variant="standard">
-                  <InputLabel
-                    shrink
-                    id="demo-simple-select-placeholder-label-label"
-                  >
+                  <InputLabel shrink id="solresol-output-type-label">
                     Type
                   </InputLabel>
                   <Select
                     native
-                    labelId="demo-simple-select-placeholder-label-label"
-                    id="demo-simple-select-placeholder-label"
+                    labelId="solresol-output-type-label"
+                    id="solresol-output-type"
                     value={outputType}
                     onChange={handleOutputTypeChange}
                   >
