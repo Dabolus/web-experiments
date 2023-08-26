@@ -3,8 +3,12 @@ import React, {
   useState,
   useCallback,
   useEffect,
+  useRef,
+  useMemo,
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { renderToString } from 'react-dom/server';
+import { saveAs } from 'file-saver';
 import {
   OutlinedInputProps,
   Grid,
@@ -18,11 +22,20 @@ import {
   InputLabel,
   SelectProps,
   IconButton,
+  Button,
+  Menu,
+  MenuItem,
+  ListSubheader,
 } from '@mui/material';
-import { SwapHoriz as SwapHorizIcon } from '@mui/icons-material';
+import {
+  SwapHoriz as SwapHorizIcon,
+  ArrowDropUp as ArrowDropUpIcon,
+  ArrowDropDown as ArrowDropDownIcon,
+} from '@mui/icons-material';
 import { useDebounce } from 'use-debounce';
 import { setupWorkerClient } from '../../../workers/utils';
 import Page from '../../Page';
+import Loader from '../../Loader';
 import SolresolOutput, {
   SolresolOutputProps,
 } from '../../music/solresol/SolresolOutput';
@@ -31,7 +44,11 @@ import type {
   SolresolWorker,
   SolresolOutputType,
   TranslationOutputItems,
+  TranslationOutputItem,
 } from '../../../workers/music/solresol.worker';
+import useAudioExporter from '../../../hooks/useAudioExporter';
+import { chunk } from '../../../helpers';
+import Abc from '../Abc';
 
 const solresolWorker = setupWorkerClient<SolresolWorker>(
   new Worker(
@@ -50,6 +67,18 @@ const SolresolTranslator: FunctionComponent = () => {
   const [output, setOutput] = useState<TranslationOutputItems>([]);
   const [comments, setComments] = useState<string>('');
   const [debouncedInput] = useDebounce(input, 300);
+  const [exportMenuOpen, setExportMenuOpen] = useState(false);
+
+  const exportButtonRef = useRef<HTMLButtonElement>(null);
+
+  const {
+    isExporting,
+    getAbcProps,
+    exportAbc,
+    exportSvg,
+    exportWav,
+    exportMp3,
+  } = useAudioExporter();
 
   useEffect(() => {
     const compute = async () => {
@@ -75,6 +104,37 @@ const SolresolTranslator: FunctionComponent = () => {
 
     compute();
   }, [debouncedInput, swapped]);
+
+  const cleanedOutputItems = useMemo(() => {
+    const validOutputItems = output.filter(
+      item => Array.isArray(item) && item.length,
+    ) as TranslationOutputItem[][];
+
+    return validOutputItems.map(
+      item => item.find(({ preferred }) => preferred) ?? item[0],
+    );
+  }, [swapped, output]);
+
+  const abcOutput = useMemo(() => {
+    if (swapped || !output.length) {
+      return '';
+    }
+
+    const abcOutputItems = cleanedOutputItems.flatMap((item, index) => {
+      const englishForm = convertToSolresolForm(
+        item.word,
+        'english',
+      ) as string[];
+      return index < cleanedOutputItems.length - 1
+        ? [...englishForm, 'z']
+        : englishForm;
+    });
+    const abcNotes = chunk(abcOutputItems, 4)
+      .map(itemsChunk => itemsChunk.join(' '))
+      .join(' | ');
+
+    return ['X: 1', 'M: 4/4', 'L: 1/4', abcNotes].join('\n');
+  }, [cleanedOutputItems]);
 
   const handleSwapClick = useCallback(() => {
     setSearchParams(prev => {
@@ -119,6 +179,46 @@ const SolresolTranslator: FunctionComponent = () => {
   >(
     word => (swapped ? word : convertToSolresolForm(word, outputType)),
     [outputType, swapped],
+  );
+
+  const handleExportButtonClick = useCallback(async () => {
+    setExportMenuOpen(true);
+  }, []);
+
+  const handleExportMenuClose = useCallback(() => {
+    setExportMenuOpen(false);
+  }, []);
+
+  const exportSolresol = useCallback(
+    (outputType: SolresolOutputType) => async (title?: string) => {
+      const { type, ext } = {
+        full: { type: 'text/plain', ext: 'txt' },
+        abbreviated: { type: 'text/plain', ext: 'txt' },
+        english: { type: 'text/plain', ext: 'txt' },
+        numeric: { type: 'text/plain', ext: 'txt' },
+        color: { type: 'image/svg+xml', ext: 'svg' },
+        scale: { type: 'image/svg+xml', ext: 'svg' },
+        stenographic: { type: 'image/svg+xml', ext: 'svg' },
+      }[outputType];
+      const solresolForm = convertToSolresolForm(
+        cleanedOutputItems.map(item => item.word),
+        outputType,
+      );
+      const output = Array.isArray(solresolForm)
+        ? solresolForm.join('')
+        : renderToString(solresolForm as any);
+      const blob = new Blob([output], { type });
+      saveAs(blob, `${title ?? 'solresol'}.${ext}`);
+    },
+    [cleanedOutputItems],
+  );
+
+  const handleExport = useCallback(
+    (exportFn: (title?: string) => Promise<void>) => async () => {
+      handleExportMenuClose();
+      await exportFn('solresol');
+    },
+    [],
   );
 
   return (
@@ -210,6 +310,82 @@ const SolresolTranslator: FunctionComponent = () => {
               onChange={handleOutputChange}
               formatTranslation={formatTranslation}
             />
+            {abcOutput && (
+              <>
+                <Abc {...getAbcProps({ src: abcOutput, hidden: true })} />
+                <Box textAlign="right" mt={1}>
+                  <Button
+                    ref={exportButtonRef}
+                    variant="contained"
+                    color="secondary"
+                    aria-controls="export-menu"
+                    aria-haspopup="true"
+                    endIcon={
+                      exportMenuOpen ? (
+                        <ArrowDropUpIcon />
+                      ) : (
+                        <ArrowDropDownIcon />
+                      )
+                    }
+                    onClick={handleExportButtonClick}
+                    disabled={!abcOutput || isExporting}
+                  >
+                    {isExporting && <Loader size={24} />}
+                    Export as
+                  </Button>
+                  <Menu
+                    id="export-menu"
+                    anchorEl={exportButtonRef.current}
+                    anchorOrigin={{
+                      horizontal: 'right',
+                      vertical: 'bottom',
+                    }}
+                    transformOrigin={{
+                      horizontal: 'right',
+                      vertical: 'top',
+                    }}
+                    keepMounted
+                    open={exportMenuOpen}
+                    onClose={handleExportMenuClose}
+                  >
+                    <ListSubheader>Text</ListSubheader>
+                    <MenuItem onClick={handleExport(exportAbc)}>ABC</MenuItem>
+                    <MenuItem onClick={handleExport(exportSolresol('full'))}>
+                      Full
+                    </MenuItem>
+                    <MenuItem
+                      onClick={handleExport(exportSolresol('abbreviated'))}
+                    >
+                      Abbreviated
+                    </MenuItem>
+                    <MenuItem onClick={handleExport(exportSolresol('english'))}>
+                      English
+                    </MenuItem>
+                    <MenuItem onClick={handleExport(exportSolresol('numeric'))}>
+                      Numeric
+                    </MenuItem>
+                    <ListSubheader>Audio</ListSubheader>
+                    <MenuItem onClick={handleExport(exportWav)}>WAV</MenuItem>
+                    <MenuItem onClick={handleExport(exportMp3)}>MP3</MenuItem>
+                    <ListSubheader>Image (SVG)</ListSubheader>
+                    <MenuItem onClick={handleExport(exportSvg)}>
+                      Music sheet
+                    </MenuItem>
+                    <MenuItem onClick={handleExport(exportSolresol('color'))}>
+                      Color code
+                    </MenuItem>
+                    <MenuItem onClick={handleExport(exportSolresol('scale'))}>
+                      Musical scale
+                    </MenuItem>
+                    <MenuItem
+                      onClick={handleExport(exportSolresol('stenographic'))}
+                    >
+                      Stenographic
+                    </MenuItem>
+                  </Menu>
+                </Box>
+              </>
+            )}
           </FormControl>
         </Grid>
       </Grid>

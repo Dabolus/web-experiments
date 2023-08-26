@@ -38,3 +38,9 @@ export const nextPrime = (num: number) => {
   // Something went wrong
   return -1;
 };
+
+export const chunk = <T extends any[] | string>(arr: T, size: number): T[] =>
+  Array.from(
+    { length: Math.ceil(arr.length / size) },
+    (_, i) => arr.slice(i * size, i * size + size) as T,
+  );

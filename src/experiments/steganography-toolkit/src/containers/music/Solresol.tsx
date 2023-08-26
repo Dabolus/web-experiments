@@ -44,9 +44,11 @@ const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
         }
         {...props}
       >
-        <TabPanel value={SolresolTab.INFO}>{<SolresolInfo />}</TabPanel>
+        <TabPanel value={SolresolTab.INFO}>
+          <SolresolInfo />
+        </TabPanel>
         <TabPanel value={SolresolTab.TRANSLATE}>
-          {<SolresolTranslator />}
+          <SolresolTranslator />
         </TabPanel>
       </TopbarLayout>
     </TabContext>
