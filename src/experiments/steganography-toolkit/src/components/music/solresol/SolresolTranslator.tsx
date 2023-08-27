@@ -235,7 +235,7 @@ const SolresolTranslator: FunctionComponent = () => {
                   marginBottom={1}
                   height={48}
                 >
-                  <FormLabel>Input</FormLabel>
+                  <FormLabel>{swapped ? 'Solresol' : 'English'}</FormLabel>
                   <IconButton
                     aria-label="Swap languages"
                     onClick={handleSwapClick}
@@ -277,7 +277,7 @@ const SolresolTranslator: FunctionComponent = () => {
               marginBottom={1}
               height={48}
             >
-              <FormLabel>Output</FormLabel>
+              <FormLabel>{swapped ? 'English' : 'Solresol'}</FormLabel>
               {!swapped && (
                 <FormControl variant="standard">
                   <InputLabel shrink id="solresol-output-type-label">
