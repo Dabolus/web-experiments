@@ -4387,6 +4387,8 @@ __metadata:
     "@types/react": ^18.2.15
     "@types/react-dom": ^18.2.7
     abcjs: 6.2.2
+    clsx: ^2.0.0
+    compromise: ^14.10.0
     file-saver: ^2.0.5
     firebase-tools: ^12.4.5
     fuse.js: ^6.6.2
@@ -6550,6 +6552,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"compromise@npm:^14.10.0":
+  version: 14.10.0
+  resolution: "compromise@npm:14.10.0"
+  dependencies:
+    efrt: 2.7.0
+    grad-school: 0.0.5
+    suffix-thumb: 5.0.2
+  checksum: 4fa2ab7d3fbb76ac95b0eef52d156f7ac7130a70d293e534f9a3014f2579fda813de792465b7fc03a94556fa640161fb7b906ae591fc35c5fd6d51478e44af0a
+  languageName: node
+  linkType: hard
+
 "concat-map@npm:0.0.1":
   version: 0.0.1
   resolution: "concat-map@npm:0.0.1"
@@ -7843,6 +7856,13 @@ __metadata:
   version: 1.1.1
   resolution: "ee-first@npm:1.1.1"
   checksum: 1b4cac778d64ce3b582a7e26b218afe07e207a0f9bfe13cc7395a6d307849cfe361e65033c3251e00c27dd060cab43014c2d6b2647676135e18b77d2d05b3f4f
+  languageName: node
+  linkType: hard
+
+"efrt@npm:2.7.0":
+  version: 2.7.0
+  resolution: "efrt@npm:2.7.0"
+  checksum: 649da95aa60adc411563e04d8f953e67a67ebafca6f3479d5768cab2d011068de4379ad978ba8a87d574d7ea2494a82ecbe3a8f9f8f9bca3ddcc3d5cb4ea11ae
   languageName: node
   linkType: hard
 
@@ -9745,6 +9765,13 @@ __metadata:
   version: 4.2.9
   resolution: "graceful-fs@npm:4.2.9"
   checksum: 68ea4e07ff2c041ada184f9278b830375f8e0b75154e3f080af6b70f66172fabb4108d19b3863a96b53fc068a310b9b6493d86d1291acc5f3861eb4b79d26ad6
+  languageName: node
+  linkType: hard
+
+"grad-school@npm:0.0.5":
+  version: 0.0.5
+  resolution: "grad-school@npm:0.0.5"
+  checksum: 1330b02b71ef37f9a507261c1219056d19caa46f99e65fe30fe9b5c98235b5dec23d74928ed166516054b30c4cf470903de482311d2d25d985e904989b53c69a
   languageName: node
   linkType: hard
 
@@ -17209,6 +17236,13 @@ __metadata:
   version: 4.2.0
   resolution: "stylis@npm:4.2.0"
   checksum: 0eb6cc1b866dc17a6037d0a82ac7fa877eba6a757443e79e7c4f35bacedbf6421fadcab4363b39667b43355cbaaa570a3cde850f776498e5450f32ed2f9b7584
+  languageName: node
+  linkType: hard
+
+"suffix-thumb@npm:5.0.2":
+  version: 5.0.2
+  resolution: "suffix-thumb@npm:5.0.2"
+  checksum: 4c4f37168b9455c460451c9531fd2708dcd20aadbb3bc505901a0bb616fa9239a582661cd002625de3cf499ce747fbac45d074e75f0f1bccd7b88fb9c6f4fac9
   languageName: node
   linkType: hard
 

@@ -14,16 +14,15 @@ import {
   styled,
 } from '@mui/material';
 import type {
-  TranslationOutputItems as SolresolWorkerOutput,
+  TranslationOutputItems,
   TranslationOutputItem,
   SolresolOutputType,
 } from '../../../workers/music/solresol.worker';
 
 export interface SolresolOutputProps {
   outputType?: SolresolOutputType;
-  value?: SolresolWorkerOutput;
-  comments?: string;
-  onChange?(output: SolresolWorkerOutput): void;
+  value?: TranslationOutputItems;
+  onChange?(output: TranslationOutputItems): void;
   formatTranslation?(word: string): ReactNode;
 }
 
@@ -84,7 +83,6 @@ const DisabledMenuItem = styled(MenuItem)({
 const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
   outputType = 'full',
   value,
-  comments,
   onChange,
   formatTranslation = word => word,
 }) => {
@@ -114,14 +112,19 @@ const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
         return;
       }
 
+      const translation = value[
+        selectedTranslation.index
+      ] as TranslationOutputItem;
+
       onChange([
         ...value.slice(0, selectedTranslation.index),
-        (value[selectedTranslation.index] as TranslationOutputItem[]).map(
-          (item, itemIndex) => ({
-            ...item,
-            preferred: itemIndex === index,
-          }),
-        ),
+        {
+          ...translation,
+          words: translation.words.map((word, wordIndex) => ({
+            ...word,
+            preferred: wordIndex === index,
+          })),
+        } as TranslationOutputItem,
         ...value.slice(selectedTranslation.index + 1),
       ]);
 
@@ -152,7 +155,7 @@ const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
               onClick={createTranslationClickHandler(index)}
             >
               {formatTranslation(
-                part.find(({ preferred }) => preferred)?.word || '',
+                part.words.find(({ preferred }) => preferred)?.word || '',
               )}
             </Translation>
           );
@@ -175,33 +178,42 @@ const SolresolOutput: FunctionComponent<SolresolOutputProps> = ({
       >
         {value && selectedTranslation && (
           <>
-            {(value[selectedTranslation.index] as TranslationOutputItem[]).map(
-              ({ word, meanings, comments, preferred }, index) => (
-                <MenuItem
-                  key={word}
-                  selected={preferred}
-                  onClick={createTranslationPreferenceChangeHandler(index)}
-                >
-                  <AlternativeTranslation>
-                    <Typography variant="subtitle1">
-                      <strong>{formatTranslation(word)}</strong>
-                    </Typography>
+            {(
+              value[selectedTranslation.index] as TranslationOutputItem
+            ).words.map(({ word, meanings, comments, preferred }, index) => (
+              <MenuItem
+                key={word}
+                selected={preferred}
+                onClick={createTranslationPreferenceChangeHandler(index)}
+              >
+                <AlternativeTranslation>
+                  <Typography variant="subtitle1">
+                    <strong>{formatTranslation(word)}</strong>
+                  </Typography>
+                  <Typography variant="caption">
+                    {meanings.join(' · ')}
+                  </Typography>
+                  {comments && (
                     <Typography variant="caption">
-                      {meanings.join(' · ')}
+                      <em>{comments}</em>
                     </Typography>
-                    {comments && (
-                      <Typography variant="caption">
-                        <em>{comments}</em>
-                      </Typography>
-                    )}
-                  </AlternativeTranslation>
-                </MenuItem>
-              ),
-            )}
-            {comments && (
+                  )}
+                </AlternativeTranslation>
+              </MenuItem>
+            ))}
+            {(value[selectedTranslation.index] as TranslationOutputItem)
+              .comments && (
               <DisabledMenuItem>
                 <AlternativeTranslation>
-                  <Typography variant="caption">{comments}</Typography>
+                  <Typography variant="caption">
+                    {
+                      (
+                        value[
+                          selectedTranslation.index
+                        ] as TranslationOutputItem
+                      ).comments
+                    }
+                  </Typography>
                 </AlternativeTranslation>
               </DisabledMenuItem>
             )}

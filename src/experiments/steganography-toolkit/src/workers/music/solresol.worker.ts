@@ -1,4 +1,5 @@
 import Fuse from 'fuse.js';
+import nlp from 'compromise';
 
 import solresolDictionary from '../../static/solresol/dictionary.json';
 
@@ -13,14 +14,19 @@ export type SolresolOutputType =
   | 'scale'
   | 'stenographic';
 
-export interface TranslationOutputItem {
+export interface TranslationOutputWord {
   word: string;
   meanings: string[];
   comments?: string;
   preferred?: boolean;
 }
 
-export type TranslationOutputItems = (string | TranslationOutputItem[])[];
+export interface TranslationOutputItem {
+  words: TranslationOutputWord[];
+  comments?: string;
+}
+
+export type TranslationOutputItems = (string | TranslationOutputItem)[];
 
 export interface DictionaryItem {
   solresol: string;
@@ -30,8 +36,7 @@ export interface DictionaryItem {
 
 export interface TranslationOutput {
   output: TranslationOutputItems;
-  comments?: string;
-  hint?: string;
+  hint?: TranslationOutputItems;
 }
 
 export type Translator = (input: string) => Promise<TranslationOutput>;
@@ -46,7 +51,17 @@ const flattenedSolresolDictionary = solresolDictionary.flatMap(
     english.map((word: string) => ({ english: word, ...rest })),
 );
 
-const wordRegex = /([a-z\d]+)/gi;
+const preformattedTag = '\u2061';
+
+const matchRegex = new RegExp(
+  `([a-z\d]+|${preformattedTag}\\d+${preformattedTag})`,
+  'gi',
+);
+
+const preformattedTagRegex = new RegExp(
+  `${preformattedTag}(.+?)${preformattedTag}`,
+  'gi',
+);
 
 const englishFuse = new Fuse<DictionaryItem>(flattenedSolresolDictionary, {
   keys: ['english'],
@@ -58,39 +73,154 @@ const solresolFuse = new Fuse<DictionaryItem>(flattenedSolresolDictionary, {
   includeScore: true,
 });
 
+const convertTextHintToOutputItems = (
+  textHint: string,
+): TranslationOutputItems | undefined => {
+  if (!textHint.includes(preformattedTag)) {
+    return;
+  }
+
+  // Split the hint into pieces
+  const hint: TranslationOutputItems = [];
+  let previousIndex = 0;
+  for (
+    let matches = preformattedTagRegex.exec(textHint);
+    matches !== null;
+    matches = preformattedTagRegex.exec(textHint)
+  ) {
+    const [match, word] = matches;
+    hint.push(
+      textHint.slice(
+        previousIndex,
+        preformattedTagRegex.lastIndex - match.length,
+      ),
+      {
+        words: [
+          {
+            word,
+            meanings: [],
+          },
+        ],
+      },
+    );
+    previousIndex = preformattedTagRegex.lastIndex;
+  }
+  hint.push(textHint.slice(previousIndex));
+
+  return hint;
+};
+
 export const computeSolresolOutput = async (
   input: string,
-): Promise<{
-  output: TranslationOutputItems;
-  hint: string;
-}> => {
+): Promise<TranslationOutput> => {
   const output: TranslationOutputItems = [];
-  let hint = input;
+  let textHint = input;
+  let hintOffset = 0;
+  const doc = nlp(input);
+  doc.verbs().forEach(verb => {
+    const [json] = verb.json();
+    const { form, tense } = json.verb.grammar;
+
+    const formToSolresolMap: Record<string, string> = {
+      // === Simple ===
+      imperative: '55', // walk!
+      'want-infinitive': '', // he wants to walk, he wanted to walk, he will want to walk
+      'gerund-phrase': '', // started looking, starts looking, start looking, will start looking, have started looking, will have started looking
+
+      'simple-present': '', // he walks / we walk
+      'simple-past': '11', // he walked
+      'simple-future': '33', // he will walk
+
+      // === Progressive ===
+      'present-progressive': '', // he is walking
+      'past-progressive': '11', // he was walking
+      'future-progressive': '33', // he will be walking
+
+      // === Perfect ===
+      'present-perfect': '22', // he has walked
+      'past-perfect': '22', // he had walked / he had been to see
+      'future-perfect': '33', // he will have
+
+      // === Progressive-perfect ===
+      'present-perfect-progressive': '22', // he has been walking
+      'past-perfect-progressive': '22', // he had been
+      'future-perfect-progressive': '33', // will have been
+
+      // ==== Passive ===
+      'passive-present': '', // is walked, are stolen, is being walked, has been cleaned
+      'passive-past': '22', // got walked, was walked, were walked, was being walked, had been walked, have been eaten
+      'passive-future': '33', // will have been walked, will be cleaned
+
+      // === Conditional ===
+      'present-conditional': '44', // would walk
+      'past-conditional': '44', // would have walked
+
+      // ==== Auxiliary ===
+      'auxiliary-future': '33', // going to drink
+      'auxiliary-past': '11', // he did walk / he used to walk
+      'auxiliary-present': '', // we do walk
+
+      // === modals ===
+      'modal-past': '44', // he could have walked
+      'modal-infinitive': '', // he can walk
+
+      infinitive: '', // to walk
+    };
+    const tenses: Record<string, string> = {
+      Infinitive: '',
+      PastTense: '11',
+      PresentTense: '',
+      Gerund: '',
+      FutureTense: '33',
+    };
+
+    const solresol = formToSolresolMap[form] || tenses[tense];
+
+    if (solresol) {
+      verb.prepend(`${preformattedTag}${solresol}${preformattedTag}`);
+    }
+  });
+  doc.normalize('heavy');
+  doc.toLowerCase();
+  // compromise does some weird conversions when there is an abbreviation
+  // don't => do do not
+  // didn't => do did not
+  // won't => do will not
+  doc.match('do (do|did|will) not').replace('do not');
+  // Solresol does not have indefinite articles
+  // NOTE: we need to use the `undefined as any` hack because compromise
+  // typings are buggy and require a parameter which should be optional
+  doc.match('(a|an)').remove(undefined as any);
+
+  const normalizedInput = doc.text();
 
   let previousIndex = 0;
-  let hintOffset = 0;
 
   for (
-    let matches = wordRegex.exec(input);
+    let matches = matchRegex.exec(normalizedInput);
     matches !== null;
-    matches = wordRegex.exec(input)
+    matches = matchRegex.exec(normalizedInput)
   ) {
     const [word] = matches;
 
-    const translations: DictionaryItem[] = solresolDictionary.filter(
-      // TODO: remove this optional chaining when dictionary is completed
-      ({ english }) => english?.includes(word.toLowerCase()),
-    );
+    const translations: DictionaryItem[] =
+      word.startsWith(preformattedTag) && word.endsWith(preformattedTag)
+        ? [
+            solresolDictionary.find(
+              ({ solresol }) =>
+                solresol ===
+                word.slice(preformattedTag.length, -preformattedTag.length),
+            ),
+          ]
+        : solresolDictionary.filter(({ english }) => english?.includes(word));
 
     if (translations.length > 0) {
       const sortedTranslations = [...translations].sort(
-        (a, b) =>
-          a.english.indexOf(word.toLowerCase()) -
-          b.english.indexOf(word.toLowerCase()),
+        (a, b) => a.english.indexOf(word) - b.english.indexOf(word),
       );
 
       const [preferredTranslation, ...otherTranslations] =
-        sortedTranslations.map(
+        sortedTranslations.map<TranslationOutputWord>(
           ({ solresol: word, english: meanings, comments }) => ({
             word,
             meanings,
@@ -99,23 +229,34 @@ export const computeSolresolOutput = async (
         );
 
       output.push(
-        input.slice(previousIndex, wordRegex.lastIndex - word.length),
-        [
-          {
-            ...preferredTranslation,
-            preferred: true,
-          },
-          ...otherTranslations,
-        ],
+        normalizedInput.slice(
+          previousIndex,
+          matchRegex.lastIndex - word.length,
+        ),
+        {
+          words: [
+            {
+              ...preferredTranslation,
+              preferred: true,
+            },
+            ...otherTranslations,
+          ],
+        },
       );
 
-      previousIndex = wordRegex.lastIndex;
+      previousIndex = matchRegex.lastIndex;
 
       continue;
     } else {
-      output.push(input.slice(previousIndex, wordRegex.lastIndex));
+      output.push(normalizedInput.slice(previousIndex, matchRegex.lastIndex));
 
-      previousIndex = wordRegex.lastIndex;
+      previousIndex = matchRegex.lastIndex;
+    }
+
+    const originalWordIndex = input.search(word);
+
+    if (originalWordIndex < 0) {
+      continue;
     }
 
     const [
@@ -127,17 +268,18 @@ export const computeSolresolOutput = async (
       Math.abs(word.length - possibleWord.length) < 3 &&
       score < 0.01
     ) {
-      // TODO: decide whether to build an AST with the hint too or to keep it simple
-      hint = `${hint.slice(
+      textHint = `${textHint.slice(
         0,
-        wordRegex.lastIndex + hintOffset - word.length,
-      )}${possibleWord}${hint.slice(wordRegex.lastIndex + hintOffset)}`;
-
-      hintOffset += possibleWord.length - word.length;
+        originalWordIndex + hintOffset,
+      )}${preformattedTag}${possibleWord}${preformattedTag}${textHint.slice(
+        originalWordIndex + word.length + hintOffset,
+      )}`;
+      hintOffset +=
+        possibleWord.length - word.length + preformattedTag.length * 2;
     }
   }
 
-  return { output, hint };
+  return { output, hint: convertTextHintToOutputItems(textHint) };
 };
 
 const inputTypeMap = {
@@ -165,16 +307,15 @@ export const computeEnglishOutput = async (
   const inputType = detectSolresolInputType(input);
 
   const output: TranslationOutputItems = [];
-  let hint = input;
-  let comments: string | undefined;
+  let textHint = input;
 
   let previousIndex = 0;
   let hintOffset = 0;
 
   for (
-    let matches = wordRegex.exec(input);
+    let matches = matchRegex.exec(input);
     matches !== null;
-    matches = wordRegex.exec(input)
+    matches = matchRegex.exec(input)
   ) {
     const [word] = matches;
 
@@ -192,7 +333,6 @@ export const computeEnglishOutput = async (
     );
 
     if (translation) {
-      comments = translation.comments;
       const [preferredTranslation, ...otherTranslations] =
         translation.english?.map(word => ({
           word,
@@ -200,23 +340,26 @@ export const computeEnglishOutput = async (
         }));
 
       output.push(
-        input.slice(previousIndex, wordRegex.lastIndex - word.length),
-        [
-          {
-            ...preferredTranslation,
-            preferred: true,
-          },
-          ...otherTranslations,
-        ],
+        input.slice(previousIndex, matchRegex.lastIndex - word.length),
+        {
+          words: [
+            {
+              ...preferredTranslation,
+              preferred: true,
+            },
+            ...otherTranslations,
+          ],
+          comments: translation.comments,
+        },
       );
 
-      previousIndex = wordRegex.lastIndex;
+      previousIndex = matchRegex.lastIndex;
 
       continue;
     } else {
-      output.push(input.slice(previousIndex, wordRegex.lastIndex));
+      output.push(input.slice(previousIndex, matchRegex.lastIndex));
 
-      previousIndex = wordRegex.lastIndex;
+      previousIndex = matchRegex.lastIndex;
     }
 
     const [
@@ -228,17 +371,18 @@ export const computeEnglishOutput = async (
       Math.abs(word.length - possibleWord.length) < 3 &&
       score < 0.01
     ) {
-      // TODO: decide whether to build an AST with the hint too or to keep it simple
-      hint = `${hint.slice(
+      textHint = `${textHint.slice(
         0,
-        wordRegex.lastIndex + hintOffset - word.length,
-      )}${possibleWord}${hint.slice(wordRegex.lastIndex + hintOffset)}`;
-
-      hintOffset += possibleWord.length - word.length;
+        matchRegex.lastIndex + hintOffset - word.length,
+      )}${preformattedTag}${possibleWord}${preformattedTag}${textHint.slice(
+        matchRegex.lastIndex + hintOffset,
+      )}`;
+      hintOffset +=
+        possibleWord.length - word.length + preformattedTag.length * 2;
     }
   }
 
-  return { output, hint, comments };
+  return { output, hint: convertTextHintToOutputItems(textHint) };
 };
 
 setupWorkerServer<SolresolWorker>({

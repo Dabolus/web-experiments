@@ -63,9 +63,8 @@ const SolresolTranslator: FunctionComponent = () => {
   const input = searchParams.get('input') ?? '';
   const outputType = (searchParams.get('type') ?? 'full') as SolresolOutputType;
   const swapped = searchParams.get('swap') === 'true';
-  const [hint, setHint] = useState<string>('');
   const [output, setOutput] = useState<TranslationOutputItems>([]);
-  const [comments, setComments] = useState<string>('');
+  const [hint, setHint] = useState<TranslationOutputItems>([]);
   const [debouncedInput] = useDebounce(input, 300);
   const [exportMenuOpen, setExportMenuOpen] = useState(false);
 
@@ -83,23 +82,17 @@ const SolresolTranslator: FunctionComponent = () => {
   useEffect(() => {
     const compute = async () => {
       if (!debouncedInput) {
-        setHint('');
         setOutput([]);
-        setComments('');
+        setHint([]);
         return;
       }
 
-      const {
-        output: possibleOutput,
-        hint: possibleHint = '',
-        comments: possibleComments = '',
-      } = swapped
+      const { output: possibleOutput, hint: possibleHint = [] } = swapped
         ? await solresolWorker.computeEnglishOutput(debouncedInput)
         : await solresolWorker.computeSolresolOutput(debouncedInput);
 
       setOutput(possibleOutput);
-      setHint(possibleHint !== debouncedInput ? possibleHint : '');
-      setComments(possibleComments);
+      setHint(possibleHint);
     };
 
     compute();
@@ -107,11 +100,11 @@ const SolresolTranslator: FunctionComponent = () => {
 
   const cleanedOutputItems = useMemo(() => {
     const validOutputItems = output.filter(
-      item => Array.isArray(item) && item.length,
-    ) as TranslationOutputItem[][];
+      item => typeof item !== 'string' && item.words.length,
+    ) as unknown as TranslationOutputItem[];
 
     return validOutputItems.map(
-      item => item.find(({ preferred }) => preferred) ?? item[0],
+      item => item.words.find(({ preferred }) => preferred) ?? item.words[0],
     );
   }, [swapped, output]);
 
@@ -155,8 +148,11 @@ const SolresolTranslator: FunctionComponent = () => {
   );
 
   const handleHintClick = useCallback(() => {
+    const hintText = hint
+      .map(item => (typeof item === 'string' ? item : item.words[0].word))
+      .join('');
     setSearchParams(prev => {
-      prev.set('input', hint);
+      prev.set('input', hintText);
       return prev;
     });
   }, [hint]);
@@ -251,7 +247,7 @@ const SolresolTranslator: FunctionComponent = () => {
                 />
               </FormControl>
             </Grid>
-            {hint && (
+            {hint.length > 0 && (
               <Grid item xs={12}>
                 <Typography variant="subtitle1">
                   Did you mean:{' '}
@@ -261,7 +257,13 @@ const SolresolTranslator: FunctionComponent = () => {
                     style={{ cursor: 'pointer' }}
                     onClick={handleHintClick}
                   >
-                    {hint}
+                    {hint.map(item =>
+                      typeof item === 'string' ? (
+                        item
+                      ) : (
+                        <strong>{item.words[0].word}</strong>
+                      ),
+                    )}
                   </Link>
                 </Typography>
               </Grid>
@@ -303,7 +305,6 @@ const SolresolTranslator: FunctionComponent = () => {
             </Box>
             <SolresolOutput
               value={output}
-              comments={comments}
               onChange={handleOutputChange}
               formatTranslation={formatTranslation}
             />
