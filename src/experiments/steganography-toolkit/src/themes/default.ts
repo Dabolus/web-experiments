@@ -41,6 +41,14 @@ const createDefaultTheme = (mode?: PaletteMode) =>
             underline: 'hover',
           },
         },
+        // @ts-expect-error - TabPanel is still in @mui/lab, so typings are not yet available
+        MuiTabPanel: {
+          styleOverrides: {
+            root: {
+              padding: 0,
+            },
+          },
+        },
       },
     },
     enUS,
