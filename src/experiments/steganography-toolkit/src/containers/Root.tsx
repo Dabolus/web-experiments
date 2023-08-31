@@ -33,7 +33,7 @@ const Root: FunctionComponent = () => {
   }, [update]);
 
   const handleMenuButtonClick = useCallback(() => {
-    setSidebarOpen(!sidebarOpen);
+    setSidebarOpen(prev => !prev);
   }, [sidebarOpen]);
 
   const handleSidebarClose = useCallback(() => {
@@ -58,7 +58,10 @@ const Root: FunctionComponent = () => {
               element={<Home onMenuButtonClick={handleMenuButtonClick} />}
             />
 
-            <Route path="/text/*" element={<TextRouter />} />
+            <Route
+              path="/text/*"
+              element={<TextRouter onMenuButtonClick={handleMenuButtonClick} />}
+            />
 
             <Route path="/image/*" element={<>Image</>} />
 
