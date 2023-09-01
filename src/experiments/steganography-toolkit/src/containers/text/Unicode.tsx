@@ -1,20 +1,30 @@
 import React, { FunctionComponent } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
-import { Tab, Typography } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import SwipeableViews from 'react-swipeable-views';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
 import UnicodeInfo from '../../components/text/unicode/UnicodeInfo';
 import UnicodeConcealer from '../../components/text/unicode/UnicodeConcealer';
 import UnicodeRevealer from '../../components/text/unicode/UnicodeRevealer';
+import TabLink from '../../components/TabLink';
 
 enum UnicodeTab {
   INFO = 'info',
   CONCEAL = 'conceal',
   REVEAL = 'reveal',
 }
+const unicodeTabsNames = Object.values(UnicodeTab);
+const unicodeTabsIndexes = Object.fromEntries(
+  unicodeTabsNames.map((tab, index) => [tab, index]),
+);
 
 const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
   const { tab = UnicodeTab.INFO } = useParams();
+  const navigate = useNavigate();
+
+  const handleIndexChange = (index: number) => {
+    navigate(`../unicode/${unicodeTabsNames[index]}`);
+  };
 
   return (
     <TabContext value={tab}>
@@ -22,49 +32,39 @@ const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
         title="Unicode"
         topbarContent={
           <TabList textColor="inherit" indicatorColor="secondary" centered>
-            <Tab
-              component={RouterLink}
+            <TabLink
               to={`../unicode/${UnicodeTab.INFO}`}
               value={UnicodeTab.INFO}
-              label={
-                <Typography variant="button" component="h3">
-                  Info
-                </Typography>
-              }
+              label="Info"
             />
-            <Tab
-              component={RouterLink}
+            <TabLink
               to={`../unicode/${UnicodeTab.CONCEAL}`}
               value={UnicodeTab.CONCEAL}
-              label={
-                <Typography variant="button" component="h3">
-                  Conceal
-                </Typography>
-              }
+              label="Conceal"
             />
-            <Tab
-              component={RouterLink}
+            <TabLink
               to={`../unicode/${UnicodeTab.REVEAL}`}
               value={UnicodeTab.REVEAL}
-              label={
-                <Typography variant="button" component="h3">
-                  Reveal
-                </Typography>
-              }
+              label="Reveal"
             />
           </TabList>
         }
         {...props}
       >
-        <TabPanel value={UnicodeTab.INFO}>
-          <UnicodeInfo />
-        </TabPanel>
-        <TabPanel value={UnicodeTab.CONCEAL}>
-          <UnicodeConcealer />
-        </TabPanel>
-        <TabPanel value={UnicodeTab.REVEAL}>
-          <UnicodeRevealer />
-        </TabPanel>
+        <SwipeableViews
+          index={unicodeTabsIndexes[tab]}
+          onChangeIndex={handleIndexChange}
+        >
+          <TabPanel value={UnicodeTab.INFO}>
+            <UnicodeInfo />
+          </TabPanel>
+          <TabPanel value={UnicodeTab.CONCEAL}>
+            <UnicodeConcealer />
+          </TabPanel>
+          <TabPanel value={UnicodeTab.REVEAL}>
+            <UnicodeRevealer />
+          </TabPanel>
+        </SwipeableViews>
       </TopbarLayout>
     </TabContext>
   );

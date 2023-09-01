@@ -1,18 +1,28 @@
 import React, { FunctionComponent } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Tab, Typography } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import SwipeableViews from 'react-swipeable-views';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
 import SolresolInfo from '../../components/music/solresol/SolresolInfo';
 import SolresolTranslator from '../../components/music/solresol/SolresolTranslator';
+import TabLink from '../../components/TabLink';
 
-const enum SolresolTab {
+enum SolresolTab {
   INFO = 'info',
   TRANSLATE = 'translate',
 }
+const solresolTabsNames = Object.values(SolresolTab);
+const solresolTabsIndexes = Object.fromEntries(
+  solresolTabsNames.map((tab, index) => [tab, index]),
+);
 
 const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
   const { tab = SolresolTab.INFO } = useParams();
+  const navigate = useNavigate();
+
+  const handleIndexChange = (index: number) => {
+    navigate(`../solresol/${solresolTabsNames[index]}`);
+  };
 
   return (
     <TabContext value={tab}>
@@ -20,36 +30,31 @@ const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
         title="Solresol"
         topbarContent={
           <TabList textColor="inherit" indicatorColor="secondary" centered>
-            <Tab
-              component={Link}
+            <TabLink
               to={`../solresol/${SolresolTab.INFO}`}
               value={SolresolTab.INFO}
-              label={
-                <Typography variant="button" component="h3">
-                  Info
-                </Typography>
-              }
+              label="Info"
             />
-            <Tab
-              component={Link}
+            <TabLink
               to={`../solresol/${SolresolTab.TRANSLATE}`}
               value={SolresolTab.TRANSLATE}
-              label={
-                <Typography variant="button" component="h3">
-                  Translate
-                </Typography>
-              }
+              label="Translate"
             />
           </TabList>
         }
         {...props}
       >
-        <TabPanel value={SolresolTab.INFO}>
-          <SolresolInfo />
-        </TabPanel>
-        <TabPanel value={SolresolTab.TRANSLATE}>
-          <SolresolTranslator />
-        </TabPanel>
+        <SwipeableViews
+          index={solresolTabsIndexes[tab]}
+          onChangeIndex={handleIndexChange}
+        >
+          <TabPanel value={SolresolTab.INFO}>
+            <SolresolInfo />
+          </TabPanel>
+          <TabPanel value={SolresolTab.TRANSLATE}>
+            <SolresolTranslator />
+          </TabPanel>
+        </SwipeableViews>
       </TopbarLayout>
     </TabContext>
   );
