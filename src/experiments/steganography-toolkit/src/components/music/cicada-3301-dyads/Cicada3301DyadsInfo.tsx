@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import Page from '../../Page';
 import Text from '../../Text';
 
-const Cicada3301Info: FunctionComponent = () => (
+const Cicada3301DyadsInfo: FunctionComponent = () => (
   <Page>
     <section>
       <Text variant="h4">What is Cicada 3301?</Text>
@@ -75,4 +75,4 @@ const Cicada3301Info: FunctionComponent = () => (
   </Page>
 );
 
-export default Cicada3301Info;
+export default Cicada3301DyadsInfo;

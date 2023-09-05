@@ -107,8 +107,8 @@ const MENU_ITEMS: MenuItem[] = [
         title: 'Solresol',
       },
       {
-        key: 'cicada-3301',
-        title: 'Cicada 3301',
+        key: 'cicada-3301-dyads',
+        title: 'Cicada 3301 Dyads',
       },
     ],
   },

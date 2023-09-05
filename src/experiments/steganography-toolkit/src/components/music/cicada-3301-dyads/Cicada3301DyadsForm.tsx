@@ -87,7 +87,7 @@ export type Language =
   | 'cs'
   | 'hu';
 
-export interface Cicada3301FormValue {
+export interface Cicada3301DyadsFormValue {
   input: string;
   title: string;
   meter: [number, number];
@@ -96,9 +96,9 @@ export interface Cicada3301FormValue {
   language: Language;
 }
 
-export type Cicada3301FormState = {
+export type Cicada3301DyadsFormState = {
   [key in keyof Omit<
-    Cicada3301FormValue,
+    Cicada3301DyadsFormValue,
     'meter' | 'key' | 'language'
   >]: string;
 } & {
@@ -108,41 +108,41 @@ export type Cicada3301FormState = {
   language: Language;
 };
 
-export enum Cicada3301FormActionType {
+export enum Cicada3301DyadsFormActionType {
   INIT = 'INIT',
   SET_FIELD = 'SET_FIELD',
 }
 
-export interface InitCicada3301FormAction {
-  type: Cicada3301FormActionType.INIT;
-  value: Partial<Cicada3301FormState>;
+export interface InitCicada3301DyadsFormAction {
+  type: Cicada3301DyadsFormActionType.INIT;
+  value: Partial<Cicada3301DyadsFormState>;
 }
 
-export interface SetFieldCicada3301FormAction<
-  F extends keyof Cicada3301FormState = keyof Cicada3301FormState,
+export interface SetFieldCicada3301DyadsFormAction<
+  F extends keyof Cicada3301DyadsFormState = keyof Cicada3301DyadsFormState,
 > {
-  type: Cicada3301FormActionType.SET_FIELD;
+  type: Cicada3301DyadsFormActionType.SET_FIELD;
   field: F;
-  value: Cicada3301FormState[F];
+  value: Cicada3301DyadsFormState[F];
 }
 
-export type Cicada3301FormAction =
-  | InitCicada3301FormAction
-  | SetFieldCicada3301FormAction;
+export type Cicada3301DyadsFormAction =
+  | InitCicada3301DyadsFormAction
+  | SetFieldCicada3301DyadsFormAction;
 
-export interface Cicada3301FormProps {
-  defaultValue?: Cicada3301FormValue;
-  onChange?(value: Cicada3301FormValue): void;
+export interface Cicada3301DyadsFormProps {
+  defaultValue?: Cicada3301DyadsFormValue;
+  onChange?(value: Cicada3301DyadsFormValue): void;
 }
 
-const reduceCicada3301Form: Reducer<
-  Cicada3301FormState,
-  Cicada3301FormAction
+const reduceCicada3301DyadsForm: Reducer<
+  Cicada3301DyadsFormState,
+  Cicada3301DyadsFormAction
 > = (state, action) => {
   switch (action.type) {
-    case Cicada3301FormActionType.INIT:
+    case Cicada3301DyadsFormActionType.INIT:
       return { ...state, ...action.value };
-    case Cicada3301FormActionType.SET_FIELD:
+    case Cicada3301DyadsFormActionType.SET_FIELD:
       return {
         ...state,
         [action.field]: action.value,
@@ -150,7 +150,7 @@ const reduceCicada3301Form: Reducer<
   }
 };
 
-const defaultState: Cicada3301FormState = {
+const defaultState: Cicada3301DyadsFormState = {
   input: '',
   title: '',
   meterBeats: '4',
@@ -160,11 +160,11 @@ const defaultState: Cicada3301FormState = {
   language: 'en',
 };
 
-const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
+const Cicada3301DyadsForm: FunctionComponent<Cicada3301DyadsFormProps> = ({
   defaultValue,
   onChange,
 }) => {
-  const initialState: Cicada3301FormState = useMemo(() => {
+  const initialState: Cicada3301DyadsFormState = useMemo(() => {
     const { meter, tempo, key, ...rest } = defaultValue || {};
 
     return {
@@ -181,16 +181,16 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
     };
   }, [defaultValue]);
 
-  const [state, dispatch] = useReducer(reduceCicada3301Form, initialState);
+  const [state, dispatch] = useReducer(reduceCicada3301DyadsForm, initialState);
   const [isTempoFocused, setIsTempoFocused] = useState(false);
 
   const createTextFieldInputHandler = useCallback(
-    <F extends keyof Cicada3301FormState>(
+    <F extends keyof Cicada3301DyadsFormState>(
         field: F,
       ): NonNullable<OutlinedInputProps['onInput']> =>
       event => {
         dispatch({
-          type: Cicada3301FormActionType.SET_FIELD,
+          type: Cicada3301DyadsFormActionType.SET_FIELD,
           field,
           value: (event.target as HTMLTextAreaElement | HTMLInputElement).value,
         });
@@ -201,7 +201,7 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
   const handleKeyChange = useCallback<NonNullable<SelectProps['onChange']>>(
     event => {
       dispatch({
-        type: Cicada3301FormActionType.SET_FIELD,
+        type: Cicada3301DyadsFormActionType.SET_FIELD,
         field: 'key',
         value: event.target.value as MusicalKey,
       });
@@ -213,7 +213,7 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
     NonNullable<SelectProps['onChange']>
   >(event => {
     dispatch({
-      type: Cicada3301FormActionType.SET_FIELD,
+      type: Cicada3301DyadsFormActionType.SET_FIELD,
       field: 'language',
       value: event.target.value as Language,
     });
@@ -379,4 +379,4 @@ const Cicada3301Form: FunctionComponent<Cicada3301FormProps> = ({
   );
 };
 
-export default Cicada3301Form;
+export default Cicada3301DyadsForm;

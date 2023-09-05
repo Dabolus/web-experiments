@@ -1,15 +1,15 @@
 import { nextPrime } from '../../helpers';
-import letterNotesMapping from '../../static/cicada3301/letterNotesMapping.json';
+import letterNotesMapping from '../../static/cicada-3301-dyads/letterNotesMapping.json';
 import { setupWorkerServer } from '../utils';
 import type {
   Language,
-  Cicada3301FormValue,
-} from '../../components/music/Cicada3301Form';
+  Cicada3301DyadsFormValue,
+} from '../../components/music/cicada-3301-dyads/Cicada3301DyadsForm';
 
 // TODO: this code was rushed and needs to be improved
 
-export interface Cicada3301Worker {
-  computeAbc(data: Cicada3301FormValue): Promise<string>;
+export interface Cicada3301DyadsWorker {
+  computeAbc(data: Cicada3301DyadsFormValue): Promise<string>;
 }
 
 enum TieType {
@@ -47,7 +47,7 @@ export const computeAbc = async ({
   key,
   tempo,
   language,
-}: Cicada3301FormValue): Promise<string> => {
+}: Cicada3301DyadsFormValue): Promise<string> => {
   let resultStr = [
     'X: 1\n',
     ...(title ? [`T: ${title}\n`] : []),
@@ -150,4 +150,4 @@ export const computeAbc = async ({
   return `${resultStr}${computedAbc}`;
 };
 
-setupWorkerServer<Cicada3301Worker>({ computeAbc });
+setupWorkerServer<Cicada3301DyadsWorker>({ computeAbc });

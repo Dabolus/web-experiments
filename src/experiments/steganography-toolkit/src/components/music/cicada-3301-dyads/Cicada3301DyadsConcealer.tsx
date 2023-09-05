@@ -12,26 +12,29 @@ import {
   ArrowDropDown as ArrowDropDownIcon,
 } from '@mui/icons-material';
 import Page from '../../Page';
-import Cicada3301Form, {
-  Cicada3301FormProps,
-  Cicada3301FormValue,
-} from '../Cicada3301Form';
+import Cicada3301DyadsForm, {
+  Cicada3301DyadsFormProps,
+  Cicada3301DyadsFormValue,
+} from './Cicada3301DyadsForm';
 import Abc from '../Abc';
 import Loader from '../../Loader';
 import { setupWorkerClient } from '../../../workers/utils';
-import type { Cicada3301Worker } from '../../../workers/music/cicada-3301.worker';
+import type { Cicada3301DyadsWorker } from '../../../workers/music/cicada-3301-dyads.worker';
 import useAudioExporter from '../../../hooks/useAudioExporter';
 
-const cicada3301Worker = setupWorkerClient<Cicada3301Worker>(
+const cicada3301Worker = setupWorkerClient<Cicada3301DyadsWorker>(
   new Worker(
-    new URL('../../../workers/music/cicada-3301.worker.ts', import.meta.url),
+    new URL(
+      '../../../workers/music/cicada-3301-dyads.worker.ts',
+      import.meta.url,
+    ),
     { type: 'module' },
   ),
   ['computeAbc'],
 );
 
-const Cicada3301Concealer: FunctionComponent = () => {
-  const [data, setData] = useState<Cicada3301FormValue>();
+const Cicada3301DyadsConcealer: FunctionComponent = () => {
+  const [data, setData] = useState<Cicada3301DyadsFormValue>();
   const [input, setInput] = useState<string>();
   const [exportMenuOpen, setExportMenuOpen] = useState(false);
 
@@ -61,7 +64,7 @@ const Cicada3301Concealer: FunctionComponent = () => {
   }, [debouncedData]);
 
   const handleFormChange = useCallback<
-    NonNullable<Cicada3301FormProps['onChange']>
+    NonNullable<Cicada3301DyadsFormProps['onChange']>
   >(data => {
     setData(data);
   }, []);
@@ -86,7 +89,7 @@ const Cicada3301Concealer: FunctionComponent = () => {
     <Page>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Cicada3301Form onChange={handleFormChange} />
+          <Cicada3301DyadsForm onChange={handleFormChange} />
         </Grid>
         <Grid item xs={12}>
           <Box textAlign="center">
@@ -135,4 +138,4 @@ const Cicada3301Concealer: FunctionComponent = () => {
   );
 };
 
-export default Cicada3301Concealer;
+export default Cicada3301DyadsConcealer;
