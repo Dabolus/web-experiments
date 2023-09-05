@@ -11,7 +11,7 @@ const MusicRouter: FunctionComponent<TopbarLayoutProps> = props => (
   <Routes>
     <Route path="/solresol/:tab?" element={<Solresol {...props} />} />
 
-    <Route path="/cicada-3301/*" element={<Cicada3301 {...props} />} />
+    <Route path="/cicada-3301/:tab?" element={<Cicada3301 {...props} />} />
 
     <Route path="*" element={<Navigate to="/solresol/info" replace />} />
   </Routes>
