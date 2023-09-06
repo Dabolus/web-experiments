@@ -103,7 +103,7 @@ const UnicodeRevealer: FunctionComponent = () => {
   };
 
   return (
-    <Page size="md">
+    <Page size="md" title="Text - Unicode - Reveal">
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <FormControl fullWidth>

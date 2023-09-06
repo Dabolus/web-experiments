@@ -7,6 +7,7 @@ import {
   cleanupOutdatedCaches,
 } from 'workbox-precaching';
 import { registerRoute, NavigationRoute } from 'workbox-routing';
+import * as googleAnalytics from 'workbox-google-analytics';
 import type { PrecacheEntry } from 'workbox-precaching/_types';
 
 type ClientType = 'window' | 'worker' | 'sharedworker' | 'all';
@@ -53,3 +54,7 @@ if (process.env.NODE_ENV === 'development') {
   cleanupOutdatedCaches();
   registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html')));
 }
+
+googleAnalytics.initialize({
+  hitFilter: params => params.set('ep.offline', 'true'),
+});

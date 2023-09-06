@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react';
-
 import { BrowserRouter } from 'react-router-dom';
-
+import { HelmetProvider } from 'react-helmet-async';
 import {
   StyledEngineProvider,
   ThemeProvider,
@@ -20,9 +19,11 @@ const App: FunctionComponent = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <ServiceWorkerProvider>
-          <BrowserRouter basename="/steganography-toolkit/">
-            <Root />
-          </BrowserRouter>
+          <HelmetProvider>
+            <BrowserRouter basename="/steganography-toolkit/">
+              <Root />
+            </BrowserRouter>
+          </HelmetProvider>
         </ServiceWorkerProvider>
       </ThemeProvider>
     </StyledEngineProvider>

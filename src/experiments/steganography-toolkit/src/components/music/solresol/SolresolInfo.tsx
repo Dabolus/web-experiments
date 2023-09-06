@@ -19,7 +19,7 @@ const testNotes = '1234567';
 const testNotesArray = Array.from(testNotes);
 
 const SolresolInfo: FunctionComponent = () => (
-  <Page>
+  <Page title="Music - Solresol - Info">
     <section>
       <Text variant="h4">What is Solresol?</Text>
       <Text>

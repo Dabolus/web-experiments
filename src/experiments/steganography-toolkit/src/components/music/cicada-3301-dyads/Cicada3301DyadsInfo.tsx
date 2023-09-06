@@ -3,7 +3,7 @@ import Page from '../../Page';
 import Text from '../../Text';
 
 const Cicada3301DyadsInfo: FunctionComponent = () => (
-  <Page>
+  <Page title="Music - Cicada 3301 Dyads - Info">
     <section>
       <Text variant="h4">What is Cicada 3301?</Text>
       <Text>

@@ -1,7 +1,4 @@
 import React, { FunctionComponent } from 'react';
-
-import Page from './Page';
-import Text from './Text';
 import {
   TableContainer,
   Table,
@@ -10,12 +7,13 @@ import {
   TableCell,
   TableBody,
 } from '@mui/material';
-
+import Page from './Page';
+import Text from './Text';
 import TopbarLayout, { TopbarLayoutProps } from './TopbarLayout';
 
 const Home: FunctionComponent<TopbarLayoutProps> = props => (
   <TopbarLayout title="Home" {...props}>
-    <Page>
+    <Page title="Home">
       <section>
         <Text variant="h3">Welcome to Steganography Toolkit</Text>
         <Text variant="h4">What's this?</Text>

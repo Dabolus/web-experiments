@@ -143,7 +143,7 @@ const UnicodeConcealer: FunctionComponent = () => {
   };
 
   return (
-    <Page size="md">
+    <Page size="md" title="Text - Unicode - Conceal">
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>

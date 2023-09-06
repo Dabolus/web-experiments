@@ -218,7 +218,7 @@ const SolresolTranslator: FunctionComponent = () => {
   );
 
   return (
-    <Page size="md">
+    <Page size="md" title="Music - Solresol - Translate">
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <Grid container spacing={1}>

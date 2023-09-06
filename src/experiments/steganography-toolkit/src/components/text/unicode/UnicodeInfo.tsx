@@ -4,7 +4,7 @@ import Page from '../../Page';
 import Text from '../../Text';
 
 const UnicodeInfo: FunctionComponent = () => (
-  <Page>
+  <Page title="Text - Unicode - Info">
     <section>
       <Text variant="h4">What is Unicode Steganography?</Text>
       <Text>

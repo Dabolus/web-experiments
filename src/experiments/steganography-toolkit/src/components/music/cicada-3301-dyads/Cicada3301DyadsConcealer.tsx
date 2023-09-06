@@ -86,7 +86,7 @@ const Cicada3301DyadsConcealer: FunctionComponent = () => {
   );
 
   return (
-    <Page>
+    <Page title="Music - Cicada 3301 Dyads - Conceal">
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Cicada3301DyadsForm onChange={handleFormChange} />
