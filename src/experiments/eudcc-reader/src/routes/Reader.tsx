@@ -1,6 +1,7 @@
 import { FunctionalComponent, h, Fragment, JSX } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 import { Link, Redirect } from 'wouter-preact';
+import { logEvent } from '../firebase';
 import EUDCC from '../components/EUDCC';
 import ArrowBackIcon from '../components/icons/ArrowBack';
 import useCamera from '../hooks/useCamera';
@@ -18,6 +19,17 @@ const Reader: FunctionalComponent = () => {
     if (output) {
       stopCamera();
     }
+
+    window.history.replaceState(
+      {},
+      '',
+      `/eudcc-reader/${output ? 'results' : 'read'}`,
+    );
+
+    logEvent('page_view', {
+      page_title: `EUDCC Reader - ${output ? 'Results' : 'Read'}`,
+      page_location: window.location.href,
+    });
   }, [output, stopCamera]);
 
   useEffect(() => {
