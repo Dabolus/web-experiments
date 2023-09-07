@@ -196,13 +196,13 @@ const SidebarMenu: FunctionComponent<SidebarMenuProps> = ({ onItemClick }) => {
                     ({
                       key: subkey,
                       title: subtitle,
-                      link: sublink,
+                      link: sublink = `/${key}/${subkey}/info`,
                       available = true,
                     }) => (
                       <NestedListItemLink
                         key={`${key}-${subkey}`}
                         available={available}
-                        to={`${sublink || `/${key}/${subkey}`}`}
+                        to={sublink}
                         onClick={handleListItemClick}
                         tabIndex={available ? 0 : -1}
                       >

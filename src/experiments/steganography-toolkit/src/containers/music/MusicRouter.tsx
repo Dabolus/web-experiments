@@ -7,13 +7,11 @@ const Cicada3301Dyads = lazy(() => import('./Cicada3301Dyads'));
 
 const MusicRouter: FunctionComponent<TopbarLayoutProps> = props => (
   <Routes>
-    <Route path="/solresol/:tab?" element={<Solresol {...props} />} />
-
+    <Route path="/solresol/:tab" element={<Solresol {...props} />} />
     <Route
-      path="/cicada-3301-dyads/:tab?"
+      path="/cicada-3301-dyads/:tab"
       element={<Cicada3301Dyads {...props} />}
     />
-
     <Route path="*" element={<Navigate to="/solresol/info" replace />} />
   </Routes>
 );
