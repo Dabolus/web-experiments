@@ -46,32 +46,52 @@ export interface SolresolWorker {
   computeEnglishOutput: Translator;
 }
 
-const flattenedSolresolDictionary = solresolDictionary.flatMap(
-  ({ english = [], ...rest }) =>
-    english.map((word: string) => ({ english: word, ...rest })),
-);
+const supportedEnglishWords = Array.from(
+  new Set(solresolDictionary.flatMap(({ english = [] }) => english)),
+).filter(Boolean);
+const supportedSolresolWords = Array.from(
+  new Set(solresolDictionary.map(({ solresol }) => solresol)),
+).filter(Boolean);
 
 const preformattedTag = '\u2061';
 
-const matchRegex = new RegExp(
-  `([a-z\d]+|${preformattedTag}\\d+${preformattedTag})`,
+const englishMatchRegex = new RegExp(
+  `([a-z\\d]+|${preformattedTag}\\d+${preformattedTag})`,
   'gi',
 );
-
 const preformattedTagRegex = new RegExp(
   `${preformattedTag}(.+?)${preformattedTag}`,
   'gi',
 );
+const solresolMatchRegex = /([a-z\d]+)/gi;
 
-const englishFuse = new Fuse<DictionaryItem>(flattenedSolresolDictionary, {
-  keys: ['english'],
+const englishFuse = new Fuse<string>(supportedEnglishWords, {
+  threshold: 1,
+  includeScore: true,
+});
+const solresolFuse = new Fuse<string>(supportedSolresolWords, {
+  threshold: 1,
   includeScore: true,
 });
 
-const solresolFuse = new Fuse<DictionaryItem>(flattenedSolresolDictionary, {
-  keys: ['solresol'],
-  includeScore: true,
-});
+const getPossibleWord = (
+  fuse: Fuse<string>,
+  word: string,
+): string | undefined => {
+  const [{ item: possibleWord = undefined } = {}] = fuse
+    .search<string>(word)
+    .sort((a, b) => {
+      const aDiff = Math.abs(a.item.length - word.length);
+      const bDiff = Math.abs(b.item.length - word.length);
+
+      if (aDiff === bDiff) {
+        return a.score! - b.score!;
+      }
+
+      return aDiff - bDiff;
+    });
+  return possibleWord;
+};
 
 const convertTextHintToOutputItems = (
   textHint: string,
@@ -197,9 +217,9 @@ export const computeSolresolOutput = async (
   let previousIndex = 0;
 
   for (
-    let matches = matchRegex.exec(normalizedInput);
+    let matches = englishMatchRegex.exec(normalizedInput);
     matches !== null;
-    matches = matchRegex.exec(normalizedInput)
+    matches = englishMatchRegex.exec(normalizedInput)
   ) {
     const [word] = matches;
 
@@ -231,7 +251,7 @@ export const computeSolresolOutput = async (
       output.push(
         normalizedInput.slice(
           previousIndex,
-          matchRegex.lastIndex - word.length,
+          englishMatchRegex.lastIndex - word.length,
         ),
         {
           words: [
@@ -244,30 +264,27 @@ export const computeSolresolOutput = async (
         },
       );
 
-      previousIndex = matchRegex.lastIndex;
+      previousIndex = englishMatchRegex.lastIndex;
 
       continue;
     } else {
-      output.push(normalizedInput.slice(previousIndex, matchRegex.lastIndex));
+      output.push(
+        normalizedInput.slice(previousIndex, englishMatchRegex.lastIndex),
+      );
 
-      previousIndex = matchRegex.lastIndex;
+      previousIndex = englishMatchRegex.lastIndex;
     }
 
-    const originalWordIndex = input.search(word);
+    const originalWordIndex = input.search(
+      new RegExp(`\\b${word.replace(preformattedTagRegex, '$1')}\\b`, 'gi'),
+    );
 
     if (originalWordIndex < 0) {
       continue;
     }
 
-    const [
-      { score = 1, item: { english: possibleWord = undefined } = {} } = {},
-    ] = englishFuse.search<DictionaryItem>(word);
-
-    if (
-      possibleWord &&
-      Math.abs(word.length - possibleWord.length) < 3 &&
-      score < 0.01
-    ) {
+    const possibleWord = getPossibleWord(englishFuse, word);
+    if (possibleWord) {
       textHint = `${textHint.slice(
         0,
         originalWordIndex + hintOffset,
@@ -313,9 +330,9 @@ export const computeEnglishOutput = async (
   let hintOffset = 0;
 
   for (
-    let matches = matchRegex.exec(input);
+    let matches = solresolMatchRegex.exec(input);
     matches !== null;
-    matches = matchRegex.exec(input)
+    matches = solresolMatchRegex.exec(input)
   ) {
     const [word] = matches;
 
@@ -334,13 +351,13 @@ export const computeEnglishOutput = async (
 
     if (translation) {
       const [preferredTranslation, ...otherTranslations] =
-        translation.english?.map(word => ({
+        translation.english.map(word => ({
           word,
           meanings: [],
         }));
 
       output.push(
-        input.slice(previousIndex, matchRegex.lastIndex - word.length),
+        input.slice(previousIndex, solresolMatchRegex.lastIndex - word.length),
         {
           words: [
             {
@@ -353,29 +370,22 @@ export const computeEnglishOutput = async (
         },
       );
 
-      previousIndex = matchRegex.lastIndex;
+      previousIndex = solresolMatchRegex.lastIndex;
 
       continue;
     } else {
-      output.push(input.slice(previousIndex, matchRegex.lastIndex));
+      output.push(input.slice(previousIndex, solresolMatchRegex.lastIndex));
 
-      previousIndex = matchRegex.lastIndex;
+      previousIndex = solresolMatchRegex.lastIndex;
     }
 
-    const [
-      { score = 1, item: { solresol: possibleWord = undefined } = {} } = {},
-    ] = solresolFuse.search<DictionaryItem>(word);
-
-    if (
-      possibleWord &&
-      Math.abs(word.length - possibleWord.length) < 3 &&
-      score < 0.01
-    ) {
+    const possibleWord = getPossibleWord(solresolFuse, word);
+    if (possibleWord) {
       textHint = `${textHint.slice(
         0,
-        matchRegex.lastIndex + hintOffset - word.length,
+        solresolMatchRegex.lastIndex + hintOffset - word.length,
       )}${preformattedTag}${possibleWord}${preformattedTag}${textHint.slice(
-        matchRegex.lastIndex + hintOffset,
+        solresolMatchRegex.lastIndex + hintOffset,
       )}`;
       hintOffset +=
         possibleWord.length - word.length + preformattedTag.length * 2;
