@@ -4,6 +4,7 @@ import { configurePlanet } from './planet';
 import { navigate, setupRouter, computeUrl, getRoutingData } from './routing';
 import { debounce } from './utils';
 import { updateMetadata } from 'pwa-helpers';
+import { logEvent } from './firebase';
 
 history.scrollRestoration = 'manual';
 
@@ -31,7 +32,13 @@ const computeTitle = (date?: Date, planet?: string) =>
   [
     'Planet Age',
     ...(date ? [date.toLocaleDateString('en')] : []),
-    ...(date && planet ? [planetsKeyVal[planet].name] : []),
+    ...(date && planet
+      ? [
+          `${planetsKeyVal[planet].name[0].toUpperCase()}${planetsKeyVal[
+            planet
+          ].name.slice(1)}`,
+        ]
+      : []),
   ].join(' - ');
 
 setupRouter((date, planet) => {
@@ -48,8 +55,11 @@ setupRouter((date, planet) => {
       behavior: 'smooth',
     });
 
-    updateMetadata({
-      title: computeTitle(date),
+    const title = computeTitle(date);
+    updateMetadata({ title });
+    logEvent('page_view', {
+      page_title: title,
+      page_location: window.location.href,
     });
 
     return;
@@ -62,8 +72,11 @@ setupRouter((date, planet) => {
   ref.scrollIntoView({ behavior: 'smooth' });
   main.style.backgroundColor = background;
 
-  updateMetadata({
-    title: computeTitle(date, id),
+  const title = computeTitle(date, id);
+  updateMetadata({ title });
+  logEvent('page_view', {
+    page_title: title,
+    page_location: window.location.href,
   });
 });
 
@@ -107,8 +120,11 @@ main.addEventListener(
     if (path !== newPath) {
       history.pushState({}, '', newPath);
 
-      updateMetadata({
-        title: computeTitle(date, planet?.id),
+      const title = computeTitle(date, planet?.id);
+      updateMetadata({ title });
+      logEvent('page_view', {
+        page_title: title,
+        page_location: window.location.href,
       });
     }
   }, 100),
