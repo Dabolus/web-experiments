@@ -52,7 +52,6 @@ export const numericSolresolCodes = Array.from({ length: 7 }, (_, i) =>
 interface StenographicSolresolCode {
   path: string;
   doublePath: string;
-  area: [number, number, number, number];
   start?: (previousNote?: number) => [number, number];
 }
 export const stenographicSolresolCodes: StenographicSolresolCode[] = [
@@ -64,7 +63,6 @@ export const stenographicSolresolCodes: StenographicSolresolCode[] = [
       m 50, 0
     `,
     doublePath: 'm -50,0 l 50,0',
-    area: [0, -25, 50, 50],
     start: previousNote => {
       switch (previousNote) {
         case 4:
@@ -82,38 +80,32 @@ export const stenographicSolresolCodes: StenographicSolresolCode[] = [
   {
     path: `l 0, 50`,
     doublePath: 'm -12.5,-25 l 25,0 m -12.5,25',
-    area: [-12.5, 0, 0, 50],
   },
   // mi
   {
     path: `a 25,25 0 1,1 50,0`,
     doublePath: 'm -25,-37.5 l 0,25 m 25,12.5',
-    area: [0, -37.5, 50, 0],
   },
   // fa
   {
     path: `l 50, 50`,
     doublePath: 'm -37.5,-12.5 l 25,-25 m 12.5,37.5',
-    area: [0, 0, 50, 50],
     start: previousNote => (previousNote === 1 ? [-7.3, -17.7] : [0, 0]),
   },
   // sol
   {
     path: `l 50, 0`,
     doublePath: 'm -25,-12.5 l 0,25 m 25,-12.5',
-    area: [0, -12.5, 50, 0],
   },
   // la
   {
     path: `a 25,25 0 0,0 0,50`,
     doublePath: 'm -37.5,-25 l 25,0 m 12.5,25',
-    area: [-37.5, 0, 0, 50],
   },
   // si
   {
     path: `l 50, -50`,
     doublePath: 'm -37.5,12.5 l 25,25 m 12.5,-37.5',
-    area: [0, -50, 50, 0],
     start: previousNote => (previousNote === 1 ? [-7.3, 17.7] : [0, 0]),
   },
 ];
@@ -129,9 +121,36 @@ export const ColorTranslation = styled('svg')({
 });
 
 export const ShapeTranslation = styled('svg')(({ theme }) => ({
-  borderRadius: '3px',
   stroke: theme.palette.text.primary,
 }));
+
+const computePathBoundingBox = (
+  path: string,
+): Pick<DOMRect, 'x' | 'y' | 'width' | 'height'> => {
+  const svgElement = document.createElementNS(
+    'http://www.w3.org/2000/svg',
+    'svg',
+  );
+  svgElement.setAttribute('width', '0');
+  svgElement.setAttribute('height', '0');
+  svgElement.setAttribute('viewBox', '0 0 0 0');
+  svgElement.setAttribute('style', 'position: absolute');
+  const pathElement = document.createElementNS(
+    'http://www.w3.org/2000/svg',
+    'path',
+  );
+  pathElement.setAttribute('d', path);
+  svgElement.appendChild(pathElement);
+  document.body.appendChild(svgElement);
+  const boundingBox = pathElement.getBBox();
+  document.body.removeChild(svgElement);
+  return {
+    x: boundingBox.x - 2,
+    y: boundingBox.y - 2,
+    width: boundingBox.width + 4,
+    height: boundingBox.height + 4,
+  };
+};
 
 export const convertToSolresolForm = (
   wordOrPhrase: string | string[],
@@ -232,19 +251,13 @@ export const convertToSolresolForm = (
       );
     }
     case 'stenographic': {
-      let [minX, minY, maxX, maxY] = [0, 0, 0, 0];
       const path = normalizedWordOrPhrase
         .map((code, index) => {
           const {
             path = 'm 50,0',
             doublePath = '',
-            area = [0, 0, 50, 0],
             start = () => [0, 0],
           } = typeof code === 'number' ? stenographicSolresolCodes[code] : {};
-          minX += area[0];
-          minY += area[1];
-          maxX += area[2];
-          maxY += area[3];
           const previousCode = normalizedWordOrPhrase[index - 1];
           const [pathStartX, pathStartY] = start(
             typeof previousCode === 'number' ? previousCode + 1 : undefined,
@@ -256,15 +269,16 @@ export const convertToSolresolForm = (
           return `${startPath}${previousCode === code ? doublePath : path}`;
         })
         .join(' ');
-      const width = maxX - minX;
-      const height = maxY - minY;
+      const finalPath = `m 0,0 ${path}`;
+      const boundingBox = computePathBoundingBox(finalPath);
       return (
         <ShapeTranslation
           xmlns="http://www.w3.org/2000/svg"
-          viewBox={`${minX - 2} ${minY - 2} ${width + 4} ${height + 4}`}
+          viewBox={`${boundingBox.x} ${boundingBox.y} ${boundingBox.width} ${boundingBox.height}`}
           role="img"
           aria-labelledby={`${fullWordOrPhrase}-title`}
-          height={`${height / 50 + 0.1}rem`}
+          width={`${boundingBox.width / 50}rem`}
+          height={`${boundingBox.height / 50}rem`}
           fill="transparent"
           stroke="#000"
           strokeWidth={4}
@@ -272,7 +286,7 @@ export const convertToSolresolForm = (
           <title id={`${fullWordOrPhrase}-title`}>
             {convertToSolresolForm(fullWordOrPhrase, 'full')}
           </title>
-          <path d={`m 0,0 ${path}`} />
+          {<path d={finalPath} />}
         </ShapeTranslation>
       );
     }
