@@ -4788,7 +4788,15 @@
   },
   {
     "solresol": "4732",
-    "english": ["speed", "haste", "velocity", "promptness", "quickly", "fast"]
+    "english": [
+      "speed",
+      "haste",
+      "velocity",
+      "promptness",
+      "quick",
+      "quickly",
+      "fast"
+    ]
   },
   {
     "solresol": "4734",
