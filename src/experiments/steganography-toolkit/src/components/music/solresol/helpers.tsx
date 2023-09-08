@@ -324,7 +324,13 @@ const convertSolresolToken = (
   from: Exclude<SolresolInputType, 'auto'>,
   to: Exclude<SolresolInputType, 'auto'>,
 ) =>
-  from === to ? input : inputTypeMap[to][inputTypeMap[from].indexOf(input)];
+  from === to
+    ? input
+    : inputTypeMap[to][
+        inputTypeMap[from].findIndex(
+          token => token.toLowerCase() === input.toLowerCase(),
+        )
+      ];
 
 export const convertSolresolInput = (
   input: string,
