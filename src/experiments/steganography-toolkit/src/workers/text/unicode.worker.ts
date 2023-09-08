@@ -41,9 +41,9 @@ const codelengthBinary = Math.ceil(Math.log(256) / Math.log(radix));
     return: unicode stego text
    */
 const encodeText = (text1: string, text2: string) => {
-  return combine_shuffle_string(
+  return combineShuffleString(
     text1,
-    encode_to_zerowidth_characters_text(text2),
+    encodeTextToZeroWidthCharacters(text2),
     codelengthText,
   );
 };
@@ -56,9 +56,9 @@ const encodeText = (text1: string, text2: string) => {
     return: unicode stego text
    */
 const encodeBinary = (text: string, data: Uint8Array) => {
-  return combine_shuffle_string(
+  return combineShuffleString(
     text,
-    encode_to_zerowidth_characters_binary(data),
+    encodeBinaryToZeroWidthCharacters(data),
     codelengthBinary,
   );
 };
@@ -72,11 +72,11 @@ const encodeBinary = (text: string, data: Uint8Array) => {
     }
    */
 const decodeText = (text: string) => {
-  const splitted = split_zerowidth_characters(text);
+  const splitted = splitZeroWidthCharacters(text);
 
   return {
     originalText: splitted.originalText,
-    hiddenText: decode_from_zero_width_characters_text(
+    hiddenText: decodeTextFromZeroWidthCharacters(
       splitted.hiddenText,
       codelengthText,
     ),
@@ -91,58 +91,47 @@ const decodeText = (text: string) => {
     }
    */
 const decodeBinary = (text: string) => {
-  const splitted = split_zerowidth_characters(text);
+  const splitted = splitZeroWidthCharacters(text);
 
   return {
     originalText: splitted.originalText,
-    hiddenData: decode_from_zero_width_characters_binary(splitted.hiddenText),
+    hiddenData: decodeBinaryFromZeroWidthCharacters(splitted.hiddenText),
   };
 };
 
 /**
     Internal Functions
   */
-const encode_to_zerowidth_characters_text = (str1: string): string => {
-  const result = new Array(str1.length);
-  const base = '0'.repeat(codelengthText);
-  let i, c, d, r;
+const encodeTextToZeroWidthCharacters = (str1: string): string => {
+  const result = Array.from(str1, char => {
+    const codePoint = char.codePointAt(0)!;
+    const stringified = codePoint.toString(radix);
+    return stringified.padStart(codelengthText, '0');
+  });
 
-  for (i = 0; i < str1.length; i++) {
-    c = str1.charCodeAt(i);
-    d = c.toString(radix);
+  const resultStr = chars.reduce(
+    (acc, char, i) => acc.replace(new RegExp(i.toString(), 'g'), char),
+    result.join(''),
+  );
 
-    result[i] = (base + d).substr(-codelengthText);
-  }
-
-  r = result.join('');
-
-  for (i = 0; i < radix; i++) {
-    r = r.replace(new RegExp(i.toString(), 'g'), chars[i]);
-  }
-
-  return r;
+  return resultStr;
 };
 
-const encode_to_zerowidth_characters_binary = (u8ary: Uint8Array): string => {
-  const result = new Array(u8ary.length);
-  const base = '0'.repeat(codelengthBinary);
-  let i, c, d, r;
+const encodeBinaryToZeroWidthCharacters = (u8ary: Uint8Array): string => {
+  const result = Array.from(u8ary, byte => {
+    const stringified = byte.toString(radix);
+    return stringified.padStart(codelengthBinary, '0');
+  });
 
-  for (i = 0; i < u8ary.length; i++) {
-    d = u8ary[i].toString(radix);
-    result[i] = (base + d).substr(-codelengthBinary);
-  }
+  const resultStr = chars.reduce(
+    (acc, char, i) => acc.replace(new RegExp(i.toString(), 'g'), char),
+    result.join(''),
+  );
 
-  r = result.join('');
-
-  for (i = 0; i < radix; i++) {
-    r = r.replace(new RegExp(i.toString(), 'g'), chars[i]);
-  }
-
-  return r;
+  return resultStr;
 };
 
-const combine_shuffle_string = (
+const combineShuffleString = (
   str1: string,
   str2: string,
   codelength: number,
@@ -181,12 +170,12 @@ const combine_shuffle_string = (
   return result.join('');
 };
 
-const split_zerowidth_characters = (str1: string): DecodedTextResult => ({
+const splitZeroWidthCharacters = (str1: string): DecodedTextResult => ({
   originalText: str1.replace(new RegExp('[' + chars.join('') + ']', 'g'), ''),
   hiddenText: str1.replace(new RegExp('[^' + chars.join('') + ']', 'g'), ''),
 });
 
-const decode_from_zero_width_characters_text = (
+const decodeTextFromZeroWidthCharacters = (
   str1: string,
   codelength: number,
 ): string => {
@@ -203,7 +192,7 @@ const decode_from_zero_width_characters_text = (
   return result.join('');
 };
 
-const decode_from_zero_width_characters_binary = (str1: string): Uint8Array => {
+const decodeBinaryFromZeroWidthCharacters = (str1: string): Uint8Array => {
   let r = str1;
   let i, j;
   const result = new Uint8Array(Math.ceil(str1.length / codelengthBinary));
