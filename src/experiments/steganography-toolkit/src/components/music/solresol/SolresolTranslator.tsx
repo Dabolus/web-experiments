@@ -121,26 +121,30 @@ const SolresolTranslator: FunctionComponent = () => {
         ? await solresolWorker.computeEnglishOutput(normalizedInput)
         : await solresolWorker.computeSolresolOutput(normalizedInput);
 
-      const transformedOutput = possibleOutput.map(item =>
-        typeof item === 'string'
-          ? convertSolresolInput(item, 'numeric', finalInputType)
-          : item,
-      );
-      const transformedHint = possibleHint.map(item =>
-        typeof item === 'string'
-          ? convertSolresolInput(item, 'numeric', finalInputType)
-          : {
-              ...item,
-              words: item.words.map(word => ({
-                ...word,
-                word: convertSolresolInput(
-                  word.word,
-                  'numeric',
-                  finalInputType,
-                ),
-              })),
-            },
-      );
+      const transformedOutput = swapped
+        ? possibleOutput.map(item =>
+            typeof item === 'string'
+              ? convertSolresolInput(item, 'numeric', finalInputType)
+              : item,
+          )
+        : possibleOutput;
+      const transformedHint = swapped
+        ? possibleHint.map(item =>
+            typeof item === 'string'
+              ? convertSolresolInput(item, 'numeric', finalInputType)
+              : {
+                  ...item,
+                  words: item.words.map(word => ({
+                    ...word,
+                    word: convertSolresolInput(
+                      word.word,
+                      'numeric',
+                      finalInputType,
+                    ),
+                  })),
+                },
+          )
+        : possibleHint;
 
       setOutput(transformedOutput);
       setHint(transformedHint);
