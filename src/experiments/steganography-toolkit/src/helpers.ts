@@ -44,3 +44,29 @@ export const chunk = <T extends any[] | string>(arr: T, size: number): T[] =>
     { length: Math.ceil(arr.length / size) },
     (_, i) => arr.slice(i * size, i * size + size) as T,
   );
+
+export const readFile = <T extends 'binary' | 'text' = 'binary'>(
+  file: File,
+  format?: T,
+): Promise<T extends 'text' ? string : Uint8Array> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onabort = reject;
+    reader.onerror = reject;
+    reader.onload = () =>
+      resolve(
+        (format === 'text'
+          ? reader.result
+          : new Uint8Array(reader.result as ArrayBuffer)) as T extends 'text'
+          ? string
+          : Uint8Array,
+      );
+    switch (format) {
+      case 'text':
+        reader.readAsText(file);
+        break;
+      default:
+        reader.readAsArrayBuffer(file);
+        break;
+    }
+  });

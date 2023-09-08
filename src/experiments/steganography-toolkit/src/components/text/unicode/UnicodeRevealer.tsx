@@ -1,4 +1,11 @@
-import React, { FunctionComponent, useState, useEffect, useMemo } from 'react';
+import React, {
+  FunctionComponent,
+  useCallback,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react';
+import { useDropzone } from 'react-dropzone';
 import { useDebounce } from 'use-debounce';
 import { saveAs } from 'file-saver';
 import {
@@ -26,6 +33,8 @@ import type {
 } from '../../../workers/text/unicode.worker';
 import { EncryptionAlgorithm } from '../../../workers/preprocessor.worker';
 import usePreprocessor from '../../../hooks/usePreprocessor';
+import { readFile } from '../../../helpers';
+import FileContainer from './FileContainer';
 
 const unicodeWorker = setupWorkerClient<UnicodeWorker>(
   new Worker(
@@ -51,7 +60,9 @@ const DownloadLink = styled(Link)({
 const decoder = new TextDecoder();
 
 const UnicodeRevealer: FunctionComponent = () => {
-  const [carrierWithPayload, setCarrierWithPayload] = useState('');
+  const [carrierWithPayloadText, setCarrierWithPayloadText] = useState('');
+  const [carrierWithPayloadFileName, setCarrierWithPayloadFileName] =
+    useState('');
   const [payload, setPayload] = useState<DecodedBinaryResult | undefined>();
   const hiddenText = useMemo(
     () =>
@@ -66,12 +77,30 @@ const UnicodeRevealer: FunctionComponent = () => {
   const [password, setPassword] = useState('');
   const { decrypt } = usePreprocessor();
 
-  const [debouncedCarrierWithPayload] = useDebounce(carrierWithPayload, 300);
+  const data = useMemo(
+    () => ({ carrierWithPayloadText, carrierWithPayloadFileName }),
+    [carrierWithPayloadText, carrierWithPayloadFileName],
+  );
+
+  const [debouncedData] = useDebounce(data, 300);
+
+  const onFileDrop = useCallback(async ([acceptedFile]: File[]) => {
+    const content = await readFile(acceptedFile, 'text');
+    setCarrierWithPayloadFileName(acceptedFile.name);
+    setCarrierWithPayloadText(content);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: onFileDrop,
+    accept: {
+      'text/plain': ['.txt'],
+    },
+  });
 
   useEffect(() => {
     const compute = async () => {
       if (
-        !debouncedCarrierWithPayload ||
+        !debouncedData.carrierWithPayloadText ||
         (encryption !== 'none' && !password)
       ) {
         setPayload(undefined);
@@ -79,8 +108,9 @@ const UnicodeRevealer: FunctionComponent = () => {
       }
 
       const decoded = await unicodeWorker.decodeBinary(
-        debouncedCarrierWithPayload,
+        debouncedData.carrierWithPayloadText,
       );
+
       const hiddenData =
         encryption === 'none'
           ? decoded.hiddenData
@@ -93,7 +123,7 @@ const UnicodeRevealer: FunctionComponent = () => {
     };
 
     compute();
-  }, [debouncedCarrierWithPayload, decrypt, encryption, password]);
+  }, [debouncedData, decrypt, encryption, password]);
 
   const handleDecodedOutputCopyToClipboard = async () => {
     await navigator.clipboard.writeText(hiddenText!);
@@ -104,9 +134,10 @@ const UnicodeRevealer: FunctionComponent = () => {
   const handleDecodedOutputDownloadAsTxt = () => {
     saveAs(new Blob([hiddenText!], { type: 'text/plain' }), 'output.txt');
   };
+
   const handleDecodedOutputDownloadAsFile = async () => {
     const decoded = await unicodeWorker.decodeBinary(
-      debouncedCarrierWithPayload,
+      debouncedData.carrierWithPayloadText,
     );
     const hiddenData =
       encryption === 'none'
@@ -123,22 +154,40 @@ const UnicodeRevealer: FunctionComponent = () => {
     <Page size="md" title="Text - Unicode - Reveal">
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <FormControl fullWidth>
-            <Label>
-              Text with hidden message
-              {carrierWithPayload
-                ? ` (length: ${carrierWithPayload.length})`
-                : ''}
-            </Label>
-            <OutlinedInput
-              multiline
-              rows={8}
-              value={carrierWithPayload}
-              onInput={event =>
-                setCarrierWithPayload((event.target as HTMLInputElement).value)
-              }
-            />
-          </FormControl>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormControl fullWidth>
+                <Label>
+                  Text with hidden message
+                  {carrierWithPayloadText
+                    ? ` (length: ${carrierWithPayloadText.length})`
+                    : ''}
+                </Label>
+                <OutlinedInput
+                  multiline
+                  rows={3.5}
+                  value={carrierWithPayloadText}
+                  onInput={event =>
+                    setCarrierWithPayloadText(
+                      (event.target as HTMLInputElement).value,
+                    )
+                  }
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl fullWidth>
+                <div {...getRootProps()}>
+                  <Label>Or select a file instead</Label>
+                  <input {...getInputProps()} />
+                  <FileContainer isDragActive={isDragActive}>
+                    {carrierWithPayloadFileName ||
+                      'Drop a file here, or click to select file'}
+                  </FileContainer>
+                </div>
+              </FormControl>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={1}>

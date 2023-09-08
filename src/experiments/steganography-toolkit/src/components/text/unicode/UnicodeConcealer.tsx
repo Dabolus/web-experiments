@@ -17,7 +17,6 @@ import {
   styled,
   IconButton,
   Tooltip,
-  alpha,
   Select,
 } from '@mui/material';
 import {
@@ -29,6 +28,8 @@ import { setupWorkerClient } from '../../../workers/utils';
 import type { UnicodeWorker } from '../../../workers/text/unicode.worker';
 import usePreprocessor from '../../../hooks/usePreprocessor';
 import { EncryptionAlgorithm } from '../../../workers/preprocessor.worker';
+import { readFile } from '../../../helpers';
+import FileContainer from './FileContainer';
 
 const unicodeWorker = setupWorkerClient<UnicodeWorker>(
   new Worker(
@@ -43,41 +44,6 @@ const unicodeWorker = setupWorkerClient<UnicodeWorker>(
 const Label = styled(FormLabel)(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
-
-const FileContainer = styled('p')<{ isDragActive?: boolean }>(
-  ({ theme, isDragActive }) => ({
-    padding: '16.5px 14px',
-    margin: theme.spacing(1, 0, 0),
-    fontSize: '1rem',
-    borderRadius: '4px',
-    border: `1px solid ${alpha(theme.palette.divider, 0.23)}`,
-    height: '3.46rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    '&:hover': {
-      borderColor: theme.palette.text.primary,
-    },
-    '&:active, &:focus': {
-      borderColor: theme.palette.text.primary,
-      borderWidth: '2px',
-    },
-    ...(isDragActive && {
-      borderColor: theme.palette.text.primary,
-      borderWidth: '2px',
-    }),
-  }),
-);
-
-const readFile = (file: File): Promise<Uint8Array> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onabort = reject;
-    reader.onerror = reject;
-    reader.onload = () => resolve(new Uint8Array(reader.result as ArrayBuffer));
-    reader.readAsArrayBuffer(file);
-  });
 
 const UnicodeConcealer: FunctionComponent = () => {
   const [carrier, setCarrier] = useState('');
