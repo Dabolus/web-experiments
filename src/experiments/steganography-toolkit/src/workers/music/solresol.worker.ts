@@ -1,9 +1,8 @@
 import Fuse from 'fuse.js';
 import nlp from 'compromise';
-
 import solresolDictionary from '../../static/solresol/dictionary.json';
-
 import { setupWorkerServer } from '../utils';
+import type { Verbs } from 'compromise/types/view/three';
 
 export interface TranslationOutputWord {
   word: string;
@@ -207,6 +206,7 @@ export const computeSolresolOutput = async (
 
   let previousIndex = 0;
 
+  englishMatchRegex.lastIndex = 0;
   for (
     let matches = englishMatchRegex.exec(normalizedInput);
     matches !== null;
@@ -290,6 +290,25 @@ export const computeSolresolOutput = async (
   return { output, hint: convertTextHintToOutputItems(textHint) };
 };
 
+type PickMatching<T, V> = {
+  [K in keyof T as T[K] extends V ? K : never]: T[K];
+};
+type ExtractMethods<T> = PickMatching<T, () => any>;
+
+const solresolToNlpTransformMap: Record<
+  string,
+  (keyof ExtractMethods<Verbs>)[]
+> = {
+  default: ['toInfinitive', 'toPresentTense'],
+  '11': ['toPresentTense', 'toPastTense'],
+  '22': ['toPastTense'],
+  '33': ['toFutureTense'],
+  '44': ['toPastTense'],
+  '55': ['toInfinitive'],
+  '66': ['toGerund'],
+  '77': ['toPastTense'],
+};
+
 export const computeEnglishOutput = async (
   input: string,
 ): Promise<TranslationOutput> => {
@@ -298,7 +317,9 @@ export const computeEnglishOutput = async (
 
   let previousIndex = 0;
   let hintOffset = 0;
+  let previousTranslation: DictionaryItem | undefined;
 
+  solresolMatchRegex.lastIndex = 0;
   for (
     let matches = solresolMatchRegex.exec(input);
     matches !== null;
@@ -310,12 +331,76 @@ export const computeEnglishOutput = async (
       ({ solresol }) => solresol === word,
     );
 
+    if (translation?.solresol in solresolToNlpTransformMap) {
+      previousIndex = solresolMatchRegex.lastIndex;
+      previousTranslation = translation;
+      continue;
+    }
+
     if (translation) {
-      const [preferredTranslation, ...otherTranslations] =
-        translation.english.map(word => ({
-          word,
-          meanings: [],
-        }));
+      const [preferredTranslation, ...otherTranslations] = translation.english
+        .flatMap(word => {
+          // If it's a verb, convert to the possible form(s)
+          const asVerb = nlp(word).verbs();
+          const verbForms = asVerb.length
+            ? (
+                solresolToNlpTransformMap[previousTranslation?.solresol!] ||
+                solresolToNlpTransformMap.default
+              ).map(transform => ({
+                word: asVerb[transform]().out('text'),
+                meanings:
+                  previousTranslation?.solresol! in solresolToNlpTransformMap
+                    ? previousTranslation!.english
+                    : [
+                        ...(transform === 'toInfinitive' ? ['infinitive'] : []),
+                        'present',
+                      ],
+              }))
+            : [];
+          // If it's a noun, add the indefinite article
+          const withArticle = nlp(word)
+            .nouns()
+            .prepend(/^[aeiou]/i.test(word) ? 'an ' : 'a ')
+            .out('text');
+          return [
+            // If the word before was a verb form modifier, we are more confident
+            // that this is a verb, so we add the verb form(s) before the noun form(s)
+            ...(previousTranslation?.solresol! in solresolToNlpTransformMap
+              ? verbForms
+              : []),
+            ...(verbForms.some(form => form.word === word)
+              ? []
+              : [
+                  {
+                    word,
+                    meanings: [],
+                  },
+                ]),
+            ...(withArticle
+              ? [
+                  {
+                    word: withArticle,
+                    meanings: [],
+                  },
+                ]
+              : []),
+            // Otherwise, we add the noun form(s) before the verb form(s)
+            ...(previousTranslation?.solresol! in solresolToNlpTransformMap
+              ? []
+              : verbForms),
+          ];
+        })
+        // Remove duplicates from array
+        .filter(
+          (val1, index, arr) =>
+            arr.findIndex(
+              val2 =>
+                val2.word === val1.word &&
+                val2.meanings.every(
+                  (meaning, index) => meaning === val1.meanings[index],
+                ),
+            ) === index,
+        );
 
       output.push(
         input.slice(previousIndex, solresolMatchRegex.lastIndex - word.length),
@@ -332,12 +417,13 @@ export const computeEnglishOutput = async (
       );
 
       previousIndex = solresolMatchRegex.lastIndex;
+      previousTranslation = translation;
 
       continue;
     } else {
       output.push(input.slice(previousIndex, solresolMatchRegex.lastIndex));
-
       previousIndex = solresolMatchRegex.lastIndex;
+      previousTranslation = undefined;
     }
 
     const possibleWord = getPossibleWord(solresolFuse, word);
