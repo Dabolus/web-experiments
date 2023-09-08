@@ -12,9 +12,9 @@ export type SolresolType =
   | 'stenographic';
 
 export type SolresolOutputType = Exclude<SolresolType, 'auto'>;
-export type SolresolInputType = Extract<
+export type SolresolInputType = Exclude<
   SolresolType,
-  'auto' | 'full' | 'abbreviated' | 'numeric'
+  'color' | 'scale' | 'stenographic'
 >;
 
 export const isSolresolOutputType = (
@@ -244,6 +244,7 @@ export const convertToSolresolForm = (
 const inputTypeMap: Record<Exclude<SolresolInputType, 'auto'>, string[]> = {
   full: fullSolresolCodes,
   abbreviated: abbreviatedSolresolCodes,
+  english: englishSolresolCodes,
   numeric: numericSolresolCodes,
 };
 const inputTypeRegexes = Object.fromEntries(

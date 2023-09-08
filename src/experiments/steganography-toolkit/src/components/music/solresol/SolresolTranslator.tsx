@@ -297,6 +297,7 @@ const SolresolTranslator: FunctionComponent = () => {
                     </option>
                     <option value="full">Full</option>
                     <option value="abbreviated">Abbreviated</option>
+                    <option value="english">English</option>
                     <option value="numeric">Numeric</option>
                   </Select>
                 </FormControl>
