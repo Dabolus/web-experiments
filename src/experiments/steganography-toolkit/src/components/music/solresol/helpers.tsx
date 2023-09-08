@@ -1,6 +1,38 @@
 import React, { Fragment, ReactNode } from 'react';
 import { styled } from '@mui/material';
-import type { SolresolOutputType } from '../../../workers/music/solresol.worker';
+
+export type SolresolType =
+  | 'auto'
+  | 'full'
+  | 'abbreviated'
+  | 'english'
+  | 'numeric'
+  | 'color'
+  | 'scale'
+  | 'stenographic';
+
+export type SolresolOutputType = Exclude<SolresolType, 'auto'>;
+export type SolresolInputType = Extract<
+  SolresolType,
+  'auto' | 'full' | 'abbreviated' | 'numeric'
+>;
+
+export const isSolresolOutputType = (
+  value: unknown,
+): value is SolresolOutputType =>
+  [
+    'full',
+    'abbreviated',
+    'english',
+    'numeric',
+    'color',
+    'scale',
+    'stenographic',
+  ].includes(value as string);
+export const isSolresolInputType = (
+  value: unknown,
+): value is SolresolInputType =>
+  ['auto', 'full', 'abbreviated', 'numeric'].includes(value as string);
 
 export const fullSolresolCodes = ['do', 're', 'mi', 'fa', 'sol', 'la', 'si'];
 export const abbreviatedSolresolCodes = ['d', 'r', 'm', 'f', 'so', 'l', 's'];
@@ -207,4 +239,59 @@ export const convertToSolresolForm = (
       );
     }
   }
+};
+
+const inputTypeMap: Record<Exclude<SolresolInputType, 'auto'>, string[]> = {
+  full: fullSolresolCodes,
+  abbreviated: abbreviatedSolresolCodes,
+  numeric: numericSolresolCodes,
+};
+const inputTypeRegexes = Object.fromEntries(
+  Object.entries(inputTypeMap).map(([key, values]) => [
+    key,
+    new RegExp(`(?:${values.join('|')})`, 'gi'),
+  ]),
+) as Record<Exclude<SolresolInputType, 'auto'>, RegExp>;
+const inputTypeDetectionRegexes = Object.fromEntries(
+  Object.entries(inputTypeMap).map(([key, values]) => [
+    key,
+    new RegExp(`^\s*(?:${values.join('|')})`, 'i'),
+  ]),
+) as Record<Exclude<SolresolInputType, 'auto'>, RegExp>;
+
+export const detectSolresolInputType = (
+  input: string,
+): Exclude<SolresolInputType, 'auto'> | null =>
+  (Object.entries(inputTypeDetectionRegexes).find(([, regex]) =>
+    regex.test(input),
+  )?.[0] as Exclude<SolresolInputType, 'auto'>) ?? null;
+
+const convertSolresolToken = (
+  input: string,
+  from: Exclude<SolresolInputType, 'auto'>,
+  to: Exclude<SolresolInputType, 'auto'>,
+) =>
+  from === to ? input : inputTypeMap[to][inputTypeMap[from].indexOf(input)];
+
+export const convertSolresolInput = (
+  input: string,
+  from: Exclude<SolresolInputType, 'auto'>,
+  to: Exclude<SolresolInputType, 'auto'>,
+): string => {
+  if (from === to) {
+    return input;
+  }
+
+  inputTypeRegexes[from].lastIndex = 0;
+  return Array.from(input.matchAll(inputTypeRegexes[from]))
+    .flatMap((match, index, arr) => {
+      const prefix = index === 0 ? input.slice(0, match.index!) : undefined;
+      const term = convertSolresolToken(match[0], from, to);
+      const suffix = input.slice(
+        match.index! + match[0].length,
+        arr[index + 1]?.index,
+      );
+      return [...(prefix ? [prefix] : []), term, ...(suffix ? [suffix] : [])];
+    })
+    .join('');
 };

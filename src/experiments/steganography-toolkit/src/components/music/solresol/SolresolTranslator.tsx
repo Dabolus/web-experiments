@@ -5,13 +5,14 @@ import React, {
   useEffect,
   useRef,
   useMemo,
+  Fragment,
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { renderToString } from 'react-dom/server';
 import { saveAs } from 'file-saver';
 import {
   OutlinedInputProps,
-  Grid,
+  Unstable_Grid2 as Grid,
   Link,
   Typography,
   FormControl,
@@ -39,10 +40,18 @@ import Loader from '../../Loader';
 import SolresolOutput, {
   SolresolOutputProps,
 } from '../../music/solresol/SolresolOutput';
-import { convertToSolresolForm } from './helpers';
+import {
+  SolresolInputType,
+  SolresolOutputType,
+  SolresolType,
+  convertToSolresolForm,
+  detectSolresolInputType,
+  isSolresolInputType,
+  isSolresolOutputType,
+  convertSolresolInput,
+} from './helpers';
 import type {
   SolresolWorker,
-  SolresolOutputType,
   TranslationOutputItems,
   TranslationOutputItem,
 } from '../../../workers/music/solresol.worker';
@@ -60,14 +69,26 @@ const solresolWorker = setupWorkerClient<SolresolWorker>(
 
 const SolresolTranslator: FunctionComponent = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const input = searchParams.get('input') ?? '';
-  const outputType = (searchParams.get('type') ?? 'full') as SolresolOutputType;
-  const swapped = searchParams.get('swap') === 'true';
+  const input = searchParams.get('text') ?? '';
+  const swapped = searchParams.has('swap');
+  const inputTypeParam = searchParams.get('it');
+  const outputTypeParam = searchParams.get('ot');
+  const inputType =
+    swapped && isSolresolInputType(inputTypeParam) ? inputTypeParam : 'auto';
+  const outputType =
+    !swapped && isSolresolOutputType(outputTypeParam)
+      ? outputTypeParam
+      : 'full';
+  const [detectedInputType, setDetectedInputType] = useState<Exclude<
+    SolresolInputType,
+    'auto'
+  > | null>(null);
+  const finalInputType: Exclude<SolresolInputType, 'auto'> =
+    inputType === 'auto' ? detectedInputType ?? 'full' : inputType;
   const [output, setOutput] = useState<TranslationOutputItems>([]);
   const [hint, setHint] = useState<TranslationOutputItems>([]);
   const [debouncedInput] = useDebounce(input, 300);
   const [exportMenuOpen, setExportMenuOpen] = useState(false);
-
   const exportButtonRef = useRef<HTMLButtonElement>(null);
 
   const {
@@ -82,21 +103,51 @@ const SolresolTranslator: FunctionComponent = () => {
   useEffect(() => {
     const compute = async () => {
       if (!debouncedInput) {
+        setDetectedInputType(null);
         setOutput([]);
         setHint([]);
         return;
       }
 
-      const { output: possibleOutput, hint: possibleHint = [] } = swapped
-        ? await solresolWorker.computeEnglishOutput(debouncedInput)
-        : await solresolWorker.computeSolresolOutput(debouncedInput);
+      if (swapped) {
+        setDetectedInputType(detectSolresolInputType(debouncedInput));
+      }
 
-      setOutput(possibleOutput);
-      setHint(possibleHint);
+      const normalizedInput = swapped
+        ? convertSolresolInput(debouncedInput, finalInputType, 'numeric')
+        : debouncedInput;
+
+      const { output: possibleOutput, hint: possibleHint = [] } = swapped
+        ? await solresolWorker.computeEnglishOutput(normalizedInput)
+        : await solresolWorker.computeSolresolOutput(normalizedInput);
+
+      const transformedOutput = possibleOutput.map(item =>
+        typeof item === 'string'
+          ? convertSolresolInput(item, 'numeric', finalInputType)
+          : item,
+      );
+      const transformedHint = possibleHint.map(item =>
+        typeof item === 'string'
+          ? convertSolresolInput(item, 'numeric', finalInputType)
+          : {
+              ...item,
+              words: item.words.map(word => ({
+                ...word,
+                word: convertSolresolInput(
+                  word.word,
+                  'numeric',
+                  finalInputType,
+                ),
+              })),
+            },
+      );
+
+      setOutput(transformedOutput);
+      setHint(transformedHint);
     };
 
     compute();
-  }, [debouncedInput, swapped]);
+  }, [debouncedInput, finalInputType, swapped]);
 
   const cleanedOutputItems = useMemo(() => {
     const validOutputItems = output.filter(
@@ -129,46 +180,46 @@ const SolresolTranslator: FunctionComponent = () => {
     return ['X: 1', 'M: 4/4', 'L: 1/4', abcNotes].join('\n');
   }, [cleanedOutputItems]);
 
-  const handleSwapClick = useCallback(() => {
+  const handleSwapClick = () => {
     setSearchParams(prev => {
-      const prevSwapped = prev.get('swap') === 'true';
-      prev.set('swap', (!prevSwapped).toString());
+      if (prev.has('swap')) {
+        prev.delete('swap');
+      } else {
+        prev.set('swap', '');
+      }
       return prev;
     });
-  }, []);
+  };
 
-  const handleInput = useCallback<NonNullable<OutlinedInputProps['onInput']>>(
-    event => {
-      setSearchParams(prev => {
-        prev.set('input', (event.target as HTMLTextAreaElement).value);
-        return prev;
-      });
-    },
-    [],
-  );
+  const handleInput: NonNullable<OutlinedInputProps['onInput']> = event => {
+    setSearchParams(prev => {
+      prev.set('text', (event.target as HTMLTextAreaElement).value);
+      return prev;
+    });
+  };
 
-  const handleHintClick = useCallback(() => {
+  const handleHintClick = () => {
     const hintText = hint
       .map(item => (typeof item === 'string' ? item : item.words[0].word))
       .join('');
     setSearchParams(prev => {
-      prev.set('input', hintText);
+      prev.set('text', hintText);
       return prev;
     });
-  }, [hint]);
+  };
 
-  const handleOutputChange = useCallback((output: TranslationOutputItems) => {
+  const handleOutputChange = (output: TranslationOutputItems) => {
     setOutput(output);
-  }, []);
+  };
 
-  const handleOutputTypeChange = useCallback<
-    NonNullable<SelectProps['onChange']>
-  >(event => {
-    setSearchParams(prev => {
-      prev.set('type', event.target.value as SolresolOutputType);
-      return prev;
-    });
-  }, []);
+  const handleTypeChange =
+    (param: string): NonNullable<SelectProps['onChange']> =>
+    event => {
+      setSearchParams(prev => {
+        prev.set(param, event.target.value as SolresolType);
+        return prev;
+      });
+    };
 
   const formatTranslation = useCallback<
     NonNullable<SolresolOutputProps['formatTranslation']>
@@ -185,7 +236,7 @@ const SolresolTranslator: FunctionComponent = () => {
     setExportMenuOpen(false);
   }, []);
 
-  const exportSolresol = useCallback(
+  const exportSolresol =
     (outputType: SolresolOutputType) => async (title?: string) => {
       const { type, ext } = {
         full: { type: 'text/plain', ext: 'txt' },
@@ -205,9 +256,7 @@ const SolresolTranslator: FunctionComponent = () => {
         : renderToString(solresolForm as any);
       const blob = new Blob([output], { type });
       saveAs(blob, `${title ?? 'solresol'}.${ext}`);
-    },
-    [cleanedOutputItems],
-  );
+    };
 
   const handleExport = useCallback(
     (exportFn: (title?: string) => Promise<void>) => async () => {
@@ -219,58 +268,75 @@ const SolresolTranslator: FunctionComponent = () => {
 
   return (
     <Page size="md" title="Music - Solresol - Translate">
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  marginBottom={1}
-                  height={48}
-                >
-                  <FormLabel>{swapped ? 'Solresol' : 'English'}</FormLabel>
-                  <IconButton
-                    aria-label="Swap languages"
-                    onClick={handleSwapClick}
+      <Grid container spacing={3} columns={13}>
+        <Grid xs={13} sm={6}>
+          <FormControl fullWidth>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              marginBottom={1}
+              height={48}
+            >
+              <FormLabel>{swapped ? 'Solresol' : 'English'}</FormLabel>
+              {swapped && (
+                <FormControl variant="standard">
+                  <InputLabel shrink id="solresol-input-type-label">
+                    Type
+                  </InputLabel>
+                  <Select
+                    native
+                    labelId="solresol-input-type-label"
+                    id="solresol-input-type"
+                    value={inputType}
+                    onChange={handleTypeChange('it')}
+                    sx={{ width: 160 }}
                   >
-                    <SwapHorizIcon />
-                  </IconButton>
-                </Box>
-                <OutlinedInput
-                  multiline
-                  rows={5}
-                  value={input}
-                  onInput={handleInput}
-                />
-              </FormControl>
-            </Grid>
-            {hint.length > 0 && (
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">
-                  Did you mean:{' '}
-                  <Link
-                    color="secondary"
-                    role="button"
-                    style={{ cursor: 'pointer' }}
-                    onClick={handleHintClick}
-                  >
-                    {hint.map(item =>
-                      typeof item === 'string' ? (
-                        item
-                      ) : (
-                        <strong>{item.words[0].word}</strong>
-                      ),
+                    <option value="auto">
+                      Detect{detectedInputType ? ` (${detectedInputType})` : ''}
+                    </option>
+                    <option value="full">Full</option>
+                    <option value="abbreviated">Abbreviated</option>
+                    <option value="numeric">Numeric</option>
+                  </Select>
+                </FormControl>
+              )}
+            </Box>
+            <OutlinedInput
+              multiline
+              rows={5}
+              value={input}
+              onInput={handleInput}
+            />
+          </FormControl>
+          {hint.length > 0 && (
+            <Typography variant="subtitle1" mt={1}>
+              Did you mean:{' '}
+              <Link
+                color="secondary"
+                role="button"
+                style={{ cursor: 'pointer' }}
+                onClick={handleHintClick}
+              >
+                {hint.map((item, index) => (
+                  <Fragment key={index}>
+                    {typeof item === 'string' ? (
+                      item
+                    ) : (
+                      <strong>{item.words[0].word}</strong>
                     )}
-                  </Link>
-                </Typography>
-              </Grid>
-            )}
-          </Grid>
+                  </Fragment>
+                ))}
+              </Link>
+            </Typography>
+          )}
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid xs={13} sm={1} sx={{ textAlign: 'center' }}>
+          <IconButton aria-label="Swap languages" onClick={handleSwapClick}>
+            <SwapHorizIcon />
+          </IconButton>
+        </Grid>
+        <Grid xs={13} sm={6}>
           <FormControl fullWidth>
             <Box
               display="flex"
@@ -290,7 +356,7 @@ const SolresolTranslator: FunctionComponent = () => {
                     labelId="solresol-output-type-label"
                     id="solresol-output-type"
                     value={outputType}
-                    onChange={handleOutputTypeChange}
+                    onChange={handleTypeChange('ot')}
                   >
                     <option value="full">Full</option>
                     <option value="abbreviated">Abbreviated</option>

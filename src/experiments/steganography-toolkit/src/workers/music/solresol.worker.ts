@@ -5,15 +5,6 @@ import solresolDictionary from '../../static/solresol/dictionary.json';
 
 import { setupWorkerServer } from '../utils';
 
-export type SolresolOutputType =
-  | 'full'
-  | 'abbreviated'
-  | 'english'
-  | 'numeric'
-  | 'color'
-  | 'scale'
-  | 'stenographic';
-
 export interface TranslationOutputWord {
   word: string;
   meanings: string[];
@@ -299,30 +290,9 @@ export const computeSolresolOutput = async (
   return { output, hint: convertTextHintToOutputItems(textHint) };
 };
 
-const inputTypeMap = {
-  full: [undefined, 'do', 're', 'mi', 'fa', 'sol', 'la', 'si'],
-  abbreviated: [undefined, 'd', 'r', 'm', 'f', 'so', 'l', 's'],
-};
-
-const detectSolresolInputType = (
-  input: string,
-): keyof typeof inputTypeMap | 'numeric' => {
-  if (/^\s*\d/.test(input)) {
-    return 'numeric';
-  }
-
-  if (!/^\s*(?:do|re|mi|fa|sol|la|si)/i.test(input)) {
-    return 'abbreviated';
-  }
-
-  return 'full';
-};
-
 export const computeEnglishOutput = async (
   input: string,
 ): Promise<TranslationOutput> => {
-  const inputType = detectSolresolInputType(input);
-
   const output: TranslationOutputItems = [];
   let textHint = input;
 
@@ -337,16 +307,7 @@ export const computeEnglishOutput = async (
     const [word] = matches;
 
     const translation: DictionaryItem = solresolDictionary.find(
-      ({ solresol }) => {
-        // NOTE: we are doing this conversion for each term because it is much easier,
-        // but it would be most probably more performant to convert the input into numeric instead
-        const normalizedSolresol =
-          inputType === 'numeric'
-            ? solresol
-            : [...solresol].map(code => inputTypeMap[inputType][code]).join('');
-
-        return normalizedSolresol === word.toLowerCase();
-      },
+      ({ solresol }) => solresol === word,
     );
 
     if (translation) {
