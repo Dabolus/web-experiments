@@ -11,6 +11,7 @@ import {
   IconButton,
   Tooltip,
   Link,
+  Select,
 } from '@mui/material';
 import {
   FileCopy as FileCopyIcon,
@@ -20,9 +21,11 @@ import {
 import Page from '../../Page';
 import { setupWorkerClient } from '../../../workers/utils';
 import type {
-  DecodedTextResult,
+  DecodedBinaryResult,
   UnicodeWorker,
 } from '../../../workers/text/unicode.worker';
+import { EncryptionAlgorithm } from '../../../workers/preprocessor.worker';
+import usePreprocessor from '../../../hooks/usePreprocessor';
 
 const unicodeWorker = setupWorkerClient<UnicodeWorker>(
   new Worker(
@@ -45,59 +48,73 @@ const DownloadLink = styled(Link)({
   fontSize: 'inherit',
 }) as typeof Link;
 
-const readFile = (file: File): Promise<Uint8Array> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onabort = reject;
-    reader.onerror = reject;
-    reader.onload = () => resolve(new Uint8Array(reader.result as ArrayBuffer));
-    reader.readAsArrayBuffer(file);
-  });
+const decoder = new TextDecoder();
 
 const UnicodeRevealer: FunctionComponent = () => {
   const [carrierWithPayload, setCarrierWithPayload] = useState('');
-  const [payload, setPayload] = useState<DecodedTextResult | undefined>();
+  const [payload, setPayload] = useState<DecodedBinaryResult | undefined>();
+  const hiddenText = useMemo(
+    () =>
+      payload?.hiddenData ? decoder.decode(payload.hiddenData) : undefined,
+    [payload],
+  );
   const [copyToClipboardText, setCopyToClipboardText] =
     useState('Copy to clipboard');
+  const [encryption, setEncryption] = useState<EncryptionAlgorithm | 'none'>(
+    'none',
+  );
+  const [password, setPassword] = useState('');
+  const { decrypt } = usePreprocessor();
 
   const [debouncedCarrierWithPayload] = useDebounce(carrierWithPayload, 300);
 
   useEffect(() => {
     const compute = async () => {
-      if (!debouncedCarrierWithPayload) {
+      if (
+        !debouncedCarrierWithPayload ||
+        (encryption !== 'none' && !password)
+      ) {
         setPayload(undefined);
         return;
       }
 
-      const decoded = await unicodeWorker.decodeText(
+      const decoded = await unicodeWorker.decodeBinary(
         debouncedCarrierWithPayload,
       );
+      const hiddenData =
+        encryption === 'none'
+          ? decoded.hiddenData
+          : await decrypt(decoded.hiddenData, password, encryption);
 
-      setPayload(decoded);
+      setPayload({
+        originalText: decoded.originalText,
+        hiddenData,
+      });
     };
 
     compute();
-  }, [debouncedCarrierWithPayload]);
+  }, [debouncedCarrierWithPayload, decrypt, encryption, password]);
 
   const handleDecodedOutputCopyToClipboard = async () => {
-    await navigator.clipboard.writeText(payload!.hiddenText);
+    await navigator.clipboard.writeText(hiddenText!);
     setCopyToClipboardText('Copied!');
     setTimeout(() => setCopyToClipboardText('Copy to clipboard'), 2000);
   };
 
   const handleDecodedOutputDownloadAsTxt = () => {
-    saveAs(
-      new Blob([payload!.hiddenText], { type: 'text/plain' }),
-      'output.txt',
-    );
+    saveAs(new Blob([hiddenText!], { type: 'text/plain' }), 'output.txt');
   };
   const handleDecodedOutputDownloadAsFile = async () => {
     const decoded = await unicodeWorker.decodeBinary(
       debouncedCarrierWithPayload,
     );
+    const hiddenData =
+      encryption === 'none'
+        ? decoded.hiddenData
+        : await decrypt(decoded.hiddenData, password, encryption);
 
     saveAs(
-      new Blob([decoded.hiddenData], { type: 'application/octet-stream' }),
+      new Blob([hiddenData], { type: 'application/octet-stream' }),
       'output',
     );
   };
@@ -123,6 +140,47 @@ const UnicodeRevealer: FunctionComponent = () => {
             />
           </FormControl>
         </Grid>
+        <Grid item xs={12}>
+          <Grid container spacing={1}>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <Label>Encryption</Label>
+                <Select
+                  native
+                  value={encryption}
+                  onChange={e =>
+                    setEncryption(
+                      e.target.value as EncryptionAlgorithm | 'none',
+                    )
+                  }
+                >
+                  <option value="none">None</option>
+                  <option value="AES-CTR">AES (Counter)</option>
+                  <option value="AES-GCM">AES (Galois/Counter)</option>
+                  <option value="AES-CBC">AES (Cipher Block Chaining)</option>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <Label>Password</Label>
+                <OutlinedInput
+                  type="password"
+                  readOnly={encryption === 'none'}
+                  value={encryption === 'none' ? '' : password}
+                  onInput={e =>
+                    setPassword((e.target as HTMLInputElement).value)
+                  }
+                  placeholder={
+                    encryption === 'none'
+                      ? 'Select an encryption algorithm first'
+                      : ''
+                  }
+                />
+              </FormControl>
+            </Grid>
+          </Grid>
+        </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth>
             <Label>
@@ -143,20 +201,15 @@ const UnicodeRevealer: FunctionComponent = () => {
           <FormControl fullWidth>
             <Label>
               Hidden text/file
-              {payload?.hiddenText
-                ? ` (length: ${payload.hiddenText.length})`
+              {payload?.hiddenData
+                ? ` (length: ${payload.hiddenData.length})`
                 : ''}
             </Label>
-            <OutlinedInput
-              readOnly
-              multiline
-              rows={8}
-              value={payload?.hiddenText}
-            />
+            <OutlinedInput readOnly multiline rows={8} value={hiddenText} />
           </FormControl>
           <Box mt={2} display="flex" justifyContent="space-between">
             <Box flex="1 1 auto">
-              {payload && /[^ -~]/.test(payload?.hiddenText) && (
+              {hiddenText && /[^ -~]/.test(hiddenText) && (
                 <>
                   Output looks weird?
                   <br />

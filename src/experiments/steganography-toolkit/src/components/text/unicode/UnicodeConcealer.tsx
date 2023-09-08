@@ -18,6 +18,7 @@ import {
   IconButton,
   Tooltip,
   alpha,
+  Select,
 } from '@mui/material';
 import {
   FileCopy as FileCopyIcon,
@@ -26,6 +27,8 @@ import {
 import Page from '../../Page';
 import { setupWorkerClient } from '../../../workers/utils';
 import type { UnicodeWorker } from '../../../workers/text/unicode.worker';
+import usePreprocessor from '../../../hooks/usePreprocessor';
+import { EncryptionAlgorithm } from '../../../workers/preprocessor.worker';
 
 const unicodeWorker = setupWorkerClient<UnicodeWorker>(
   new Worker(
@@ -44,11 +47,11 @@ const Label = styled(FormLabel)(({ theme }) => ({
 const FileContainer = styled('p')<{ isDragActive?: boolean }>(
   ({ theme, isDragActive }) => ({
     padding: '16.5px 14px',
-    margin: 0,
+    margin: theme.spacing(1, 0, 0),
     fontSize: '1rem',
     borderRadius: '4px',
     border: `1px solid ${alpha(theme.palette.divider, 0.23)}`,
-    height: '3.75rem',
+    height: '3.46rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -85,6 +88,11 @@ const UnicodeConcealer: FunctionComponent = () => {
   const [output, setOutput] = useState('');
   const [copyToClipboardText, setCopyToClipboardText] =
     useState('Copy to clipboard');
+  const [encryption, setEncryption] = useState<EncryptionAlgorithm | 'none'>(
+    'none',
+  );
+  const [password, setPassword] = useState('');
+  const { encrypt } = usePreprocessor();
 
   const data = useMemo(
     () => ({ carrier, payloadText, payloadFile }),
@@ -106,31 +114,36 @@ const UnicodeConcealer: FunctionComponent = () => {
     const compute = async () => {
       if (
         !debouncedData.carrier ||
+        (encryption !== 'none' && !password) ||
         (!debouncedData.payloadText && !debouncedData.payloadFile)
       ) {
         setOutput('');
         return;
       }
 
-      if (debouncedData.payloadText) {
-        const encodedText = await unicodeWorker.encodeText(
-          carrier,
-          debouncedData.payloadText,
-        );
+      const dataToEncode = debouncedData.payloadText
+        ? new TextEncoder().encode(debouncedData.payloadText)
+        : debouncedData.payloadFile?.content;
 
-        setOutput(encodedText);
-      } else if (debouncedData.payloadFile) {
-        const encodedBinary = await unicodeWorker.encodeBinary(
-          carrier,
-          debouncedData.payloadFile.content,
-        );
-
-        setOutput(encodedBinary);
+      if (!dataToEncode) {
+        return;
       }
+
+      const finalDataToEncode =
+        encryption === 'none'
+          ? dataToEncode
+          : await encrypt(dataToEncode, password, encryption);
+
+      const encodedText = await unicodeWorker.encodeBinary(
+        debouncedData.carrier,
+        finalDataToEncode,
+      );
+
+      setOutput(encodedText);
     };
 
     compute();
-  }, [debouncedData]);
+  }, [debouncedData, encrypt, encryption, password]);
 
   const handleEncodedOutputCopyToClipboard = async () => {
     await navigator.clipboard.writeText(output);
@@ -160,7 +173,7 @@ const UnicodeConcealer: FunctionComponent = () => {
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Grid container spacing={1}>
+          <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <Label>
@@ -169,7 +182,7 @@ const UnicodeConcealer: FunctionComponent = () => {
                 </Label>
                 <OutlinedInput
                   multiline
-                  rows={4}
+                  rows={3.5}
                   value={payloadText}
                   onInput={e =>
                     setPayloadText((e.target as HTMLInputElement).value)
@@ -192,6 +205,47 @@ const UnicodeConcealer: FunctionComponent = () => {
                       'Drop a file here, or click to select file'}
                   </FileContainer>
                 </div>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid container spacing={1}>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <Label>Encryption</Label>
+                <Select
+                  native
+                  value={encryption}
+                  onChange={e =>
+                    setEncryption(
+                      e.target.value as EncryptionAlgorithm | 'none',
+                    )
+                  }
+                >
+                  <option value="none">None</option>
+                  <option value="AES-CTR">AES (Counter)</option>
+                  <option value="AES-GCM">AES (Galois/Counter)</option>
+                  <option value="AES-CBC">AES (Cipher Block Chaining)</option>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <Label>Password</Label>
+                <OutlinedInput
+                  type="password"
+                  readOnly={encryption === 'none'}
+                  value={encryption === 'none' ? '' : password}
+                  onInput={e =>
+                    setPassword((e.target as HTMLInputElement).value)
+                  }
+                  placeholder={
+                    encryption === 'none'
+                      ? 'Select an encryption algorithm first'
+                      : ''
+                  }
+                />
               </FormControl>
             </Grid>
           </Grid>
