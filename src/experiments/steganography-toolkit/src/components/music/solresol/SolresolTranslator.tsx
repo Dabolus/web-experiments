@@ -191,6 +191,22 @@ const SolresolTranslator: FunctionComponent = () => {
       } else {
         prev.set('swap', '');
       }
+      const outputStr = output
+        .map(item =>
+          typeof item === 'string'
+            ? item
+            : (item.words.find(({ preferred }) => preferred) ?? item.words[0])
+                .word,
+        )
+        .join('');
+      const formattedOutputStr = convertSolresolInput(
+        outputStr,
+        'numeric',
+        isSolresolInputType(outputType) ? outputType : 'full',
+      );
+      if (outputStr) {
+        prev.set('text', formattedOutputStr);
+      }
       return prev;
     });
   };
