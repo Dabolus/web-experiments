@@ -49,7 +49,13 @@ export const colorSolresolCodes = [
 export const numericSolresolCodes = Array.from({ length: 7 }, (_, i) =>
   (i + 1).toString(),
 );
-export const stenographicSolresolCodes = [
+interface StenographicSolresolCode {
+  path: string;
+  doublePath: string;
+  area: [number, number, number, number];
+  start?: (previousNote?: number) => [number, number];
+}
+export const stenographicSolresolCodes: StenographicSolresolCode[] = [
   // do
   {
     path: `
@@ -57,38 +63,58 @@ export const stenographicSolresolCodes = [
       a 25,25 0 1,1 -50,0
       m 50, 0
     `,
-    // m 42.7, 17.7
-    area: [0, -25, 50, 25],
+    doublePath: 'm -50,0 l 50,0',
+    area: [0, -25, 50, 50],
+    start: previousNote => {
+      switch (previousNote) {
+        case 4:
+          return [-7.3, -17.7];
+        case 5:
+          return [-25, 25];
+        case 7:
+          return [-7.3, 17.7];
+        default:
+          return [0, 0];
+      }
+    },
   },
   // re
   {
     path: `l 0, 50`,
-    area: [0, 0, 0, 50],
+    doublePath: 'm -12.5,-25 l 25,0 m -12.5,25',
+    area: [-12.5, 0, 0, 50],
   },
   // mi
   {
     path: `a 25,25 0 1,1 50,0`,
-    area: [0, -25, 50, 0],
+    doublePath: 'm -25,-37.5 l 0,25 m 25,12.5',
+    area: [0, -37.5, 50, 0],
   },
   // fa
   {
     path: `l 50, 50`,
+    doublePath: 'm -37.5,-12.5 l 25,-25 m 12.5,37.5',
     area: [0, 0, 50, 50],
+    start: previousNote => (previousNote === 1 ? [-7.3, -17.7] : [0, 0]),
   },
   // sol
   {
     path: `l 50, 0`,
-    area: [0, 0, 50, 0],
+    doublePath: 'm -25,-12.5 l 0,25 m 25,-12.5',
+    area: [0, -12.5, 50, 0],
   },
   // la
   {
     path: `a 25,25 0 0,0 0,50`,
-    area: [-25, 0, 0, 50],
+    doublePath: 'm -37.5,-25 l 25,0 m 12.5,25',
+    area: [-37.5, 0, 0, 50],
   },
   // si
   {
     path: `l 50, -50`,
+    doublePath: 'm -37.5,12.5 l 25,25 m 12.5,-37.5',
     area: [0, -50, 50, 0],
+    start: previousNote => (previousNote === 1 ? [-7.3, 17.7] : [0, 0]),
   },
 ];
 
@@ -208,14 +234,26 @@ export const convertToSolresolForm = (
     case 'stenographic': {
       let [minX, minY, maxX, maxY] = [0, 0, 0, 0];
       const path = normalizedWordOrPhrase
-        .map(code => {
-          const { path = 'm 50, 0', area = [0, 0, 50, 0] } =
-            typeof code === 'number' ? stenographicSolresolCodes[code] : {};
+        .map((code, index) => {
+          const {
+            path = 'm 50,0',
+            doublePath = '',
+            area = [0, 0, 50, 0],
+            start = () => [0, 0],
+          } = typeof code === 'number' ? stenographicSolresolCodes[code] : {};
           minX += area[0];
           minY += area[1];
           maxX += area[2];
           maxY += area[3];
-          return path;
+          const previousCode = normalizedWordOrPhrase[index - 1];
+          const [pathStartX, pathStartY] = start(
+            typeof previousCode === 'number' ? previousCode + 1 : undefined,
+          );
+          const startPath =
+            pathStartX !== 0 && pathStartY !== 0
+              ? `m ${pathStartX},${pathStartY} `
+              : '';
+          return `${startPath}${previousCode === code ? doublePath : path}`;
         })
         .join(' ');
       const width = maxX - minX;
