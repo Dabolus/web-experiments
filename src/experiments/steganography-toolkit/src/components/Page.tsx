@@ -16,7 +16,7 @@ const Card = styled(Box)<PageProps>(({ theme, size = 'sm' }) => ({
   margin: 0,
   flex: '1 1 auto',
 
-  [theme.breakpoints.up('md')]: {
+  [theme.breakpoints.up('sm')]: {
     flex: '0 0 auto',
     margin: '0 auto',
     borderRadius: '.5rem',

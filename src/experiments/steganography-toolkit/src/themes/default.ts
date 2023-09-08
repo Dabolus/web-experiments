@@ -46,7 +46,7 @@ const createDefaultTheme = (mode?: PaletteMode) =>
           styleOverrides: {
             root: ({ theme }: { theme: Theme }) => ({
               padding: 0,
-              [theme.breakpoints.up('md')]: {
+              [theme.breakpoints.up('sm')]: {
                 padding: theme.spacing(3),
               },
             }),
