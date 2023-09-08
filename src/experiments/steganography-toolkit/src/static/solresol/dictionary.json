@@ -8,7 +8,7 @@
   { "solresol": "7", "english": ["yes", "willingly"] },
   {
     "solresol": "12",
-    "english": ["i", "me", "myself", "personally", "we", "ourselves"]
+    "english": ["i", "me", "myself", "personally", "us", "we", "ourselves"]
   },
   {
     "solresol": "13",
@@ -11583,8 +11583,8 @@
   {
     "solresol": "6671",
     "english": [
-      "gems",
-      "precious stones",
+      "gem",
+      "precious stone",
       "diamond",
       "red diamond",
       "ruby",
