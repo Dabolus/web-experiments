@@ -84,7 +84,6 @@ const Root: FunctionComponent = () => {
           <Button
             color="secondary"
             size="small"
-            autoFocus
             disabled={isUpdating}
             onClick={handleUpdate}
           >
