@@ -65,7 +65,7 @@ const TopbarLayout: FunctionComponent<PropsWithChildren<TopbarLayoutProps>> = ({
   children,
 }) => {
   const theme = useTheme();
-  const isNarrow = useMediaQuery(theme.breakpoints.up('sm'));
+  const isNarrow = useMediaQuery(theme.breakpoints.up('md'));
 
   const handleMenuButtonClick = useCallback(() => {
     onMenuButtonClick?.();

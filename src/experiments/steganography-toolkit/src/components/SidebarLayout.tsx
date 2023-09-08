@@ -19,7 +19,7 @@ const Toolbar = styled(MuiToolbar)(({ theme }) => theme.mixins.toolbar);
 const Menu = styled('nav')(({ theme }) => ({
   width: 'min(100vw - 56px, 280px)',
 
-  [theme.breakpoints.up('sm')]: {
+  [theme.breakpoints.up('md')]: {
     width: 'min(100vw - 64px, 320px)',
   },
 }));
@@ -30,7 +30,7 @@ const Content = styled('div')(({ theme }) => ({
   float: 'right',
   position: 'relative',
 
-  [theme.breakpoints.up('sm')]: {
+  [theme.breakpoints.up('md')]: {
     width: 'calc(100vw - min(100vw - 64px, 320px))',
   },
 }));
@@ -39,7 +39,7 @@ const SidebarLayout: FunctionComponent<
   PropsWithChildren<SidebarLayoutProps>
 > = ({ menuContent, open, children, ...props }) => {
   const theme = useTheme();
-  const isNarrow = useMediaQuery(theme.breakpoints.up('sm'));
+  const isNarrow = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
     <>

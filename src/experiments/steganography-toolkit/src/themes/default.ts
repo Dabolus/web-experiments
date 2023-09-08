@@ -1,4 +1,4 @@
-import { createTheme, PaletteMode } from '@mui/material';
+import { createTheme, PaletteMode, Theme } from '@mui/material';
 import { enUS } from '@mui/material/locale';
 
 const createDefaultTheme = (mode?: PaletteMode) =>
@@ -44,9 +44,12 @@ const createDefaultTheme = (mode?: PaletteMode) =>
         // @ts-expect-error - TabPanel is still in @mui/lab, so typings are not yet available
         MuiTabPanel: {
           styleOverrides: {
-            root: {
+            root: ({ theme }: { theme: Theme }) => ({
               padding: 0,
-            },
+              [theme.breakpoints.up('md')]: {
+                padding: theme.spacing(3),
+              },
+            }),
           },
         },
       },
