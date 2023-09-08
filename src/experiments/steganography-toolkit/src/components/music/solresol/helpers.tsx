@@ -336,15 +336,16 @@ export const convertSolresolInput = (
   }
 
   inputTypeRegexes[from].lastIndex = 0;
-  return Array.from(input.matchAll(inputTypeRegexes[from]))
-    .flatMap((match, index, arr) => {
-      const prefix = index === 0 ? input.slice(0, match.index!) : undefined;
+  const matches = Array.from(input.matchAll(inputTypeRegexes[from]));
+  return [
+    input.slice(0, matches[0]?.index),
+    ...matches.map((match, index, arr) => {
       const term = convertSolresolToken(match[0], from, to);
       const suffix = input.slice(
         match.index! + match[0].length,
         arr[index + 1]?.index,
       );
-      return [...(prefix ? [prefix] : []), term, ...(suffix ? [suffix] : [])];
-    })
-    .join('');
+      return `${term}${suffix}`;
+    }),
+  ].join('');
 };
