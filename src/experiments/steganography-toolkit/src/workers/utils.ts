@@ -39,7 +39,7 @@ export const setupWorkerClient = <T extends Worker, U = Omit<T, keyof Worker>>(
           const handle = window.setTimeout(() => {
             delete eventsQueueMap[id];
             reject(new Error('Timeout'));
-          }, 10000);
+          }, 60000);
           const wrappedResolve: typeof resolve = (...args) => {
             window.clearTimeout(handle);
             return resolve(...args);
