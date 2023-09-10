@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
@@ -19,12 +19,16 @@ const unicodeTabsIndexes = Object.fromEntries(
 );
 
 const Unicode: FunctionComponent<TopbarLayoutProps> = props => {
-  const { tab = UnicodeTab.INFO } = useParams();
+  const { tab } = useParams();
   const navigate = useNavigate();
 
   const handleIndexChange = (index: number) => {
     navigate(`../unicode/${unicodeTabsNames[index]}`);
   };
+
+  if (!tab) {
+    return <Navigate to={`../unicode/${UnicodeTab.INFO}`} replace />;
+  }
 
   return (
     <TabContext value={tab}>

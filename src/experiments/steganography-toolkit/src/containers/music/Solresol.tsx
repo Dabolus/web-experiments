@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
@@ -17,12 +17,16 @@ const solresolTabsIndexes = Object.fromEntries(
 );
 
 const Solresol: FunctionComponent<TopbarLayoutProps> = props => {
-  const { tab = SolresolTab.INFO } = useParams();
+  const { tab } = useParams();
   const navigate = useNavigate();
 
   const handleIndexChange = (index: number) => {
     navigate(`../solresol/${solresolTabsNames[index]}`);
   };
+
+  if (!tab) {
+    return <Navigate to={`../solresol/${SolresolTab.INFO}`} replace />;
+  }
 
   return (
     <TabContext value={tab}>

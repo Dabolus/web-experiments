@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
@@ -17,12 +17,21 @@ const cicada3301DyadsTabsIndexes = Object.fromEntries(
 );
 
 const Cicada3301Dyads: FunctionComponent<TopbarLayoutProps> = props => {
-  const { tab = Cicada3301DyadsTab.INFO } = useParams();
+  const { tab } = useParams();
   const navigate = useNavigate();
 
   const handleIndexChange = (index: number) => {
     navigate(`../cicada-3301-dyads/${cicada3301DyadsTabsNames[index]}`);
   };
+
+  if (!tab) {
+    return (
+      <Navigate
+        to={`../cicada-3301-dyads/${Cicada3301DyadsTab.INFO}`}
+        replace
+      />
+    );
+  }
 
   return (
     <TabContext value={tab}>

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
@@ -17,12 +17,16 @@ const spectrogramTabsIndexes = Object.fromEntries(
 );
 
 const Spectrogram: FunctionComponent<TopbarLayoutProps> = props => {
-  const { tab = SpectrogramTab.INFO } = useParams();
+  const { tab } = useParams();
   const navigate = useNavigate();
 
   const handleIndexChange = (index: number) => {
     navigate(`../spectrogram/${spectrogramTabsNames[index]}`);
   };
+
+  if (!tab) {
+    return <Navigate to={`../spectrogram/${SpectrogramTab.INFO}`} replace />;
+  }
 
   return (
     <TabContext value={tab}>
