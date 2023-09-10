@@ -3728,6 +3728,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/colormap@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "@types/colormap@npm:2.3.2"
+  checksum: 6cc597b5ae7b481f5dcf3b2ad96a5d43d6769bf7739e1ecfb9db825f8f65fd3c2fd7e9786769add6e0ad6fbdccc237f59b2a876b269278fd06916c00e42a88e2
+  languageName: node
+  linkType: hard
+
 "@types/connect-history-api-fallback@npm:^1.3.5":
   version: 1.3.5
   resolution: "@types/connect-history-api-fallback@npm:1.3.5"
@@ -4526,6 +4533,7 @@ __metadata:
     "@mui/lab": ^5.0.0-alpha.138
     "@mui/material": ^5.14.1
     "@preact/preset-vite": ^2.5.0
+    "@types/colormap": ^2.3.2
     "@types/file-saver": ^2.0.5
     "@types/node": 18
     "@types/react": ^18.2.15
@@ -4533,6 +4541,7 @@ __metadata:
     "@types/react-swipeable-views": ^0.13.2
     abcjs: 6.2.2
     clsx: ^2.0.0
+    colormap: ^2.3.2
     compromise: ^14.10.0
     file-saver: ^2.0.5
     firebase: ^10.3.1
@@ -4550,6 +4559,7 @@ __metadata:
     use-debounce: ^9.0.4
     vite: ^4.4.6
     vite-plugin-pwa: ^0.16.4
+    wavesurfer.js: ^7.2.2
     workbox-core: ^7.0.0
     workbox-google-analytics: ^7.0.0
     workbox-precaching: ^7.0.0
@@ -6562,6 +6572,15 @@ __metadata:
   version: 2.0.19
   resolution: "colorette@npm:2.0.19"
   checksum: 888cf5493f781e5fcf54ce4d49e9d7d698f96ea2b2ef67906834bb319a392c667f9ec69f4a10e268d2946d13a9503d2d19b3abaaaf174e3451bfe91fb9d82427
+  languageName: node
+  linkType: hard
+
+"colormap@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "colormap@npm:2.3.2"
+  dependencies:
+    lerp: ^1.0.3
+  checksum: 4624c1817fecb9aff4333d03269908b25154b43d5686866f46d99e84ee15cac12fd5f6403a5af03120c8c97aad0e37b1f0f833c9fe6e0fae1fc15d94f87843a1
   languageName: node
   linkType: hard
 
@@ -11897,6 +11916,13 @@ __metadata:
   dependencies:
     readable-stream: ^2.0.5
   checksum: 822c54c6b87701a6491c70d4fabc4cafcf0f87d6b656af168ee7bb3c45de9128a801cb612e6eeeefc64d298a7524a698dd49b13b0121ae50c2ae305f0dcc5310
+  languageName: node
+  linkType: hard
+
+"lerp@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "lerp@npm:1.0.3"
+  checksum: 352d072fd44378adedaa22b99e718e830489ac715f7c18c1da9033758b2c3d28ac54677e3e829eaf6dc7fd99dbccd97c514e5775ba5ad6f88d1673692d666c14
   languageName: node
   linkType: hard
 
@@ -18952,6 +18978,13 @@ __metadata:
     watchpack-chokidar2:
       optional: true
   checksum: 8b7cb8c8df8f4dd0e8ac47693c0141c4f020a4b031411247d600eca31522fde6f1f9a3a6f6518b46e71f7971b0ed5734c08c60d7fdd2530e7262776286f69236
+  languageName: node
+  linkType: hard
+
+"wavesurfer.js@npm:^7.2.2":
+  version: 7.2.2
+  resolution: "wavesurfer.js@npm:7.2.2"
+  checksum: 3f379b095ee00e7f01158743c29542099d67a3d80a35675de23daadd5b363041b26fb7e175330e322a0d69092324742287719eeaf548aae70f42f821a6cc1704
   languageName: node
   linkType: hard
 

@@ -17,6 +17,7 @@
     "@types/react-dom": "^18.2.7",
     "abcjs": "6.2.2",
     "clsx": "^2.0.0",
+    "colormap": "^2.3.2",
     "compromise": "^14.10.0",
     "file-saver": "^2.0.5",
     "firebase": "^10.3.1",
@@ -30,6 +31,7 @@
     "react-router-dom": "^6.14.2",
     "react-swipeable-views": "^0.14.0",
     "use-debounce": "^9.0.4",
+    "wavesurfer.js": "^7.2.2",
     "workbox-core": "^7.0.0",
     "workbox-google-analytics": "^7.0.0",
     "workbox-precaching": "^7.0.0",
@@ -37,6 +39,7 @@
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",
+    "@types/colormap": "^2.3.2",
     "@types/file-saver": "^2.0.5",
     "@types/react-swipeable-views": "^0.13.2",
     "firebase-tools": "^12.4.5",

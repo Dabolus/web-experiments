@@ -107,6 +107,10 @@ const MENU_ITEMS: MenuItem[] = [
         title: 'Solresol',
       },
       {
+        key: 'spectrogram',
+        title: 'Spectrogram',
+      },
+      {
         key: 'cicada-3301-dyads',
         title: 'Cicada 3301 Dyads',
       },
