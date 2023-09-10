@@ -8,7 +8,7 @@ import type {
 
 // TODO: this code was rushed and needs to be improved
 
-export interface Cicada3301DyadsWorker {
+export interface Cicada3301DyadsWorker extends Worker {
   computeAbc(data: Cicada3301DyadsFormValue): Promise<string>;
 }
 

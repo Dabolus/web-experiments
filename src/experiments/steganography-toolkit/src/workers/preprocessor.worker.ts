@@ -2,7 +2,7 @@ import { setupWorkerServer } from './utils';
 
 export type EncryptionAlgorithm = 'AES-CTR' | 'AES-CBC' | 'AES-GCM';
 
-export interface PreprocessorWorker {
+export interface PreprocessorWorker extends Worker {
   encrypt(
     message: string | Uint8Array,
     password: string | Uint8Array,

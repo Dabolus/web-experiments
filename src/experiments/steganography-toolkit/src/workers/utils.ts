@@ -9,9 +9,9 @@ export type PromisifiedObject<T extends {}> = {
     : T[K];
 };
 
-export const setupWorkerClient = <T extends {}>(
+export const setupWorkerClient = <T extends Worker, U = Omit<T, keyof Worker>>(
   worker: Worker,
-  methods: (keyof T)[],
+  methods: (keyof U)[],
 ): PromisifiedObject<T> => {
   const eventsQueueMap: Record<
     string,
@@ -55,14 +55,16 @@ export const setupWorkerClient = <T extends {}>(
   ) as PromisifiedObject<T>;
 };
 
-export const setupWorkerServer = <T extends {}>(methods: T) => {
+export const setupWorkerServer = <T extends Worker, U = Omit<T, keyof Worker>>(
+  methods: U,
+) => {
   self.addEventListener('message', async event => {
     const { id, method, args = [] } = event.data;
-    if (!id || !Object.keys(methods).includes(method)) {
+    if (!id || !Object.keys(methods as {}).includes(method)) {
       return;
     }
     try {
-      const result = await (methods[method as keyof T] as Function)(...args);
+      const result = await (methods[method as keyof U] as Function)(...args);
       self.postMessage({
         id,
         status: 'fulfilled',

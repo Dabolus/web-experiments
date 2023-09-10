@@ -3,6 +3,7 @@ import nlp from 'compromise';
 import solresolDictionary from '../../static/solresol/dictionary.json';
 import { setupWorkerServer } from '../utils';
 import type { Verbs } from 'compromise/types/view/three';
+import type { PickMatching } from '../../helpers';
 
 export interface TranslationOutputWord {
   word: string;
@@ -31,7 +32,7 @@ export interface TranslationOutput {
 
 export type Translator = (input: string) => Promise<TranslationOutput>;
 
-export interface SolresolWorker {
+export interface SolresolWorker extends Worker {
   computeSolresolOutput: Translator;
   computeEnglishOutput: Translator;
 }
@@ -290,14 +291,9 @@ export const computeSolresolOutput = async (
   return { output, hint: convertTextHintToOutputItems(textHint) };
 };
 
-type PickMatching<T, V> = {
-  [K in keyof T as T[K] extends V ? K : never]: T[K];
-};
-type ExtractMethods<T> = PickMatching<T, () => any>;
-
 const solresolToNlpTransformMap: Record<
   string,
-  (keyof ExtractMethods<Verbs>)[]
+  (keyof PickMatching<Verbs, () => any>)[]
 > = {
   default: ['toInfinitive', 'toPresentTense'],
   '11': ['toPresentTense', 'toPastTense'],
