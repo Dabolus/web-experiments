@@ -76,7 +76,16 @@ const SpectrogramGenerator: FunctionComponent = () => {
     disabled: isProcessing,
     onDrop: onFileDrop,
     accept: {
-      'image/*': ['.png', '.gif', '.jpeg', '.jpg', '.bmp'],
+      'image/*': [
+        '.png',
+        '.gif',
+        '.jpeg',
+        '.jpg',
+        '.bmp',
+        '.webp',
+        '.avif',
+        '.svg',
+      ],
     },
   });
 
