@@ -7,6 +7,7 @@ export interface GetImageSpectrogramOptions {
   sampleRate?: number;
   minFrequency?: number;
   maxFrequency?: number;
+  logarithmic?: boolean;
 }
 
 export interface SpectrogramWorker extends Worker {
@@ -21,13 +22,16 @@ export const getImageSpectrogram: SpectrogramWorker['getImageSpectrogram'] =
     sampleRate = 44100,
     minFrequency = 0,
     maxFrequency = sampleRate / 2,
+    logarithmic,
   }): Promise<Blob> => {
     const tmpData = [];
     const data2 = [];
     const numSamples = Math.round(sampleRate * duration);
     const samplesPerPixel = Math.floor(numSamples / imageData.width);
     const frequencyHeight = maxFrequency - minFrequency;
-    const heightFactor = frequencyHeight / imageData.height;
+    const heightFactor = logarithmic
+      ? Math.log2(frequencyHeight) / imageData.height
+      : frequencyHeight / imageData.height;
     let maxFreq = 0;
 
     let imageMinColorIntensity = 255 * 3;
@@ -56,9 +60,11 @@ export const getImageSpectrogram: SpectrogramWorker['getImageSpectrogram'] =
         const colorsVolumePercentage =
           (colorsSum / imageMaxColorIntensity) * 100;
         const volume = Math.pow(colorsVolumePercentage, 2);
-
-        const freq =
-          Math.round(heightFactor * (imageData.height - y + 1)) + minFrequency;
+        const freq = logarithmic
+          ? Math.pow(2, heightFactor * (imageData.height - y + 1)) +
+            minFrequency
+          : Math.round(heightFactor * (imageData.height - y + 1)) +
+            minFrequency;
         result += Math.floor(volume * Math.cos((freq * 6.28 * x) / sampleRate));
       }
 

@@ -18,6 +18,8 @@ import {
   Button,
   Stack,
   Typography,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material';
 import {
   WarningAmber as WarningAmberIcon,
@@ -61,6 +63,7 @@ const SpectrogramGenerator: FunctionComponent = () => {
   const [minFrequency, setMinFrequency] = useState(0);
   const [maxFrequency, setMaxFrequency] = useState(sampleRate / 2);
   const [density, setDensity] = useState(4);
+  const [logarithmic, setLogarithmic] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [waveSurfer, setWaveSurfer] = useState<WaveSurfer | undefined>();
@@ -104,6 +107,7 @@ const SpectrogramGenerator: FunctionComponent = () => {
       sampleRate,
       minFrequency,
       maxFrequency,
+      logarithmic,
     });
 
     setOutput(outputWav);
@@ -275,6 +279,29 @@ const SpectrogramGenerator: FunctionComponent = () => {
                   </FormHelperText>
                 )}
               </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                disabled={isProcessing}
+                label="Use logarithmic scale"
+                control={
+                  <Checkbox
+                    value={logarithmic}
+                    onChange={e => setLogarithmic(e.target.checked)}
+                  />
+                }
+              />
+              {logarithmic && (
+                <FormHelperText
+                  component={Stack}
+                  direction="row"
+                  alignItems="center"
+                  gap={0.5}
+                >
+                  <WarningAmberIcon fontSize="inherit" />
+                  <div>Output will look less precise</div>
+                </FormHelperText>
+              )}
             </Grid>
           </Grid>
         </Grid>
