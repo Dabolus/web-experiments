@@ -29,4 +29,5 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT_BASE64: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BASE64 }}
           FIREBASE_PROJECT: ${{ secrets.FIREBASE_PROJECT }}
+          RECAPTCHA_SECRET: ${{ secrets.RECAPTCHA_SECRET }}
           GOOGLE_APPLICATION_CREDENTIALS: firebase-service-account.json
