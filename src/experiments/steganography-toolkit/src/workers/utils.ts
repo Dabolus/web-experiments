@@ -5,14 +5,17 @@ const randomId = () => {
 
 export type PromisifiedObject<T extends {}> = {
   [K in keyof T]: T[K] extends (...args: infer A) => infer R
-    ? (...args: A) => Promise<R>
+    ? (...args: A) => Promise<Awaited<R>>
     : T[K];
 };
+
+export type PromisifiedWorker<T extends Worker> = Worker &
+  PromisifiedObject<Omit<T, keyof Worker>>;
 
 export const setupWorkerClient = <T extends Worker, U = Omit<T, keyof Worker>>(
   worker: Worker,
   methods: (keyof U)[],
-): PromisifiedObject<T> => {
+): PromisifiedWorker<T> => {
   const eventsQueueMap: Record<
     string,
     { resolve: Function; reject: Function }
@@ -30,29 +33,32 @@ export const setupWorkerClient = <T extends Worker, U = Omit<T, keyof Worker>>(
     }
   });
 
-  return Object.fromEntries(
-    methods.map(method => [
-      method,
-      (...args: unknown[]) =>
-        new Promise((resolve, reject) => {
-          const id = randomId();
-          const handle = window.setTimeout(() => {
-            delete eventsQueueMap[id];
-            reject(new Error('Timeout'));
-          }, 60000);
-          const wrappedResolve: typeof resolve = (...args) => {
-            window.clearTimeout(handle);
-            return resolve(...args);
-          };
-          eventsQueueMap[id] = { resolve: wrappedResolve, reject };
-          worker.postMessage({
-            id,
-            method,
-            args,
-          });
-        }),
-    ]),
-  ) as PromisifiedObject<T>;
+  return Object.assign(
+    worker,
+    Object.fromEntries(
+      methods.map(method => [
+        method,
+        (...args: unknown[]) =>
+          new Promise((resolve, reject) => {
+            const id = randomId();
+            const handle = window.setTimeout(() => {
+              delete eventsQueueMap[id];
+              reject(new Error('Timeout'));
+            }, 120000);
+            const wrappedResolve: typeof resolve = (...args) => {
+              window.clearTimeout(handle);
+              return resolve(...args);
+            };
+            eventsQueueMap[id] = { resolve: wrappedResolve, reject };
+            worker.postMessage({
+              id,
+              method,
+              args,
+            });
+          }),
+      ]),
+    ),
+  ) as PromisifiedWorker<T>;
 };
 
 export const setupWorkerServer = <T extends Worker, U = Omit<T, keyof Worker>>(

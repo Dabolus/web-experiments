@@ -14,6 +14,14 @@ export interface SpectrogramWorker extends Worker {
   getImageSpectrogram(options: GetImageSpectrogramOptions): Promise<Blob>;
 }
 
+export interface GetImageSpectrogramProgressMessage {
+  type: 'progress';
+  phase: 'start' | 'preprocess' | 'process' | 'encode' | 'end';
+  progress: number;
+}
+
+const sampleBits = 16;
+
 export const getImageSpectrogram: SpectrogramWorker['getImageSpectrogram'] =
   async ({
     imageData,
@@ -24,9 +32,14 @@ export const getImageSpectrogram: SpectrogramWorker['getImageSpectrogram'] =
     maxFrequency = sampleRate / 2,
     logarithmic,
   }): Promise<Blob> => {
-    const tmpData = [];
-    const data2 = [];
+    postMessage({
+      type: 'progress',
+      phase: 'start',
+      progress: 0,
+    });
+
     const numSamples = Math.round(sampleRate * duration);
+    const tmpData = new Array<number>(numSamples);
     const samplesPerPixel = Math.floor(numSamples / imageData.width);
     const frequencyHeight = maxFrequency - minFrequency;
     const heightFactor = logarithmic
@@ -44,6 +57,14 @@ export const getImageSpectrogram: SpectrogramWorker['getImageSpectrogram'] =
       const colorsSum = (red + green + blue) * (alpha / 255);
       imageMinColorIntensity = Math.min(imageMinColorIntensity, colorsSum);
       imageMaxColorIntensity = Math.max(imageMaxColorIntensity, colorsSum);
+
+      if (i % (imageData.data.length / 100) === 0) {
+        postMessage({
+          type: 'progress',
+          phase: 'preprocess',
+          progress: i / imageData.data.length,
+        });
+      }
     }
 
     for (let x = 0; x < numSamples; x++) {
@@ -58,7 +79,9 @@ export const getImageSpectrogram: SpectrogramWorker['getImageSpectrogram'] =
         const alpha = imageData.data[pixelIndex + 3];
         const colorsSum = (red + green + blue) * (alpha / 255);
         const colorsVolumePercentage =
-          (colorsSum / imageMaxColorIntensity) * 100;
+          ((colorsSum - imageMinColorIntensity) /
+            (imageMaxColorIntensity - imageMinColorIntensity)) *
+          100;
         const volume = Math.pow(colorsVolumePercentage, 2);
         const freq = logarithmic
           ? Math.pow(2, heightFactor * (imageData.height - y + 1)) +
@@ -68,66 +91,92 @@ export const getImageSpectrogram: SpectrogramWorker['getImageSpectrogram'] =
         result += Math.floor(volume * Math.cos((freq * 6.28 * x) / sampleRate));
       }
 
-      tmpData.push(result);
+      tmpData[x] = result;
 
       if (Math.abs(result) > maxFreq) {
         maxFreq = Math.abs(result);
       }
+
+      if (x % (numSamples / 100) === 0) {
+        postMessage({
+          type: 'progress',
+          phase: 'process',
+          progress: x / numSamples,
+        });
+      }
     }
 
-    for (const byte of tmpData) {
-      data2.push((32767 * byte) / maxFreq);
-    }
+    const maxVolumePositiveValue = Math.pow(2, sampleBits - 1) - 1;
+    const data = tmpData.map(byte =>
+      Math.round((maxVolumePositiveValue * byte) / maxFreq),
+    );
 
-    const sampleBits = 16;
     const numChannels = 1;
-
-    const dataLength = data2.length * (sampleBits / 8);
+    const dataLength = data.length * (sampleBits / 8);
     const buffer = new ArrayBuffer(44 + dataLength);
-    const data = new DataView(buffer);
+    const dataView = new DataView(buffer);
     let offset = 0;
 
     const writeString = (str: string) => {
       for (let i = 0; i < str.length; i++) {
-        data.setUint8(offset + i, str.charCodeAt(i));
+        dataView.setUint8(offset + i, str.charCodeAt(i));
       }
     };
 
     writeString('RIFF');
     offset += 4;
-    data.setUint32(offset, 36 + dataLength, true);
+    dataView.setUint32(offset, 36 + dataLength, true);
     offset += 4;
     writeString('WAVE');
     offset += 4;
     writeString('fmt ');
     offset += 4;
-    data.setUint32(offset, 16, true);
+    dataView.setUint32(offset, 16, true);
     offset += 4;
-    data.setUint16(offset, 1, true);
+    dataView.setUint16(offset, 1, true);
     offset += 2;
-    data.setUint16(offset, numChannels, true);
+    dataView.setUint16(offset, numChannels, true);
     offset += 2;
-    data.setUint32(offset, sampleRate, true);
+    dataView.setUint32(offset, sampleRate, true);
     offset += 4;
-    data.setUint32(offset, numChannels * sampleRate * (sampleBits / 8), true);
+    dataView.setUint32(
+      offset,
+      numChannels * sampleRate * (sampleBits / 8),
+      true,
+    );
     offset += 4;
-    data.setUint16(offset, numChannels * (sampleBits / 8), true);
+    dataView.setUint16(offset, numChannels * (sampleBits / 8), true);
     offset += 2;
-    data.setUint16(offset, sampleBits, true);
+    dataView.setUint16(offset, sampleBits, true);
     offset += 2;
     writeString('data');
     offset += 4;
-    data.setUint32(offset, dataLength, true);
+    dataView.setUint32(offset, dataLength, true);
     offset += 4;
 
-    for (const byte of data2) {
-      data.setInt8(offset, byte & 0xff);
-      offset += 1;
-      data.setInt8(offset, (byte >> 8) & 0xff);
-      offset += 1;
+    for (const byte of data) {
+      for (let i = 0; i < sampleBits / 8; i++) {
+        dataView.setInt8(offset, (byte >> (i * 8)) & 0xff);
+        offset += 1;
+      }
+
+      if (offset % (data.length / 100) === 0) {
+        postMessage({
+          type: 'progress',
+          phase: 'encode',
+          progress: offset / data.length,
+        });
+      }
     }
 
-    const blob = new Blob([data], { type: 'audio/x-wav' });
+    const blob = new Blob([dataView], { type: 'audio/x-wav' });
+
+    postMessage({
+      type: 'progress',
+      phase: 'end',
+      progress: 1,
+    });
+
     return blob;
   };
 

@@ -1,4 +1,11 @@
-import React, { FunctionComponent, useState, useCallback, useRef } from 'react';
+import React, {
+  FunctionComponent,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  startTransition,
+} from 'react';
 import { useDropzone } from 'react-dropzone';
 import colormap from 'colormap';
 import WaveSurfer from 'wavesurfer.js';
@@ -29,10 +36,13 @@ import {
 } from '@mui/icons-material';
 import Page from '../../Page';
 import { setupWorkerClient } from '../../../workers/utils';
-import type { SpectrogramWorker } from '../../../workers/music/spectrogram.worker';
+import type {
+  GetImageSpectrogramProgressMessage,
+  SpectrogramWorker,
+} from '../../../workers/music/spectrogram.worker';
 import { getImageData, readFile } from '../../../helpers';
 import FileContainer, { UserFile } from '../../text/unicode/FileContainer';
-import Loader from '../../Loader';
+import LoadingOverlay from '../../LoadingOverlay';
 
 const spectrogramWorker = setupWorkerClient<SpectrogramWorker>(
   new Worker(
@@ -56,6 +66,27 @@ const Label = styled(FormLabel)(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
 
+const statusToLabelMap: Record<
+  GetImageSpectrogramProgressMessage['phase'],
+  string
+> = {
+  start: 'Starting...',
+  preprocess: 'Preprocessing...',
+  process: 'Processing...',
+  encode: 'Encoding...',
+  end: 'Done',
+};
+const startStatus: GetImageSpectrogramProgressMessage = {
+  type: 'progress',
+  phase: 'start',
+  progress: 0,
+};
+const endStatus: GetImageSpectrogramProgressMessage = {
+  type: 'progress',
+  phase: 'end',
+  progress: 1,
+};
+
 const SpectrogramGenerator: FunctionComponent = () => {
   const [image, setImage] = useState<UserFile<string> | undefined>();
   const [duration, setDuration] = useState(10);
@@ -65,7 +96,9 @@ const SpectrogramGenerator: FunctionComponent = () => {
   const [density, setDensity] = useState(4);
   const [logarithmic, setLogarithmic] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [status, setStatus] =
+    useState<GetImageSpectrogramProgressMessage>(endStatus);
+  const isProcessing = status.progress < 1;
   const [waveSurfer, setWaveSurfer] = useState<WaveSurfer | undefined>();
   const [output, setOutput] = useState<Blob | undefined>();
   const spectrogramContainerRef = useRef<HTMLDivElement | null>(null);
@@ -96,7 +129,7 @@ const SpectrogramGenerator: FunctionComponent = () => {
     if (!image || !spectrogramContainerRef?.current) {
       return;
     }
-    setIsProcessing(true);
+    setStatus(startStatus);
     const imageData = await getImageData(image.content);
     const aspectRatio = imageData.width / imageData.height;
     const resizedImageWidth = Math.round(spectrogramHeight * aspectRatio);
@@ -134,7 +167,7 @@ const SpectrogramGenerator: FunctionComponent = () => {
     if (waveSurfer) {
       waveSurfer.setOptions(waveSurferOptions);
       waveSurfer.loadBlob(outputWav);
-      setIsProcessing(false);
+      setStatus(endStatus);
       return;
     }
 
@@ -143,8 +176,21 @@ const SpectrogramGenerator: FunctionComponent = () => {
     ws.on('play', () => setIsPlaying(true));
     ws.on('pause', () => setIsPlaying(false));
     setWaveSurfer(ws);
-    setIsProcessing(false);
+    setStatus(endStatus);
   };
+
+  useEffect(() => {
+    const updateStatus = (event: MessageEvent) => {
+      if (event.data.type !== 'progress') {
+        return;
+      }
+      startTransition(() => setStatus(event.data));
+    };
+    spectrogramWorker.addEventListener('message', updateStatus);
+    return () => {
+      spectrogramWorker.removeEventListener('message', updateStatus);
+    };
+  }, []);
 
   return (
     <Page size="md" title="Music - Spectrogram - Generate">
@@ -315,8 +361,7 @@ const SpectrogramGenerator: FunctionComponent = () => {
           </Button>
         </Grid>
         <Grid item xs={12}>
-          <Box
-            display="flex"
+          <Stack
             alignItems="center"
             justifyContent="center"
             height={276}
@@ -325,9 +370,15 @@ const SpectrogramGenerator: FunctionComponent = () => {
             {!waveSurfer && !isProcessing && (
               <Typography>The spectrogram will appear here</Typography>
             )}
-            {isProcessing && <Loader zIndex={3} />}
+            {isProcessing && (
+              <LoadingOverlay
+                zIndex={3}
+                status={statusToLabelMap[status.phase]}
+                progress={status.progress}
+              />
+            )}
             <div ref={spectrogramContainerRef} />
-          </Box>
+          </Stack>
         </Grid>
         <Grid item xs={12} display="flex" justifyContent="center">
           <Tooltip
@@ -345,7 +396,7 @@ const SpectrogramGenerator: FunctionComponent = () => {
           <Tooltip title={output && !isProcessing ? 'Download as .wav' : ''}>
             <IconButton
               onClick={() => saveAs(output!, 'spectrogram.wav')}
-              disabled={!output}
+              disabled={!output || isProcessing}
             >
               <DownloadIcon />
             </IconButton>
