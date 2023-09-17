@@ -91,8 +91,8 @@ const MENU_ITEMS: MenuItem[] = [
         available: false,
       },
       {
-        key: 'dct',
-        title: 'Discrete Cosine Transform',
+        key: 'dt',
+        title: 'Discrete Transform',
         available: false,
       },
     ],
