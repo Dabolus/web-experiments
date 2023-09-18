@@ -88,7 +88,6 @@ const MENU_ITEMS: MenuItem[] = [
       {
         key: 'lsb',
         title: 'Least Significant Bit',
-        available: false,
       },
       {
         key: 'dt',

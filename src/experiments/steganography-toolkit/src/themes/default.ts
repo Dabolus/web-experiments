@@ -36,6 +36,26 @@ const createDefaultTheme = (mode?: PaletteMode) =>
         },
       },
       components: {
+        MuiCssBaseline: {
+          styleOverrides: theme => `
+            mark {
+              background: ${theme.palette.secondary.dark};
+              color: ${theme.palette.getContrastText(
+                theme.palette.secondary.dark,
+              )};
+            }
+            del {
+              background: ${theme.palette.error.dark};
+              color: ${theme.palette.getContrastText(theme.palette.error.dark)};
+            }
+            ins {
+              background: ${theme.palette.secondary.dark};
+              color: ${theme.palette.getContrastText(
+                theme.palette.secondary.dark,
+              )};
+            }
+          `,
+        },
         MuiLink: {
           defaultProps: {
             underline: 'hover',
