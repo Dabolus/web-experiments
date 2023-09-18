@@ -201,6 +201,31 @@ const LSBInfo: FunctionComponent = () => (
           </div>
         </li>
       </ul>
+      <Text variant="h5">
+        How is the end of the message detected on decode?
+      </Text>
+      <Text>
+        Since the technique simply consists in subtly changing the color of the
+        pixels of the carrier image, there is no way to know when the message is
+        over just by looking at pixels information.
+      </Text>
+      <Text>
+        For this reason, the message is usually preceded by a header that
+        contains information about the message itself.
+      </Text>
+      <Text>
+        Besides the message length, some steganography programs like to use this
+        header to include additional information such as a signature of the
+        program used, the encryption algorithm used to encrypt the message, and
+        so on.
+      </Text>
+      <Text>
+        The approach used by this tool instead includes just the length of the
+        message, which is the bare minimum information needed to decode it. This
+        has two main advantages: it makes the bytes needed by the header as few
+        as possible, and it makes the message harder to extract by a third party
+        that doesn't know the settings used to encode it.
+      </Text>
     </section>
   </Page>
 );
