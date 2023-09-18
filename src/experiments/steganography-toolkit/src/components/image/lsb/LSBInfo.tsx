@@ -46,17 +46,15 @@ const LSBInfo: FunctionComponent = () => (
       </Text>
       <Text variant="h4">How can the LSB be used for Steganography?</Text>
       <Text>
-        There are two different approaches to LSB Steganography: one that works
-        by substitution (which is the most common one), and one that works by
-        addition. In both cases, the idea at the core of the technique is to
-        split the message to be concealed into chunk of bit(s) and to encode
-        them in the corresponding chunk of bit(s) of the carrier image.
+        The idea at the core of LSB Steganography is to split the message to be
+        concealed into chunk of bit(s) and to encode them in the corresponding
+        chunk of bit(s) of the carrier image.
       </Text>
       <Text variant="h5">A practical example</Text>
       <Text>
         Given the letter "K" and an image of two pixels with colors{' '}
         <code>rgb(27,&nbsp;71,&nbsp;112)</code> and{' '}
-        <code>rgb(201,&nbsp;123,&nbsp;99)</code>, here is how the two approaches
+        <code>rgb(201,&nbsp;123,&nbsp;99)</code>, here is how the technique
         would work using two significant bits of the carrier:
       </Text>
       <ul>
@@ -75,25 +73,12 @@ const LSBInfo: FunctionComponent = () => (
           </code>
         </li>
         <li>
-          Based on the chosen approach:
-          <ul>
-            <li>
-              <strong>For the substitution approach:</strong> replace the last
-              two bits of the channel with the two bits of the message:{' '}
-              <code>
-                000110<del>11</del>
-                <ins>01</ins>
-              </code>
-            </li>
-            <li>
-              <strong>For the addition approach:</strong> add the two bits of
-              the message to the byte of the channel:{' '}
-              <code>
-                00011<del>011</del>
-                <ins>100</ins>
-              </code>
-            </li>
-          </ul>
+          Replace the last two bits of the channel with the two bits of the
+          message:{' '}
+          <code>
+            000110<del>11</del>
+            <ins>01</ins>
+          </code>
         </li>
         <li>
           Repeat the process with the other channels of the first pixel (G and
@@ -117,7 +102,6 @@ const LSBInfo: FunctionComponent = () => (
               <TableCell>Bit&nbsp;pair</TableCell>
               <TableCell>Original</TableCell>
               <TableCell>Substitution</TableCell>
-              <TableCell>Addition</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -135,15 +119,6 @@ const LSBInfo: FunctionComponent = () => (
                   ? highlightDiff(
                       formattedByte,
                       ((channelByte & 0b11111100) | bitPair)
-                        .toString(2)
-                        .padStart(8, '0'),
-                    )
-                  : formattedByte;
-              const added =
-                typeof bitPair === 'number'
-                  ? highlightDiff(
-                      formattedByte,
-                      ((channelByte + bitPair) % 256)
                         .toString(2)
                         .padStart(8, '0'),
                     )
@@ -168,9 +143,6 @@ const LSBInfo: FunctionComponent = () => (
                   <TableCell>
                     <code>{substituted}</code>
                   </TableCell>
-                  <TableCell>
-                    <code>{added}</code>
-                  </TableCell>
                 </TableRow>
               );
             })}
@@ -191,13 +163,6 @@ const LSBInfo: FunctionComponent = () => (
           <div>
             <code>rgb(25,&nbsp;68,&nbsp;114)</code>,{' '}
             <code>rgb(203,&nbsp;123,&nbsp;99)</code>
-          </div>
-        </li>
-        <li>
-          <strong>With addition:</strong>
-          <div>
-            <code>rgb(28,&nbsp;71,&nbsp;114)</code>,{' '}
-            <code>rgb(204,&nbsp;123,&nbsp;99)</code>
           </div>
         </li>
       </ul>
