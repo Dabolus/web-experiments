@@ -3,13 +3,15 @@ import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
+import TabLink from '../../components/TabLink';
 import LSBInfo from '../../components/image/lsb/LSBInfo';
 import LSBConcealer from '../../components/image/lsb/LSBConcealer';
-import TabLink from '../../components/TabLink';
+import LSBRevealer from '../../components/image/lsb/LSBRevealer';
 
 enum LSBTab {
   INFO = 'info',
   CONCEAL = 'conceal',
+  REVEAL = 'reveal',
 }
 const lsbTabsNames = Object.values(LSBTab);
 const lsbTabsIndexes = Object.fromEntries(
@@ -44,6 +46,11 @@ const LSB: FunctionComponent<TopbarLayoutProps> = props => {
               value={LSBTab.CONCEAL}
               label="Conceal"
             />
+            <TabLink
+              to={`../lsb/${LSBTab.REVEAL}`}
+              value={LSBTab.REVEAL}
+              label="Reveal"
+            />
           </TabList>
         }
         {...props}
@@ -57,6 +64,9 @@ const LSB: FunctionComponent<TopbarLayoutProps> = props => {
           </TabPanel>
           <TabPanel value={LSBTab.CONCEAL}>
             <LSBConcealer />
+          </TabPanel>
+          <TabPanel value={LSBTab.REVEAL}>
+            <LSBRevealer />
           </TabPanel>
         </SwipeableViews>
       </TopbarLayout>

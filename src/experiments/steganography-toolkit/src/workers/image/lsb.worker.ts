@@ -7,8 +7,15 @@ export interface EncodeOptions {
   useAlphaChannel?: boolean | 'auto';
 }
 
+export interface DecodeOptions {
+  imageWithMessage: ImageData;
+  bitsPerChannel?: number;
+  useAlphaChannel?: boolean | 'auto';
+}
+
 export interface LSBWorker extends Worker {
   encode(options: EncodeOptions): Promise<ImageData>;
+  decode(options: DecodeOptions): Promise<Uint8ClampedArray>;
 }
 
 export const encode: LSBWorker['encode'] = async ({
@@ -78,6 +85,57 @@ export const encode: LSBWorker['encode'] = async ({
   return outputImage;
 };
 
+export const decode: LSBWorker['decode'] = async ({
+  imageWithMessage,
+  bitsPerChannel = 1,
+  useAlphaChannel = 'auto',
+}) => {
+  let hasAlpha = useAlphaChannel === true;
+  for (
+    let i = 3;
+    i < imageWithMessage.data.length && !hasAlpha && useAlphaChannel === 'auto';
+    i += 4
+  ) {
+    hasAlpha = imageWithMessage.data[i] < 255;
+  }
+
+  // Extract the message length from the first 32 bits of the image data
+  let messageLength = 0;
+  for (let i = 0; i < 32 / bitsPerChannel; i++) {
+    const byteIndex = hasAlpha
+      ? // Use the array index as it is
+        i
+      : // Skip every fourth byte in the array, which represents the alpha channel of each pixel
+        i + Math.floor(i / 3);
+    const bitsGroup =
+      imageWithMessage.data[byteIndex] & (2 ** bitsPerChannel - 1);
+    messageLength = (messageLength << bitsPerChannel) | bitsGroup;
+  }
+
+  // Extract the message from the image data
+  const message = new Uint8ClampedArray(messageLength);
+  for (let i = 0; i < messageLength; i++) {
+    let byte = 0;
+    for (let j = 0; j < 8 / bitsPerChannel; j++) {
+      // NOTE: we need to skip the first 4 bytes (32 bits) of
+      // the image data as they contain the message length
+      const fullByteIndex = (i + 4) * (8 / bitsPerChannel) + j;
+      const byteIndex = hasAlpha
+        ? // Use the array index as it is
+          fullByteIndex
+        : // Skip every fourth byte in the array, which represents the alpha channel of each pixel
+          fullByteIndex + Math.floor(fullByteIndex / 3);
+      const bitsGroup =
+        imageWithMessage.data[byteIndex] & (2 ** bitsPerChannel - 1);
+      byte = (byte << bitsPerChannel) | bitsGroup;
+    }
+    message[i] = byte;
+  }
+
+  return message;
+};
+
 setupWorkerServer<LSBWorker>({
   encode,
+  decode,
 });
