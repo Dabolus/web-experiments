@@ -11,7 +11,6 @@ import { lsbWorker } from './lsbWorkerClient';
 
 const formatToExt: Record<string, string> = {
   'image/png': 'png',
-  'image/jpeg': 'jpg',
   'image/webp': 'webp',
 };
 
@@ -106,7 +105,6 @@ const LSBConcealer: FunctionComponent = () => {
             label="Download as"
           >
             <MenuItem onClick={handleDownload('image/png')}>PNG</MenuItem>
-            <MenuItem onClick={handleDownload('image/jpeg')}>JPEG</MenuItem>
             <MenuItem onClick={handleDownload('image/webp')}>WEBP</MenuItem>
           </MenuButton>
         </Box>
