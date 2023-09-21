@@ -1,5 +1,8 @@
 import { createTheme, PaletteMode, Theme } from '@mui/material';
 import { enUS } from '@mui/material/locale';
+// This is required to make the props of the components available to the
+// theme. See https://mui.com/material-ui/about-the-lab/#typescript
+import type * as _ from '@mui/lab/themeAugmentation';
 
 const createDefaultTheme = (mode?: PaletteMode) =>
   createTheme(
@@ -61,7 +64,6 @@ const createDefaultTheme = (mode?: PaletteMode) =>
             underline: 'hover',
           },
         },
-        // @ts-expect-error - TabPanel is still in @mui/lab, so typings are not yet available
         MuiTabPanel: {
           styleOverrides: {
             root: ({ theme }: { theme: Theme }) => ({
