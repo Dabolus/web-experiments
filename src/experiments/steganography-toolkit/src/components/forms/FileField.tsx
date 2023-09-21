@@ -24,6 +24,7 @@ const FileField: FunctionComponent<FileFieldProps> = ({
   description,
   cols = 12,
   wideScreenCols = 6,
+  height,
   multiple = false,
   children,
   ...props
@@ -59,6 +60,7 @@ const FileField: FunctionComponent<FileFieldProps> = ({
                   <FileContainer
                     disabled={disabled}
                     isDragActive={isDragActive}
+                    height={height}
                   >
                     {children}
                     {!children && (

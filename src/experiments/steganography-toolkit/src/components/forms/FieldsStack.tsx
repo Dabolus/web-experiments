@@ -6,6 +6,7 @@ export interface FieldsStackProps {
   spacing?: number;
   cols?: number;
   wideScreenCols?: number;
+  height?: number;
   children:
     | ReactElement<FormChildProps<any>>
     | ReactElement<FormChildProps<any>>[];
@@ -15,11 +16,12 @@ const FieldsStack: FunctionComponent<FieldsStackProps> = ({
   spacing = 2,
   cols = 12,
   wideScreenCols = 6,
+  height,
   children,
 }) => (
   <Grid xs={cols} sm={wideScreenCols}>
     <div>
-      <Grid container spacing={spacing}>
+      <Grid container spacing={spacing} sx={{ height }}>
         {children}
       </Grid>
     </div>

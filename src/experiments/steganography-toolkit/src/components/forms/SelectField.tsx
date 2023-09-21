@@ -32,6 +32,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
   inputProps,
   cols = 12,
   wideScreenCols = 6,
+  height,
   options,
   ...props
 }) => {
@@ -62,6 +63,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
                     : selectedOption;
                 onChange(selectedValue);
               }}
+              sx={{ height }}
               {...props}
               {...field}
             >

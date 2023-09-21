@@ -37,6 +37,7 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
   spacing = 2,
   cols = 12,
   wideScreenCols = 6,
+  height,
 }) => {
   const textLabelId = useId();
   const fileLabelId = useId();
@@ -51,6 +52,7 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
           spacing={spacing}
           cols={cols}
           wideScreenCols={wideScreenCols}
+          height={height}
         >
           <Grid xs={12}>
             <FormControl fullWidth>

@@ -32,6 +32,7 @@ export type FormChildProps<T extends FieldValues = FieldValues> = {
   description?: ReactNode;
   cols?: number;
   wideScreenCols?: number;
+  height?: number;
   children?:
     | ReactElement<FormChildProps<T>>
     | ReactElement<FormChildProps<T>>[];

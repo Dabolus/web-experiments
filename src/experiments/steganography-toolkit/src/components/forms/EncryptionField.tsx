@@ -30,6 +30,7 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
   spacing = 3,
   cols = 12,
   wideScreenCols = 12,
+  height,
 }) => {
   const algorithmLabelId = useId();
   const passwordLabelId = useId();
@@ -66,6 +67,7 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
                       password,
                     })
                   }
+                  sx={{ height }}
                   {...field}
                 >
                   <option value="none">None</option>
@@ -95,6 +97,7 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
                       ? 'Select an encryption algorithm first'
                       : ''
                   }
+                  sx={{ height }}
                   {...field}
                 />
               </FormControl>

@@ -27,6 +27,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
   inputProps,
   cols = 12,
   wideScreenCols = 6,
+  height,
   min,
   max,
   step,
@@ -60,6 +61,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
                     : event.target.value,
                 )
               }
+              sx={{ height }}
               {...props}
               {...field}
             />
