@@ -5,11 +5,13 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import TopbarLayout, { TopbarLayoutProps } from '../../components/TopbarLayout';
 import TabLink from '../../components/TabLink';
 import LSBInfo from '../../components/image/lsb/LSBInfo';
+import LSBGenerator from '../../components/image/lsb/LSBGenerator';
 import LSBConcealer from '../../components/image/lsb/LSBConcealer';
 import LSBRevealer from '../../components/image/lsb/LSBRevealer';
 
 enum LSBTab {
   INFO = 'info',
+  GENERATE = 'generate',
   CONCEAL = 'conceal',
   REVEAL = 'reveal',
 }
@@ -42,6 +44,11 @@ const LSB: FunctionComponent<TopbarLayoutProps> = props => {
               label="Info"
             />
             <TabLink
+              to={`../lsb/${LSBTab.GENERATE}`}
+              value={LSBTab.GENERATE}
+              label="Generate"
+            />
+            <TabLink
               to={`../lsb/${LSBTab.CONCEAL}`}
               value={LSBTab.CONCEAL}
               label="Conceal"
@@ -61,6 +68,9 @@ const LSB: FunctionComponent<TopbarLayoutProps> = props => {
         >
           <TabPanel value={LSBTab.INFO}>
             <LSBInfo />
+          </TabPanel>
+          <TabPanel value={LSBTab.GENERATE}>
+            <LSBGenerator />
           </TabPanel>
           <TabPanel value={LSBTab.CONCEAL}>
             <LSBConcealer />
