@@ -106,7 +106,11 @@ const LSBConcealerForm: FunctionComponent<LSBConcealerFormProps> = ({
           ],
         }}
       >
-        <AutoFittingCanvas hidden={!hasCarrier} ref={carrierCanvasRef} />
+        <AutoFittingCanvas
+          pixelated
+          hidden={!hasCarrier}
+          ref={carrierCanvasRef}
+        />
         {!hasCarrier && 'Drop an image here, or click to select image'}
       </FileField>
       <TextOrFileField name="payload" label="Text to hide" />

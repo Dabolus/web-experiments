@@ -107,6 +107,7 @@ const LSBRevealerForm: FunctionComponent<LSBRevealerFormProps> = ({
         height={219.5}
       >
         <AutoFittingCanvas
+          pixelated
           hidden={!hasCarrierWithPayload}
           ref={carrierWithPayloadCanvasRef}
         />

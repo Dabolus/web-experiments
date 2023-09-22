@@ -94,7 +94,7 @@ const LSBConcealer: FunctionComponent = () => {
         <FormControl fullWidth>
           <Label>Output image</Label>
           <FileContainer disabled height={320}>
-            <AutoFittingCanvas hidden={!hasOutput} ref={outputRef} />
+            <AutoFittingCanvas pixelated hidden={!hasOutput} ref={outputRef} />
           </FileContainer>
         </FormControl>
         <Box mt={2} textAlign="right">
