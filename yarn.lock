@@ -1695,6 +1695,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ctrl/tinycolor@npm:^3.6.0":
+  version: 3.6.1
+  resolution: "@ctrl/tinycolor@npm:3.6.1"
+  checksum: cefec6fcaaa3eb8ddf193f981e097dccf63b97b93b1e861cb18c645654824c831a568f444996e15ee509f255658ed82fba11c5365494a6e25b9b12ac454099e0
+  languageName: node
+  linkType: hard
+
 "@dabh/diagnostics@npm:^2.0.2":
   version: 2.0.3
   resolution: "@dabh/diagnostics@npm:2.0.3"
@@ -4548,6 +4555,7 @@ __metadata:
     firebase-tools: ^12.4.5
     fuse.js: ^6.6.2
     lamejs: ^1.2.1
+    mui-color-input: ^2.0.0
     preact: ^10.16.0
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -13028,6 +13036,25 @@ __metadata:
   version: 2.1.3
   resolution: "ms@npm:2.1.3"
   checksum: aa92de608021b242401676e35cfa5aa42dd70cbdc082b916da7fb925c542173e36bce97ea3e804923fe92c0ad991434e4a38327e15a1b5b5f945d66df615ae6d
+  languageName: node
+  linkType: hard
+
+"mui-color-input@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "mui-color-input@npm:2.0.0"
+  dependencies:
+    "@ctrl/tinycolor": ^3.6.0
+  peerDependencies:
+    "@emotion/react": ^11.5.0
+    "@emotion/styled": ^11.3.0
+    "@mui/material": ^5.0.0
+    "@types/react": ^18.0.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: b000add16b41462ea2883850a14d745b8878ccb978febb72ee302580f40013002cb660a61468947fe4e98274fdb6a52e4b8d209d99d46331508d7cb7db14b763
   languageName: node
   linkType: hard
 
