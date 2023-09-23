@@ -22,6 +22,7 @@ const ColorField: FunctionComponent<ColorFieldProps> = ({
   label,
   description,
   descriptionSeverity,
+  showDescription = () => true,
   inputProps,
   cols = 12,
   wideScreenCols = 6,
@@ -71,7 +72,7 @@ const ColorField: FunctionComponent<ColorFieldProps> = ({
               {...props}
               {...field}
             />
-            {description && (
+            {description && showDescription(value) && (
               <HelperText id={descriptionId} severity={descriptionSeverity}>
                 {description}
               </HelperText>

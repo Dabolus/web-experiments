@@ -30,6 +30,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
   label,
   description,
   descriptionSeverity,
+  showDescription = () => true,
   inputProps,
   cols = 12,
   wideScreenCols = 6,
@@ -44,7 +45,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, ...field } }) => (
+      render={({ field: { value, onChange, ...field } }) => (
         <Grid xs={cols} sm={wideScreenCols}>
           <FormControl fullWidth>
             {label && <Label id={labelId}>{label}</Label>}
@@ -52,6 +53,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
               native
               {...(label && { 'aria-labelledby': labelId })}
               {...(description && { 'aria-describedby': descriptionId })}
+              value={value}
               onChange={event => {
                 const selectedOption = options.find(option =>
                   isComplexOption(option)
@@ -83,7 +85,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
                 ),
               )}
             </Select>
-            {description && (
+            {description && showDescription(value) && (
               <HelperText id={descriptionId} severity={descriptionSeverity}>
                 {description}
               </HelperText>

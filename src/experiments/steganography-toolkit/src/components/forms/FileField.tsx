@@ -24,6 +24,7 @@ const FileField: FunctionComponent<FileFieldProps> = ({
   label,
   description,
   descriptionSeverity,
+  showDescription = () => true,
   cols = 12,
   wideScreenCols = 6,
   height,
@@ -87,7 +88,7 @@ const FileField: FunctionComponent<FileFieldProps> = ({
                     )}
                   </FileContainer>
                 </InputContainer>
-                {description && (
+                {description && showDescription(value) && (
                   <HelperText id={descriptionId} severity={descriptionSeverity}>
                     {description}
                   </HelperText>

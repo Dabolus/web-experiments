@@ -3,7 +3,6 @@ import { Controller } from 'react-hook-form';
 import {
   Unstable_Grid2 as Grid,
   FormControl,
-  FormHelperText,
   OutlinedInput,
   OutlinedInputProps,
 } from '@mui/material';
@@ -25,6 +24,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
   label,
   description,
   descriptionSeverity,
+  showDescription = () => true,
   type,
   inputProps,
   cols = 12,
@@ -42,7 +42,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, ...field } }) => (
+      render={({ field: { value, onChange, ...field } }) => (
         <Grid xs={cols} sm={wideScreenCols}>
           <FormControl fullWidth>
             {label && <Label id={labelId}>{label}</Label>}
@@ -56,6 +56,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
                 step,
                 ...inputProps,
               }}
+              value={value}
               onChange={event =>
                 onChange(
                   type === 'number'
@@ -67,7 +68,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
               {...props}
               {...field}
             />
-            {description && (
+            {description && showDescription(value) && (
               <HelperText id={descriptionId} severity={descriptionSeverity}>
                 {description}
               </HelperText>

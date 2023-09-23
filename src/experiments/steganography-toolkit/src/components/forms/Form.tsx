@@ -32,6 +32,7 @@ export type FormChildProps<T extends FieldValues = FieldValues> = {
   label?: ReactNode;
   description?: ReactNode | ReactNode[];
   descriptionSeverity?: HelperTextSeverity;
+  showDescription?(value: T[keyof T]): boolean;
   cols?: number;
   wideScreenCols?: number;
   height?: number;
