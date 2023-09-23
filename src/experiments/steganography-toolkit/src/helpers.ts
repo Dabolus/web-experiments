@@ -82,7 +82,7 @@ export const readFile = <T extends ReadFileFormat = 'binary'>(
           ? string
           : Uint8Array,
       );
-    reader[formatToMethodMap[format]](file);
+    reader[formatToMethodMap[format]](new Blob([file]));
   });
 
 export const loadImage = (src: string): Promise<HTMLImageElement> =>
