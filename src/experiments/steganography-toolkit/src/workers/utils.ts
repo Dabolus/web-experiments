@@ -29,7 +29,9 @@ export const setupWorkerClient = <T extends Worker, U = Omit<T, keyof Worker>>(
     if (event.data.status === 'fulfilled') {
       handler.resolve(event.data.value);
     } else {
-      handler.reject(new Error(event.data.reason));
+      handler.reject(
+        Object.assign(new Error(event.data.reason.name), event.data.reason),
+      );
     }
   });
 
@@ -80,7 +82,12 @@ export const setupWorkerServer = <T extends Worker, U = Omit<T, keyof Worker>>(
       self.postMessage({
         id,
         status: 'rejected',
-        reason: (error as Error).message,
+        reason: {
+          name: (error as Error).name,
+          message: (error as Error).message,
+          stack: (error as Error).stack,
+          cause: (error as Error).cause,
+        },
       });
     }
   });
