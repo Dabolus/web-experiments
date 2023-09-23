@@ -78,7 +78,6 @@ const SpectrogramGenerator: FunctionComponent = () => {
   const handleChange = useDebouncedCallback<
     NonNullable<SpectrogramGeneratorFormProps['onChange']>
   >(async data => {
-    console.log(data);
     if (!data.image || !spectrogramContainerRef?.current) {
       return;
     }

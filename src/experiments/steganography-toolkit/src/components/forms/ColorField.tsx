@@ -66,7 +66,6 @@ const ColorField: FunctionComponent<ColorFieldProps> = ({
                   .split(',')
                   .map(Number);
                 const [red, green, blue, alpha] = color;
-                console.log(newColor, { red, green, blue, alpha });
                 onChange({ red, green, blue, alpha });
               }}
               sx={{ height }}
