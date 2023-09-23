@@ -28,6 +28,7 @@ const HiddenInput = styled('input')({
   width: '100%',
   height: '100%',
   opacity: 0,
+  cursor: 'pointer',
 });
 
 const FileField: FunctionComponent<FileFieldProps> = ({
@@ -87,16 +88,6 @@ const FileField: FunctionComponent<FileFieldProps> = ({
                     isDragActive={isDragActive}
                     height={height}
                   >
-                    <HiddenInput
-                      {...getInputProps({
-                        ...(label && { 'aria-labelledby': labelId }),
-                        ...(description && {
-                          'aria-describedby': descriptionId,
-                        }),
-                        required,
-                        ...field,
-                      })}
-                    />
                     {children}
                     {!children && (
                       <FileName hasFile={value instanceof File}>
@@ -122,6 +113,16 @@ const FileField: FunctionComponent<FileFieldProps> = ({
                       </ClearFileButton>
                     )}
                   </FileContainer>
+                  <HiddenInput
+                    {...getInputProps({
+                      ...(label && { 'aria-labelledby': labelId }),
+                      ...(description && {
+                        'aria-describedby': descriptionId,
+                      }),
+                      required,
+                      ...field,
+                    })}
+                  />
                 </InputContainer>
                 {description && showDescription(value) && (
                   <HelperText id={descriptionId} severity={descriptionSeverity}>
