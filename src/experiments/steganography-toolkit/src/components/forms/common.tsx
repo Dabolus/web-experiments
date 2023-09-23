@@ -29,6 +29,7 @@ export const ClearFileButton = styled(Fab)({
   width: 26,
   height: 26,
   minHeight: 'unset',
+  zIndex: 1,
 });
 
 export interface FileContainerProps {

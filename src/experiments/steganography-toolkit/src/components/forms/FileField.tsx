@@ -1,7 +1,7 @@
 import React, { FunctionComponent, PropsWithChildren, useId } from 'react';
 import Dropzone, { DropzoneProps } from 'react-dropzone';
 import { Controller } from 'react-hook-form';
-import { Unstable_Grid2 as Grid } from '@mui/material';
+import { Unstable_Grid2 as Grid, styled } from '@mui/material';
 import { Clear as ClearIcon } from '@mui/icons-material';
 import { FormChildProps } from './Form';
 import {
@@ -16,7 +16,19 @@ import HelperText from './HelperText';
 
 export type FileFieldProps = PropsWithChildren<
   Omit<DropzoneProps & FormChildProps<any>, 'onDrop' | 'children'>
->;
+> & {
+  required?: boolean;
+};
+
+const HiddenInput = styled('input')({
+  display: 'block !important',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  opacity: 0,
+});
 
 const FileField: FunctionComponent<FileFieldProps> = ({
   control,
@@ -29,6 +41,7 @@ const FileField: FunctionComponent<FileFieldProps> = ({
   wideScreenCols = 6,
   height,
   multiple = false,
+  required,
   children,
   ...props
 }) => {
@@ -39,32 +52,50 @@ const FileField: FunctionComponent<FileFieldProps> = ({
     <Controller
       name={name}
       control={control}
-      render={({ field: { value = [], onChange, disabled, ...field } }) => (
+      render={({
+        field: { value = [], onChange, disabled, ref: _, ...field },
+      }) => (
         <Grid xs={cols} sm={wideScreenCols}>
           <Dropzone
             multiple={multiple}
             disabled={disabled}
-            onDrop={files => onChange?.((multiple ? files : files[0]) as any)}
+            onDrop={(files, _rejections, event) => {
+              const dataTransfer = new DataTransfer();
+              files.forEach(file => {
+                dataTransfer.items.add(file);
+              });
+
+              const input = event.target as HTMLInputElement;
+              input.files = dataTransfer.files;
+              // Help Safari out
+              if (input.webkitEntries.length) {
+                input.dataset.file = `${dataTransfer.files[0].name}`;
+              }
+
+              onChange?.((multiple ? files : files[0]) as any);
+            }}
             {...props}
           >
-            {({ getRootProps, getInputProps, isDragActive }) => (
+            {({ getRootProps, getInputProps, isDragActive, inputRef }) => (
               <FullHeightFormControl fullWidth>
                 <InputContainer {...getRootProps()}>
                   {label && <Label id={labelId}>{label}</Label>}
-                  <input
-                    {...getInputProps({
-                      ...(label && { 'aria-labelledby': labelId }),
-                      ...(description && {
-                        'aria-describedby': descriptionId,
-                      }),
-                      ...field,
-                    })}
-                  />
                   <FileContainer
                     disabled={disabled}
                     isDragActive={isDragActive}
                     height={height}
                   >
+                    <HiddenInput
+                      {...getInputProps({
+                        ...(label && { 'aria-labelledby': labelId }),
+                        ...(description && {
+                          'aria-describedby': descriptionId,
+                        }),
+                        onChange,
+                        required,
+                        ...field,
+                      })}
+                    />
                     {children}
                     {!children && (
                       <FileName hasFile={value instanceof File}>
@@ -80,6 +111,9 @@ const FileField: FunctionComponent<FileFieldProps> = ({
                         aria-label="Clear file"
                         onClick={event => {
                           event.stopPropagation();
+                          if (inputRef.current) {
+                            inputRef.current.value = '';
+                          }
                           onChange?.(multiple ? [] : undefined);
                         }}
                       >
