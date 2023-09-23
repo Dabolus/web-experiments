@@ -46,8 +46,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
     <Controller
       name={name}
       control={control}
-      disabled={disabled}
-      render={({ field: { value, onChange, ...field } }) => (
+      render={({ field: { value, onChange, disabled: _, ...field } }) => (
         <Grid xs={cols} sm={wideScreenCols}>
           <FormControl fullWidth>
             {label && <Label id={labelId}>{label}</Label>}
@@ -69,6 +68,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
                 onChange(selectedValue);
               }}
               sx={{ height }}
+              disabled={disabled}
               {...props}
               {...field}
             >

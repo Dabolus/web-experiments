@@ -41,12 +41,12 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
     <Controller
       name={name}
       control={control}
-      disabled={disabled}
       render={({
         field: {
           name,
           value: { algorithm = 'none', password = '' } = {},
           onChange,
+          disabled: _,
           ...field
         },
       }) => (
@@ -70,6 +70,7 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
                   })
                 }
                 sx={{ height }}
+                disabled={disabled}
                 {...field}
               >
                 <option value="none">None</option>
@@ -100,6 +101,7 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
                     : ''
                 }
                 sx={{ height }}
+                disabled={disabled}
                 {...field}
               />
             </FormControl>

@@ -49,8 +49,7 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
     <Controller
       name={name}
       control={control}
-      disabled={disabled}
-      render={({ field: { name, value, onChange, disabled, ...field } }) => (
+      render={({ field: { name, value, onChange, disabled: _, ...field } }) => (
         <FieldsStack
           spacing={spacing}
           cols={cols}

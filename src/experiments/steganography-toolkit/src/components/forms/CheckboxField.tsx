@@ -34,13 +34,19 @@ const CheckboxField: FunctionComponent<CheckboxFieldProps> = ({
     <Controller
       name={name}
       control={control}
-      disabled={disabled}
-      render={({ field: { value, disabled, ...field } }) => (
+      render={({ field: { value, disabled: _, ...field } }) => (
         <Grid xs={cols} sm={wideScreenCols}>
           <FormControlLabel
             label={label}
             disabled={disabled}
-            control={<Checkbox checked={value} {...props} {...field} />}
+            control={
+              <Checkbox
+                checked={value}
+                disabled={disabled}
+                {...props}
+                {...field}
+              />
+            }
           />
           {description && showDescription(value) && (
             <HelperText id={descriptionId} severity={descriptionSeverity}>

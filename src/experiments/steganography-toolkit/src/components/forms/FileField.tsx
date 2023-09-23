@@ -54,9 +54,8 @@ const FileField: FunctionComponent<FileFieldProps> = ({
     <Controller
       name={name}
       control={control}
-      disabled={disabled}
       render={({
-        field: { value = [], onChange, disabled, ref: _, ...field },
+        field: { value = [], onChange, disabled: _, ref: __, ...field },
       }) => (
         <Grid xs={cols} sm={wideScreenCols}>
           <Dropzone

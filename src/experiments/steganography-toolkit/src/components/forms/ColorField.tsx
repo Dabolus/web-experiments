@@ -37,8 +37,7 @@ const ColorField: FunctionComponent<ColorFieldProps> = ({
     <Controller
       name={name}
       control={control}
-      disabled={disabled}
-      render={({ field: { value, onChange, ...field } }) => (
+      render={({ field: { value, onChange, disabled: _, ...field } }) => (
         <Grid xs={cols} sm={wideScreenCols}>
           <FormControl fullWidth>
             {label && <Label id={labelId}>{label}</Label>}
@@ -71,6 +70,7 @@ const ColorField: FunctionComponent<ColorFieldProps> = ({
                 onChange({ red, green, blue, alpha });
               }}
               sx={{ height }}
+              disabled={disabled}
               {...props}
               {...field}
             />
