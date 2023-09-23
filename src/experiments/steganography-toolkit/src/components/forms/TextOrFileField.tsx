@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useId, useState } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import {
   Unstable_Grid2 as Grid,
   FormControl,
@@ -32,7 +32,6 @@ const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
 const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
-  control,
   name,
   label,
   spacing = 2,
@@ -41,6 +40,7 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
   height,
   disabled,
 }) => {
+  const { control } = useFormContext();
   const textLabelId = useId();
   const fileLabelId = useId();
   const [fileName, setFileName] = useState<string>('');

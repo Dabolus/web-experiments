@@ -1,13 +1,10 @@
 import React, {
-  createElement,
-  isValidElement,
-  Children,
   ReactElement,
   ReactNode,
   useEffect,
   BaseSyntheticEvent,
 } from 'react';
-import { FieldValues, useForm, Control, EventType } from 'react-hook-form';
+import { FieldValues, useForm, EventType, FormProvider } from 'react-hook-form';
 import { Unstable_Grid2 as Grid } from '@mui/material';
 import { HelperTextSeverity } from './HelperText';
 
@@ -28,7 +25,6 @@ export type ChangeHandler<T extends FieldValues = FieldValues> = (
 
 export type FormChildProps<T extends FieldValues = FieldValues> = {
   name: Extract<keyof T, string>;
-  control?: Control<T>;
   label?: ReactNode;
   description?: ReactNode | ReactNode[];
   descriptionSeverity?: HelperTextSeverity;
@@ -50,35 +46,6 @@ export interface FormProps<T extends FieldValues = FieldValues> {
   children: ReactElement<FormChildProps<T>> | ReactElement<FormChildProps<T>>[];
 }
 
-const registerChildrenFields = (
-  control: Control<any>,
-  children:
-    | ReactElement<FormChildProps<any>>
-    | ReactElement<FormChildProps<any>>[],
-): ReactElement<FormChildProps<any>>[] =>
-  Children.map(children, child => {
-    if (!isValidElement(child)) {
-      return child;
-    }
-    if (
-      typeof child.type === 'function' &&
-      child.type.name === 'FieldsStack' &&
-      child.props.children
-    ) {
-      return createElement(child.type, {
-        ...child.props,
-        children: registerChildrenFields(control, child.props.children),
-      });
-    }
-    return child.props.name
-      ? createElement(child.type, {
-          ...child.props,
-          control,
-          key: child.props.name,
-        })
-      : child;
-  });
-
 const Form = <T extends FieldValues = FieldValues>({
   spacing = 3,
   defaultValue,
@@ -87,25 +54,25 @@ const Form = <T extends FieldValues = FieldValues>({
   children,
 }: FormProps<T>): ReactElement => {
   // We need to use any because types are too complex and VS Code gets stuck on it
-  const { handleSubmit, control, getValues, watch } = useForm<any>({
+  const formMethods = useForm<any>({
     defaultValues: defaultValue,
   });
 
   useEffect(() => {
-    const subscription = watch((value, info) =>
-      onChange?.({ ...value, ...getValues() }, info),
+    const subscription = formMethods.watch((value, info) =>
+      onChange?.({ ...value, ...formMethods.getValues() }, info),
     );
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [formMethods.watch]);
 
   return (
     <Grid
       container
       spacing={spacing}
       component="form"
-      {...(onSubmit && { onSubmit: handleSubmit(onSubmit) })}
+      {...(onSubmit && { onSubmit: formMethods.handleSubmit(onSubmit) })}
     >
-      {registerChildrenFields(control, children)}
+      <FormProvider {...formMethods}>{children}</FormProvider>
     </Grid>
   );
 };

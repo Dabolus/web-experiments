@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactNode, useId } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import {
   Unstable_Grid2 as Grid,
   FormControlLabel,
@@ -15,7 +15,6 @@ export type CheckboxFieldProps = CheckboxProps &
   };
 
 const CheckboxField: FunctionComponent<CheckboxFieldProps> = ({
-  control,
   name,
   label,
   description,
@@ -28,6 +27,7 @@ const CheckboxField: FunctionComponent<CheckboxFieldProps> = ({
   disabled,
   ...props
 }) => {
+  const { control } = useFormContext();
   const descriptionId = useId();
 
   return (

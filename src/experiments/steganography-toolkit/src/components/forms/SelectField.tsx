@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useId } from 'react';
-import { Controller, Primitive } from 'react-hook-form';
+import { Controller, Primitive, useFormContext } from 'react-hook-form';
 import {
   Unstable_Grid2 as Grid,
   FormControl,
@@ -25,7 +25,6 @@ const isComplexOption = (option: SelectOption): option is ComplexSelectOption =>
   typeof option === 'object' && option !== null && 'value' in option;
 
 const SelectField: FunctionComponent<SelectFieldProps> = ({
-  control,
   name,
   label,
   description,
@@ -39,6 +38,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
   disabled,
   ...props
 }) => {
+  const { control } = useFormContext();
   const labelId = useId();
   const descriptionId = useId();
 

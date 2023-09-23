@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useId } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import {
   Unstable_Grid2 as Grid,
   FormControl,
@@ -26,7 +26,6 @@ export interface EncryptionFieldProps
 }
 
 const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
-  control,
   name,
   spacing = 3,
   cols = 12,
@@ -34,6 +33,7 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
   height,
   disabled,
 }) => {
+  const { control } = useFormContext();
   const algorithmLabelId = useId();
   const passwordLabelId = useId();
 

@@ -1,6 +1,6 @@
 import React, { FunctionComponent, PropsWithChildren, useId } from 'react';
 import Dropzone, { DropzoneProps } from 'react-dropzone';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { Unstable_Grid2 as Grid, styled } from '@mui/material';
 import { Clear as ClearIcon } from '@mui/icons-material';
 import { FormChildProps } from './Form';
@@ -31,7 +31,6 @@ const HiddenInput = styled('input')({
 });
 
 const FileField: FunctionComponent<FileFieldProps> = ({
-  control,
   name,
   label,
   description,
@@ -46,6 +45,7 @@ const FileField: FunctionComponent<FileFieldProps> = ({
   disabled,
   ...props
 }) => {
+  const { control } = useFormContext();
   const labelId = useId();
   const descriptionId = useId();
 

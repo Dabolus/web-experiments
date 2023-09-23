@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useId } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { MuiColorInput, MuiColorInputProps } from 'mui-color-input';
 import { Unstable_Grid2 as Grid, FormControl } from '@mui/material';
 import { FormChildProps } from './Form';
@@ -17,7 +17,6 @@ export type ColorFieldProps = Omit<MuiColorInputProps, 'value' | 'onChange'> &
   FormChildProps<any>;
 
 const ColorField: FunctionComponent<ColorFieldProps> = ({
-  control,
   name,
   label,
   description,
@@ -30,6 +29,7 @@ const ColorField: FunctionComponent<ColorFieldProps> = ({
   disabled,
   ...props
 }) => {
+  const { control } = useFormContext();
   const labelId = useId();
   const descriptionId = useId();
 

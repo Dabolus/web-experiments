@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useId } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import {
   Unstable_Grid2 as Grid,
   FormControl,
@@ -19,7 +19,6 @@ export type TextFieldProps = Omit<OutlinedInputProps, 'type'> &
   };
 
 const TextField: FunctionComponent<TextFieldProps> = ({
-  control,
   name,
   label,
   description,
@@ -36,6 +35,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
   disabled,
   ...props
 }) => {
+  const { control } = useFormContext();
   const labelId = useId();
   const descriptionId = useId();
 
