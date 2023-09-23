@@ -33,6 +33,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
   min,
   max,
   step,
+  disabled,
   ...props
 }) => {
   const labelId = useId();
@@ -42,6 +43,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
     <Controller
       name={name}
       control={control}
+      disabled={disabled}
       render={({ field: { value, onChange, ...field } }) => (
         <Grid xs={cols} sm={wideScreenCols}>
           <FormControl fullWidth>

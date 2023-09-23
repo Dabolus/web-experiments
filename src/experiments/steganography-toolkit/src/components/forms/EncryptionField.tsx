@@ -22,6 +22,7 @@ export interface EncryptionFieldProps
     'label' | 'description' | 'children'
   > {
   spacing?: number;
+  disabled?: boolean;
 }
 
 const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
@@ -31,6 +32,7 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
   cols = 12,
   wideScreenCols = 12,
   height,
+  disabled,
 }) => {
   const algorithmLabelId = useId();
   const passwordLabelId = useId();
@@ -39,6 +41,7 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
     <Controller
       name={name}
       control={control}
+      disabled={disabled}
       render={({
         field: {
           name,
@@ -46,65 +49,63 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
           onChange,
           ...field
         },
-      }) => {
-        return (
-          <FieldsStack
-            spacing={spacing}
-            cols={cols}
-            wideScreenCols={wideScreenCols}
-          >
-            <Grid xs={12} sm={6}>
-              <FormControl fullWidth>
-                <Label id={algorithmLabelId}>Encryption</Label>
-                <Select
-                  native
-                  name={`${name}Algorithm`}
-                  aria-labelledby={algorithmLabelId}
-                  value={algorithm || 'none'}
-                  onChange={event =>
-                    onChange({
-                      algorithm: event.target.value,
-                      password,
-                    })
-                  }
-                  sx={{ height }}
-                  {...field}
-                >
-                  <option value="none">None</option>
-                  <option value="AES-CTR">AES (Counter)</option>
-                  <option value="AES-GCM">AES (Galois/Counter)</option>
-                  <option value="AES-CBC">AES (Cipher Block Chaining)</option>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid xs={12} sm={6}>
-              <FormControl fullWidth>
-                <Label>Password</Label>
-                <OutlinedInput
-                  type="password"
-                  name={`${name}Password`}
-                  readOnly={algorithm === 'none'}
-                  value={algorithm === 'none' ? '' : password}
-                  inputProps={{ 'aria-labelledby': passwordLabelId }}
-                  onChange={event =>
-                    onChange({
-                      algorithm,
-                      password: event.target.value,
-                    })
-                  }
-                  placeholder={
-                    algorithm === 'none'
-                      ? 'Select an encryption algorithm first'
-                      : ''
-                  }
-                  sx={{ height }}
-                  {...field}
-                />
-              </FormControl>
-            </Grid>
-          </FieldsStack>
-        );
-      }}
+      }) => (
+        <FieldsStack
+          spacing={spacing}
+          cols={cols}
+          wideScreenCols={wideScreenCols}
+        >
+          <Grid xs={12} sm={6}>
+            <FormControl fullWidth>
+              <Label id={algorithmLabelId}>Encryption</Label>
+              <Select
+                native
+                name={`${name}Algorithm`}
+                aria-labelledby={algorithmLabelId}
+                value={algorithm || 'none'}
+                onChange={event =>
+                  onChange({
+                    algorithm: event.target.value,
+                    password,
+                  })
+                }
+                sx={{ height }}
+                {...field}
+              >
+                <option value="none">None</option>
+                <option value="AES-CTR">AES (Counter)</option>
+                <option value="AES-GCM">AES (Galois/Counter)</option>
+                <option value="AES-CBC">AES (Cipher Block Chaining)</option>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid xs={12} sm={6}>
+            <FormControl fullWidth>
+              <Label>Password</Label>
+              <OutlinedInput
+                type="password"
+                name={`${name}Password`}
+                readOnly={algorithm === 'none'}
+                value={algorithm === 'none' ? '' : password}
+                inputProps={{ 'aria-labelledby': passwordLabelId }}
+                onChange={event =>
+                  onChange({
+                    algorithm,
+                    password: event.target.value,
+                  })
+                }
+                placeholder={
+                  algorithm === 'none'
+                    ? 'Select an encryption algorithm first'
+                    : ''
+                }
+                sx={{ height }}
+                {...field}
+              />
+            </FormControl>
+          </Grid>
+        </FieldsStack>
+      )}
     />
   );
 };

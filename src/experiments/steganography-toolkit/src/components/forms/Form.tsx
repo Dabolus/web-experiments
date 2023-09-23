@@ -45,6 +45,7 @@ export interface FormProps<T extends FieldValues = FieldValues> {
   spacing?: number;
   onSubmit?: SubmitHandler<T>;
   onChange?: ChangeHandler<T>;
+  disabled?: boolean;
   defaultValue?: Partial<T>;
   children: ReactElement<FormChildProps<T>> | ReactElement<FormChildProps<T>>[];
 }

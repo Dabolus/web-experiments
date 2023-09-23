@@ -27,6 +27,7 @@ const ColorField: FunctionComponent<ColorFieldProps> = ({
   cols = 12,
   wideScreenCols = 6,
   height,
+  disabled,
   ...props
 }) => {
   const labelId = useId();
@@ -36,6 +37,7 @@ const ColorField: FunctionComponent<ColorFieldProps> = ({
     <Controller
       name={name}
       control={control}
+      disabled={disabled}
       render={({ field: { value, onChange, ...field } }) => (
         <Grid xs={cols} sm={wideScreenCols}>
           <FormControl fullWidth>

@@ -25,6 +25,7 @@ export interface TextOrFileFieldProps
     'description' | 'children'
   > {
   spacing?: number;
+  disabled?: boolean;
 }
 
 const encoder = new TextEncoder();
@@ -38,6 +39,7 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
   cols = 12,
   wideScreenCols = 6,
   height,
+  disabled,
 }) => {
   const textLabelId = useId();
   const fileLabelId = useId();
@@ -47,6 +49,7 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
     <Controller
       name={name}
       control={control}
+      disabled={disabled}
       render={({ field: { name, value, onChange, disabled, ...field } }) => (
         <FieldsStack
           spacing={spacing}

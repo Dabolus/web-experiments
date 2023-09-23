@@ -36,6 +36,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
   wideScreenCols = 6,
   height,
   options,
+  disabled,
   ...props
 }) => {
   const labelId = useId();
@@ -45,6 +46,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
     <Controller
       name={name}
       control={control}
+      disabled={disabled}
       render={({ field: { value, onChange, ...field } }) => (
         <Grid xs={cols} sm={wideScreenCols}>
           <FormControl fullWidth>

@@ -43,6 +43,7 @@ const FileField: FunctionComponent<FileFieldProps> = ({
   multiple = false,
   required,
   children,
+  disabled,
   ...props
 }) => {
   const labelId = useId();
@@ -52,6 +53,7 @@ const FileField: FunctionComponent<FileFieldProps> = ({
     <Controller
       name={name}
       control={control}
+      disabled={disabled}
       render={({
         field: { value = [], onChange, disabled, ref: _, ...field },
       }) => (

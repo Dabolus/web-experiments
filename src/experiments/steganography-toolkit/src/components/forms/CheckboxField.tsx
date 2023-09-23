@@ -25,6 +25,7 @@ const CheckboxField: FunctionComponent<CheckboxFieldProps> = ({
   cols = 12,
   wideScreenCols = 6,
   height,
+  disabled,
   ...props
 }) => {
   const descriptionId = useId();
@@ -33,6 +34,7 @@ const CheckboxField: FunctionComponent<CheckboxFieldProps> = ({
     <Controller
       name={name}
       control={control}
+      disabled={disabled}
       render={({ field: { value, disabled, ...field } }) => (
         <Grid xs={cols} sm={wideScreenCols}>
           <FormControlLabel
