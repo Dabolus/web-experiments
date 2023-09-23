@@ -10,14 +10,7 @@ import colormap from 'colormap';
 import WaveSurfer from 'wavesurfer.js';
 import Spectrogram from 'wavesurfer.js/dist/plugins/spectrogram';
 import { saveAs } from 'file-saver';
-import {
-  FormLabel,
-  styled,
-  IconButton,
-  Tooltip,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { IconButton, Tooltip, Stack, Typography } from '@mui/material';
 import {
   PlayArrow as PlayArrowIcon,
   Pause as PauseIcon,
@@ -51,10 +44,6 @@ const colorMap = colormap({
   nshades: 256,
   format: 'float',
 });
-
-const Label = styled(FormLabel)(({ theme }) => ({
-  marginBottom: theme.spacing(1),
-}));
 
 const statusToLabelMap: Record<
   GetImageSpectrogramProgressMessage['phase'],
