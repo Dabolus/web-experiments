@@ -93,7 +93,6 @@ const FileField: FunctionComponent<FileFieldProps> = ({
                         ...(description && {
                           'aria-describedby': descriptionId,
                         }),
-                        onChange,
                         required,
                         ...field,
                       })}
