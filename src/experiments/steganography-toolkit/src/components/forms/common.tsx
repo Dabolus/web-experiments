@@ -1,8 +1,8 @@
+import { FunctionInterpolation } from '@emotion/react';
 import {
   Fab,
   FormControl,
   FormLabel,
-  IconButton,
   Typography,
   alpha,
   styled,
@@ -77,21 +77,28 @@ export const FullHeightFormControl = styled(FormControl)(fullHeightStyles);
 
 export const InputContainer = styled('div')(fullHeightStyles);
 
-export const AutoFittingCanvas = styled('canvas')<{ pixelated?: boolean }>(
-  ({ pixelated }) => ({
-    display: 'block',
-    position: 'absolute',
-    top: 16.5,
-    left: 14,
-    width: 'calc(100% - 28px)',
-    height: 'calc(100% - 33px)',
-    objectFit: 'contain',
-    ...(pixelated && {
-      imageRendering: ['crisp-edges', 'pixelated', '-webkit-optimize-contrast'],
-    }),
-
-    '&[hidden]': {
-      display: 'none',
-    },
+const autoFittingStyles: FunctionInterpolation<{ pixelated?: boolean }> = ({
+  pixelated,
+}) => ({
+  display: 'block',
+  position: 'absolute',
+  top: 16.5,
+  left: 14,
+  width: 'calc(100% - 28px)',
+  height: 'calc(100% - 33px)',
+  objectFit: 'contain',
+  '&[hidden]': {
+    display: 'none',
+  },
+  ...(pixelated && {
+    imageRendering: ['crisp-edges', 'pixelated', '-webkit-optimize-contrast'],
   }),
+});
+
+export const AutoFittingCanvas = styled('canvas')<{ pixelated?: boolean }>(
+  autoFittingStyles,
+);
+
+export const AutoFittingImage = styled('img')<{ pixelated?: boolean }>(
+  autoFittingStyles,
 );
