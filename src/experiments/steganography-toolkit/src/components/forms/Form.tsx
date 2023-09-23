@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import { FieldValues, useForm, Control, EventType } from 'react-hook-form';
 import { Unstable_Grid2 as Grid } from '@mui/material';
+import { HelperTextSeverity } from './HelperText';
 
 export type SubmitHandler<T extends FieldValues = FieldValues> = (
   data: T,
@@ -29,7 +30,8 @@ export type FormChildProps<T extends FieldValues = FieldValues> = {
   name: Extract<keyof T, string>;
   control?: Control<T>;
   label?: ReactNode;
-  description?: ReactNode;
+  description?: ReactNode | ReactNode[];
+  descriptionSeverity?: HelperTextSeverity;
   cols?: number;
   wideScreenCols?: number;
   height?: number;

@@ -1,13 +1,10 @@
 import React, { FunctionComponent, useId } from 'react';
 import { Controller } from 'react-hook-form';
 import { MuiColorInput, MuiColorInputProps } from 'mui-color-input';
-import {
-  Unstable_Grid2 as Grid,
-  FormControl,
-  FormHelperText,
-} from '@mui/material';
+import { Unstable_Grid2 as Grid, FormControl } from '@mui/material';
 import { FormChildProps } from './Form';
 import { Label } from './common';
+import HelperText from './HelperText';
 
 export interface Color {
   red: number;
@@ -24,6 +21,7 @@ const ColorField: FunctionComponent<ColorFieldProps> = ({
   name,
   label,
   description,
+  descriptionSeverity,
   inputProps,
   cols = 12,
   wideScreenCols = 6,
@@ -74,7 +72,9 @@ const ColorField: FunctionComponent<ColorFieldProps> = ({
               {...field}
             />
             {description && (
-              <FormHelperText id={descriptionId}>{description}</FormHelperText>
+              <HelperText id={descriptionId} severity={descriptionSeverity}>
+                {description}
+              </HelperText>
             )}
           </FormControl>
         </Grid>

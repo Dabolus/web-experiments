@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { FormChildProps } from './Form';
 import { Label } from './common';
+import HelperText from './HelperText';
 
 export type TextFieldProps = Omit<OutlinedInputProps, 'type'> &
   FormChildProps<any> & {
@@ -23,6 +24,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
   name,
   label,
   description,
+  descriptionSeverity,
   type,
   inputProps,
   cols = 12,
@@ -66,7 +68,9 @@ const TextField: FunctionComponent<TextFieldProps> = ({
               {...field}
             />
             {description && (
-              <FormHelperText id={descriptionId}>{description}</FormHelperText>
+              <HelperText id={descriptionId} severity={descriptionSeverity}>
+                {description}
+              </HelperText>
             )}
           </FormControl>
         </Grid>

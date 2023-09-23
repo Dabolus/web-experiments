@@ -3,12 +3,12 @@ import { Controller, Primitive } from 'react-hook-form';
 import {
   Unstable_Grid2 as Grid,
   FormControl,
-  FormHelperText,
   Select,
   SelectProps,
 } from '@mui/material';
 import { FormChildProps } from './Form';
 import { Label } from './common';
+import HelperText from './HelperText';
 
 type SimpleSelectOption = Primitive;
 
@@ -29,6 +29,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
   name,
   label,
   description,
+  descriptionSeverity,
   inputProps,
   cols = 12,
   wideScreenCols = 6,
@@ -83,7 +84,9 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
               )}
             </Select>
             {description && (
-              <FormHelperText id={descriptionId}>{description}</FormHelperText>
+              <HelperText id={descriptionId} severity={descriptionSeverity}>
+                {description}
+              </HelperText>
             )}
           </FormControl>
         </Grid>

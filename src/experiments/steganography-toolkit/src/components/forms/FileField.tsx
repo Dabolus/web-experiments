@@ -1,7 +1,7 @@
 import React, { FunctionComponent, PropsWithChildren, useId } from 'react';
 import Dropzone, { DropzoneProps } from 'react-dropzone';
 import { Controller } from 'react-hook-form';
-import { Unstable_Grid2 as Grid, FormHelperText } from '@mui/material';
+import { Unstable_Grid2 as Grid } from '@mui/material';
 import { Clear as ClearIcon } from '@mui/icons-material';
 import { FormChildProps } from './Form';
 import {
@@ -12,6 +12,7 @@ import {
   FullHeightFormControl,
   InputContainer,
 } from './common';
+import HelperText from './HelperText';
 
 export type FileFieldProps = PropsWithChildren<
   Omit<DropzoneProps & FormChildProps<any>, 'onDrop' | 'children'>
@@ -22,6 +23,7 @@ const FileField: FunctionComponent<FileFieldProps> = ({
   name,
   label,
   description,
+  descriptionSeverity,
   cols = 12,
   wideScreenCols = 6,
   height,
@@ -86,9 +88,9 @@ const FileField: FunctionComponent<FileFieldProps> = ({
                   </FileContainer>
                 </InputContainer>
                 {description && (
-                  <FormHelperText id={descriptionId}>
+                  <HelperText id={descriptionId} severity={descriptionSeverity}>
                     {description}
-                  </FormHelperText>
+                  </HelperText>
                 )}
               </FullHeightFormControl>
             )}
