@@ -1,5 +1,7 @@
 import { promises as fs } from 'fs';
 import { execute } from '@yarnpkg/shell';
+import { render as renderTemplate } from 'ejs';
+import { minify as minifyTemplate } from 'html-minifier';
 
 const kebabToCamelCase = str =>
   str.replace(/-([a-z])/g, ([, match]) => match.toUpperCase());
@@ -11,6 +13,7 @@ const [projects, apis] = await Promise.all([
 
 await fs.rm('dist', { recursive: true, force: true });
 
+// Build the functions index
 const firebaseFunctionsIndex = `import { onRequest } from 'firebase-functions/v2/https';
 ${apis.map(
   api =>
@@ -41,6 +44,47 @@ await Promise.all(
     fs.rename(`src/experiments/${project}/dist/`, `dist/${project}/`),
   ),
 );
+
+// Build the sitemap
+const sitemapTemplatePath = 'src/sitemap.ejs';
+const sitemapTemplate = await fs.readFile(sitemapTemplatePath, 'utf8');
+const renderedSitemap = await renderTemplate(
+  sitemapTemplate,
+  {
+    baseUrl: 'https://gga.dev',
+    now: new Date().toISOString(),
+    paths: [
+      '/',
+      '/choicest-voice/',
+      '/eudcc-reader/',
+      '/planet-age/',
+      '/steganography-toolkit/',
+      '/steganography-toolkit/text/unicode/info',
+      '/steganography-toolkit/text/unicode/conceal',
+      '/steganography-toolkit/text/unicode/reveal',
+      '/steganography-toolkit/image/lsb/info',
+      '/steganography-toolkit/image/lsb/generate',
+      '/steganography-toolkit/image/lsb/conceal',
+      '/steganography-toolkit/image/lsb/reveal',
+      '/steganography-toolkit/music/solresol/info',
+      '/steganography-toolkit/music/solresol/translate',
+      '/steganography-toolkit/music/spectrogram/info',
+      '/steganography-toolkit/music/spectrogram/generate',
+      '/steganography-toolkit/music/cicada-3301-dyads/info',
+      '/steganography-toolkit/music/cicada-3301-dyads/conceal',
+    ],
+  },
+  {
+    filename: sitemapTemplatePath,
+    client: false,
+    async: true,
+  },
+);
+const minifiedSitemap = minifyTemplate(renderedSitemap, {
+  collapseWhitespace: true,
+  keepClosingSlash: true,
+});
+await fs.writeFile('dist/sitemap.xml', minifiedSitemap, 'utf8');
 
 // Read the Firebase config template
 const firebaseConfigTemplate = JSON.parse(

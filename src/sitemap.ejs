@@ -1,0 +1,14 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <%# The pages should be sorted by priority %>
+  <%# NOTE: we assume a maximum of 101 pages %>
+  <% paths.forEach((path, index) => { %>
+    <url>
+      <loc><%= `${baseUrl}${path}` %></loc>
+      <xhtml:link rel="alternate" hreflang="x-default" href="<%= `${baseUrl}${path}` %>" />
+      <xhtml:link rel="alternate" hreflang="en" href="<%= `${baseUrl}${path}` %>" />
+      <changefreq>daily</changefreq>
+      <priority><%= (1 - index / 100).toFixed(2) %></priority>
+      <lastmod><%= now %></lastmod>
+    </url>
+  <% }) %>
+</urlset>
