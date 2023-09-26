@@ -19,6 +19,7 @@ import {
   FullHeightFormControl,
   InputContainer,
 } from './common';
+import type { FileFieldProps } from './FileField';
 
 export interface TextOrFileFieldProps
   extends Omit<
@@ -30,6 +31,7 @@ export interface TextOrFileFieldProps
   disabled?: boolean;
   maxLength?: number;
   showLength?: boolean;
+  accept?: FileFieldProps['accept'];
 }
 
 const encoder = new TextEncoder();
@@ -46,6 +48,7 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
   disabled,
   maxLength,
   showLength,
+  accept,
 }) => {
   const { control } = useFormContext();
   const textLabelId = useId();
@@ -109,6 +112,7 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
                 setFileName(file.name);
                 onChange?.(data);
               }}
+              accept={accept}
             >
               {({ getRootProps, getInputProps, isDragActive }) => (
                 <FullHeightFormControl fullWidth>

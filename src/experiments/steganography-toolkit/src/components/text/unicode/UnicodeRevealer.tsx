@@ -1,54 +1,31 @@
-import React, {
-  FunctionComponent,
-  useCallback,
-  useState,
-  useEffect,
-  useMemo,
-} from 'react';
-import { useDropzone } from 'react-dropzone';
-import { useDebounce } from 'use-debounce';
+import React, { FunctionComponent, useMemo, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 import { saveAs } from 'file-saver';
 import {
+  Unstable_Grid2 as Grid,
   Box,
-  Grid,
   FormControl,
-  FormLabel,
   OutlinedInput,
-  styled,
   IconButton,
   Tooltip,
+  Typography,
+  styled,
   Link,
-  Select,
 } from '@mui/material';
 import {
   FileCopy as FileCopyIcon,
   FileDownload as FileDownloadIcon,
   SimCardDownload as SimCardDownloadIcon,
 } from '@mui/icons-material';
-import Page from '../../Page';
-import { setupWorkerClient } from '../../../workers/utils';
-import type {
-  DecodedBinaryResult,
-  UnicodeWorker,
-} from '../../../workers/text/unicode.worker';
-import { EncryptionAlgorithm } from '../../../workers/preprocessor.worker';
 import usePreprocessor from '../../../hooks/usePreprocessor';
-import { readFile } from '../../../helpers';
-import FileContainer from './FileContainer';
-
-const unicodeWorker = setupWorkerClient<UnicodeWorker>(
-  new Worker(
-    new URL('../../../workers/text/unicode.worker.ts', import.meta.url),
-    {
-      type: 'module',
-    },
-  ),
-  ['encodeText', 'encodeBinary', 'decodeText', 'decodeBinary'],
-);
-
-const Label = styled(FormLabel)(({ theme }) => ({
-  marginBottom: theme.spacing(1),
-}));
+import { prettifySize } from '../../../helpers';
+import Page from '../../Page';
+import { Label } from '../../forms/common';
+import UnicodeRevealerForm, {
+  UnicodeRevealerFormProps,
+} from './UnicodeRevealerForm';
+import { unicodeWorker } from './unicodeWorkerClient';
+import type { DecodedBinaryResult } from '../../../workers/text/unicode.worker';
 
 const DownloadLink = styled(Link)({
   marginTop: '-0.25rem',
@@ -60,205 +37,108 @@ const DownloadLink = styled(Link)({
 const decoder = new TextDecoder();
 
 const UnicodeRevealer: FunctionComponent = () => {
-  const [carrierWithPayloadText, setCarrierWithPayloadText] = useState('');
-  const [carrierWithPayloadFileName, setCarrierWithPayloadFileName] =
-    useState('');
-  const [payload, setPayload] = useState<DecodedBinaryResult | undefined>();
+  const [carrierWithPayloadLength, setCarrierWithPayloadLength] = useState(0);
+  const [output, setOutput] = useState<DecodedBinaryResult | undefined>();
   const hiddenText = useMemo(
-    () =>
-      payload?.hiddenData ? decoder.decode(payload.hiddenData) : undefined,
-    [payload],
+    () => (output?.hiddenData ? decoder.decode(output.hiddenData) : ''),
+    [output],
   );
   const [copyToClipboardText, setCopyToClipboardText] =
     useState('Copy to clipboard');
-  const [encryption, setEncryption] = useState<EncryptionAlgorithm | 'none'>(
-    'none',
-  );
-  const [password, setPassword] = useState('');
   const { decrypt } = usePreprocessor();
 
-  const data = useMemo(
-    () => ({ carrierWithPayloadText, carrierWithPayloadFileName }),
-    [carrierWithPayloadText, carrierWithPayloadFileName],
-  );
+  const handleChange = useDebouncedCallback<
+    NonNullable<UnicodeRevealerFormProps['onChange']>
+  >(async data => {
+    setCarrierWithPayloadLength(data.carrierWithPayload?.length ?? 0);
 
-  const [debouncedData] = useDebounce(data, 300);
+    if (
+      !data.carrierWithPayload ||
+      (data.encryption.algorithm !== 'none' && !data.encryption.password)
+    ) {
+      setOutput(undefined);
+      return;
+    }
 
-  const onFileDrop = useCallback(async ([acceptedFile]: File[]) => {
-    const content = await readFile(acceptedFile, 'text');
-    setCarrierWithPayloadFileName(acceptedFile.name);
-    setCarrierWithPayloadText(content);
-  }, []);
+    const decoded = await unicodeWorker.decodeBinary(
+      decoder.decode(data.carrierWithPayload),
+    );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: onFileDrop,
-    accept: {
-      'text/plain': ['.txt'],
-    },
-  });
+    const hiddenData =
+      data.encryption.algorithm === 'none'
+        ? decoded.hiddenData
+        : await decrypt(
+            decoded.hiddenData,
+            data.encryption.password,
+            data.encryption.algorithm,
+          );
 
-  useEffect(() => {
-    const compute = async () => {
-      if (
-        !debouncedData.carrierWithPayloadText ||
-        (encryption !== 'none' && !password)
-      ) {
-        setPayload(undefined);
-        return;
-      }
-
-      const decoded = await unicodeWorker.decodeBinary(
-        debouncedData.carrierWithPayloadText,
-      );
-
-      const hiddenData =
-        encryption === 'none'
-          ? decoded.hiddenData
-          : await decrypt(decoded.hiddenData, password, encryption);
-
-      setPayload({
-        originalText: decoded.originalText,
-        hiddenData,
-      });
-    };
-
-    compute();
-  }, [debouncedData, decrypt, encryption, password]);
+    setOutput({
+      originalText: decoded.originalText,
+      hiddenData,
+    });
+  }, 300);
 
   const handleDecodedOutputCopyToClipboard = async () => {
-    await navigator.clipboard.writeText(hiddenText!);
+    await navigator.clipboard.writeText(hiddenText);
     setCopyToClipboardText('Copied!');
     setTimeout(() => setCopyToClipboardText('Copy to clipboard'), 2000);
   };
 
   const handleDecodedOutputDownloadAsTxt = () => {
-    saveAs(new Blob([hiddenText!], { type: 'text/plain' }), 'output.txt');
+    saveAs(new Blob([hiddenText], { type: 'text/plain' }), 'output.txt');
   };
 
   const handleDecodedOutputDownloadAsFile = async () => {
-    const decoded = await unicodeWorker.decodeBinary(
-      debouncedData.carrierWithPayloadText,
-    );
-    const hiddenData =
-      encryption === 'none'
-        ? decoded.hiddenData
-        : await decrypt(decoded.hiddenData, password, encryption);
-
     saveAs(
-      new Blob([hiddenData], { type: 'application/octet-stream' }),
+      new Blob([output!.hiddenData], { type: 'application/octet-stream' }),
       'output',
     );
   };
 
   return (
     <Page size="md" title="Text - Unicode - Reveal">
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <Label>
-                  Text with hidden message
-                  {carrierWithPayloadText
-                    ? ` (length: ${carrierWithPayloadText.length})`
-                    : ''}
-                </Label>
-                <OutlinedInput
-                  multiline
-                  rows={3.5}
-                  value={carrierWithPayloadText}
-                  onInput={event =>
-                    setCarrierWithPayloadText(
-                      (event.target as HTMLInputElement).value,
-                    )
-                  }
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <div {...getRootProps()}>
-                  <Label>Or select a file instead</Label>
-                  <input {...getInputProps()} />
-                  <FileContainer isDragActive={isDragActive}>
-                    {carrierWithPayloadFileName ||
-                      'Drop a file here, or click to select file'}
-                  </FileContainer>
-                </div>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Grid container spacing={1}>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <Label>Encryption</Label>
-                <Select
-                  native
-                  value={encryption}
-                  onChange={e =>
-                    setEncryption(
-                      e.target.value as EncryptionAlgorithm | 'none',
-                    )
-                  }
-                >
-                  <option value="none">None</option>
-                  <option value="AES-CTR">AES (Counter)</option>
-                  <option value="AES-GCM">AES (Galois/Counter)</option>
-                  <option value="AES-CBC">AES (Cipher Block Chaining)</option>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <Label>Password</Label>
-                <OutlinedInput
-                  type="password"
-                  readOnly={encryption === 'none'}
-                  value={encryption === 'none' ? '' : password}
-                  onInput={e =>
-                    setPassword((e.target as HTMLInputElement).value)
-                  }
-                  placeholder={
-                    encryption === 'none'
-                      ? 'Select an encryption algorithm first'
-                      : ''
-                  }
-                />
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} sm={6}>
+      <UnicodeRevealerForm onChange={handleChange} />
+      <Grid container spacing={3} mt={2}>
+        <Grid xs={12} sm={6}>
           <FormControl fullWidth>
-            <Label>
-              Original text
-              {payload?.originalText
-                ? ` (length: ${payload.originalText.length})`
-                : ''}
-            </Label>
+            <Label>Original text</Label>
             <OutlinedInput
               readOnly
               multiline
               rows={8}
-              value={payload?.originalText}
+              value={output?.originalText}
             />
+            {output && (
+              <Typography
+                variant="caption"
+                position="absolute"
+                bottom={2}
+                left={6}
+              >
+                {output.originalText.length}
+              </Typography>
+            )}
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid xs={12} sm={6}>
           <FormControl fullWidth>
-            <Label>
-              Hidden text/file
-              {payload?.hiddenData
-                ? ` (length: ${payload.hiddenData.length})`
-                : ''}
-            </Label>
+            <Label>Hidden text/file</Label>
             <OutlinedInput readOnly multiline rows={8} value={hiddenText} />
+            {output && (
+              <Typography
+                variant="caption"
+                position="absolute"
+                bottom={2}
+                left={6}
+              >
+                {prettifySize(output.hiddenData.length)}
+              </Typography>
+            )}
           </FormControl>
           <Box mt={2} display="flex" justifyContent="space-between">
             <Box flex="1 1 auto">
-              {hiddenText && /[^ -~]/.test(hiddenText) && (
+              {/[^ -~]/.test(hiddenText) && (
                 <>
                   Output looks weird?
                   <br />
@@ -275,26 +155,26 @@ const UnicodeRevealer: FunctionComponent = () => {
               )}
             </Box>
             <Box flex="0 0 auto">
-              <Tooltip title={payload ? copyToClipboardText : ''}>
+              <Tooltip title={output ? copyToClipboardText : ''}>
                 <IconButton
                   onClick={handleDecodedOutputCopyToClipboard}
-                  disabled={!payload}
+                  disabled={!output}
                 >
                   <FileCopyIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title={payload ? 'Download as .txt' : ''}>
+              <Tooltip title={output ? 'Download as .txt' : ''}>
                 <IconButton
                   onClick={handleDecodedOutputDownloadAsTxt}
-                  disabled={!payload}
+                  disabled={!output}
                 >
                   <SimCardDownloadIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title={payload ? 'Download as file' : ''}>
+              <Tooltip title={output ? 'Download as file' : ''}>
                 <IconButton
                   onClick={handleDecodedOutputDownloadAsFile}
-                  disabled={!payload}
+                  disabled={!output}
                 >
                   <FileDownloadIcon />
                 </IconButton>
