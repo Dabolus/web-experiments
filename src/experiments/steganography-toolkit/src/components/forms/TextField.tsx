@@ -5,6 +5,7 @@ import {
   FormControl,
   OutlinedInput,
   OutlinedInputProps,
+  Typography,
 } from '@mui/material';
 import { FormChildProps } from './Form';
 import { Label } from './common';
@@ -16,6 +17,8 @@ export type TextFieldProps = Omit<OutlinedInputProps, 'type'> &
     min?: number;
     max?: number;
     step?: number;
+    maxLength?: number;
+    showLength?: boolean;
   };
 
 const TextField: FunctionComponent<TextFieldProps> = ({
@@ -33,6 +36,8 @@ const TextField: FunctionComponent<TextFieldProps> = ({
   max,
   step,
   disabled,
+  maxLength,
+  showLength,
   ...props
 }) => {
   const { control } = useFormContext();
@@ -55,6 +60,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
                 min,
                 max,
                 step,
+                maxLength,
                 ...inputProps,
               }}
               value={value}
@@ -70,6 +76,17 @@ const TextField: FunctionComponent<TextFieldProps> = ({
               {...props}
               {...field}
             />
+            {showLength && !!value && (
+              <Typography
+                variant="caption"
+                position="absolute"
+                bottom={2}
+                left={6}
+              >
+                {value.length}
+                {maxLength && `/${maxLength}`}
+              </Typography>
+            )}
             {description && showDescription(value) && (
               <HelperText id={descriptionId} severity={descriptionSeverity}>
                 {description}

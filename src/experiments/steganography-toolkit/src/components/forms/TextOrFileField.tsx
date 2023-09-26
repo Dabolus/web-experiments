@@ -4,12 +4,13 @@ import {
   Unstable_Grid2 as Grid,
   FormControl,
   OutlinedInput,
+  Typography,
 } from '@mui/material';
 import { Clear as ClearIcon } from '@mui/icons-material';
 import { FormChildProps } from './Form';
 import FieldsStack, { FieldsStackProps } from './FieldsStack';
 import Dropzone from 'react-dropzone';
-import { readFile } from '../../helpers';
+import { prettifySize, readFile } from '../../helpers';
 import {
   ClearFileButton,
   FileName,
@@ -25,7 +26,10 @@ export interface TextOrFileFieldProps
     'description' | 'children'
   > {
   spacing?: number;
+  required?: boolean;
   disabled?: boolean;
+  maxLength?: number;
+  showLength?: boolean;
 }
 
 const encoder = new TextEncoder();
@@ -38,7 +42,10 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
   cols = 12,
   wideScreenCols = 6,
   height,
+  required,
   disabled,
+  maxLength,
+  showLength,
 }) => {
   const { control } = useFormContext();
   const textLabelId = useId();
@@ -63,7 +70,11 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
                 multiline
                 rows={3.5}
                 name={`${name}Text`}
-                inputProps={{ 'aria-labelledby': textLabelId, ...field }}
+                inputProps={{
+                  'aria-labelledby': textLabelId,
+                  maxLength,
+                  ...field,
+                }}
                 value={fileName ? '' : decoder.decode(value)}
                 onChange={event =>
                   onChange(
@@ -72,14 +83,27 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
                       : undefined,
                   )
                 }
+                required={required}
                 disabled={disabled || !!fileName}
               />
+              {showLength && !!value && !fileName && (
+                <Typography
+                  variant="caption"
+                  position="absolute"
+                  bottom={2}
+                  left={6}
+                >
+                  {value.length ?? 0}
+                  {maxLength && `/${maxLength}`}
+                </Typography>
+              )}
             </FormControl>
           </Grid>
           <Grid xs={12}>
             <Dropzone
               multiple={false}
               disabled={disabled || (!!value && !fileName)}
+              maxSize={maxLength}
               onDrop={async ([file]) => {
                 const data = await readFile(file);
                 setFileName(file.name);
@@ -94,6 +118,7 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
                       {...getInputProps({
                         'aria-labelledby': fileLabelId,
                         name,
+                        required,
                         ...field,
                       })}
                     />
@@ -117,6 +142,17 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
                         >
                           <ClearIcon />
                         </ClearFileButton>
+                      )}
+                      {showLength && !!value && !!fileName && (
+                        <Typography
+                          variant="caption"
+                          position="absolute"
+                          bottom={2}
+                          left={6}
+                        >
+                          {prettifySize(value.length)}
+                          {maxLength && `/${prettifySize(maxLength)}`}
+                        </Typography>
                       )}
                     </FileContainer>
                   </InputContainer>

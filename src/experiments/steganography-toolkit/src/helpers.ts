@@ -104,3 +104,14 @@ export const getImageData = async (
   ctx.drawImage(img, 0, 0);
   return ctx.getImageData(0, 0, img.width, img.height);
 };
+
+export const prettifySize = (bytes: number) => {
+  const measurementUnits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
+  let finalVal = bytes;
+  let unitIndex = 0;
+  while (finalVal > 1024 && unitIndex < measurementUnits.length - 1) {
+    finalVal /= 1024;
+    unitIndex++;
+  }
+  return `${Math.round(finalVal)}${measurementUnits[unitIndex]}`;
+};
