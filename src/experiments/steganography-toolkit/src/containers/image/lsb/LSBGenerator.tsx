@@ -3,10 +3,16 @@ import { useDebouncedCallback } from 'use-debounce';
 import { saveAs } from 'file-saver';
 import { Box, FormControl, MenuItem } from '@mui/material';
 import usePreprocessor from '../../../hooks/usePreprocessor';
-import Page from '../../Page';
-import MenuButton from '../../MenuButton';
-import { AutoFittingCanvas, FileContainer, Label } from '../../forms/common';
-import LSBConcealerForm, { LSBConcealerFormProps } from './LSBConcealerForm';
+import Page from '../../../components/Page';
+import MenuButton from '../../../components/MenuButton';
+import {
+  AutoFittingCanvas,
+  FileContainer,
+  Label,
+} from '../../../components/forms/common';
+import LSBGeneratorForm, {
+  LSBGeneratorFormProps,
+} from '../../../components/image/lsb/LSBGeneratorForm';
 import { lsbWorker } from './lsbWorkerClient';
 
 const formatToExt: Record<string, string> = {
@@ -14,35 +20,49 @@ const formatToExt: Record<string, string> = {
   'image/webp': 'webp',
 };
 
-const LSBConcealer: FunctionComponent = () => {
+const computeMinimumRequiredPixels = (
+  payloadSize: number,
+  bitsPerChannel: number,
+  useAlphaChannel: boolean,
+) => {
+  const payloadBits = payloadSize * 8;
+  const bitsPerPixel = bitsPerChannel * (useAlphaChannel ? 4 : 3);
+  return Math.ceil(payloadBits / bitsPerPixel);
+};
+
+const computeWidthHeight = (
+  size: number,
+  aspectRatio: [number, number],
+): [number, number] => {
+  const [widthRatio, heightRatio] = aspectRatio;
+  const widthHeight = Math.sqrt(size / (widthRatio * heightRatio));
+  const theoreticalWidth = widthRatio * widthHeight;
+  const theoreticalHeight = heightRatio * widthHeight;
+  const ceiledWidth = Math.ceil(theoreticalWidth);
+  const flooredHeight = Math.floor(theoreticalHeight);
+  return [
+    ceiledWidth,
+    ceiledWidth * flooredHeight >= size ? flooredHeight : flooredHeight + 1,
+  ];
+};
+
+const LSBGenerator: FunctionComponent = () => {
   const outputRef = useRef<HTMLCanvasElement | null>(null);
   const [hasOutput, setHasOutput] = useState(false);
   const { encrypt } = usePreprocessor();
 
   const handleChange = useDebouncedCallback<
-    NonNullable<LSBConcealerFormProps['onChange']>
+    NonNullable<LSBGeneratorFormProps['onChange']>
   >(async data => {
     if (
       !outputRef.current ||
-      !data.carrier ||
       !data.payload ||
       (data.encryption.algorithm !== 'none' && !data.encryption.password)
     ) {
-      if (outputRef.current) {
-        outputRef.current.width = data.carrier?.width ?? 0;
-        outputRef.current.height = data.carrier?.height ?? 0;
-      }
-      const placeHolderImage =
-        data.carrier
-          ?.getContext('2d', {
-            willReadFrequently: true,
-          })
-          ?.getImageData(0, 0, data.carrier.width, data.carrier.height) ??
-        new ImageData(1, 1);
       outputRef.current
         ?.getContext('bitmaprenderer')
-        ?.transferFromImageBitmap(await createImageBitmap(placeHolderImage));
-      setHasOutput(!!data.carrier);
+        ?.transferFromImageBitmap(await createImageBitmap(new ImageData(1, 1)));
+      setHasOutput(false);
       return;
     }
     const finalPayload =
@@ -53,10 +73,30 @@ const LSBConcealer: FunctionComponent = () => {
             data.encryption.password,
             data.encryption.algorithm,
           );
+    const minimumRequiredPixels = computeMinimumRequiredPixels(
+      finalPayload.length,
+      data.bitsPerChannel,
+      data.useAlphaChannel,
+    );
+    const [width, height] = computeWidthHeight(
+      minimumRequiredPixels,
+      data.aspectRatio,
+    );
+    const colorsArray = [
+      data.backgroundColor.red,
+      data.backgroundColor.green,
+      data.backgroundColor.blue,
+      Math.round((data.backgroundColor.alpha ?? 1) * 255),
+    ];
     const outputImage = await lsbWorker.encode({
-      inputImage: data.carrier
-        .getContext('2d', { willReadFrequently: true })!
-        .getImageData(0, 0, data.carrier.width, data.carrier.height),
+      inputImage: new ImageData(
+        Uint8ClampedArray.from(
+          { length: width * height * 4 },
+          (_, index) => colorsArray[index % 4],
+        ),
+        width,
+        height,
+      ),
       message: Uint8ClampedArray.from(finalPayload),
       bitsPerChannel: data.bitsPerChannel,
       useAlphaChannel: data.useAlphaChannel,
@@ -88,8 +128,8 @@ const LSBConcealer: FunctionComponent = () => {
   };
 
   return (
-    <Page size="md" title="Image - LSB - Conceal">
-      <LSBConcealerForm onChange={handleChange} />
+    <Page size="md" title="Image - LSB - Generate">
+      <LSBGeneratorForm onChange={handleChange} />
       <Box mt={3}>
         <FormControl fullWidth>
           <Label>Output image</Label>
@@ -113,4 +153,4 @@ const LSBConcealer: FunctionComponent = () => {
   );
 };
 
-export default LSBConcealer;
+export default LSBGenerator;

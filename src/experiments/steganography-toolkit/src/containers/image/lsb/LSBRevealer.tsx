@@ -16,9 +16,11 @@ import {
   FileDownload as FileDownloadIcon,
 } from '@mui/icons-material';
 import usePreprocessor from '../../../hooks/usePreprocessor';
-import Page from '../../Page';
-import { Label } from '../../forms/common';
-import LSBRevealerForm, { LSBRevealerFormProps } from './LSBRevealerForm';
+import Page from '../../../components/Page';
+import { Label } from '../../../components/forms/common';
+import LSBRevealerForm, {
+  LSBRevealerFormProps,
+} from '../../../components/image/lsb/LSBRevealerForm';
 import { lsbWorker } from './lsbWorkerClient';
 
 const DownloadLink = styled(Link)({

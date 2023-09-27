@@ -16,16 +16,16 @@ import {
   Pause as PauseIcon,
   Download as DownloadIcon,
 } from '@mui/icons-material';
-import Page from '../../Page';
+import Page from '../../../components/Page';
 import { setupWorkerClient } from '../../../workers/utils';
 import type {
   GetImageSpectrogramProgressMessage,
   SpectrogramWorker,
 } from '../../../workers/music/spectrogram.worker';
-import LoadingOverlay from '../../LoadingOverlay';
+import LoadingOverlay from '../../../components/LoadingOverlay';
 import SpectrogramGeneratorForm, {
   SpectrogramGeneratorFormProps,
-} from './SpectrogramGeneratorForm';
+} from '../../../components/music/spectrogram/SpectrogramGeneratorForm';
 
 const spectrogramWorker = setupWorkerClient<SpectrogramWorker>(
   new Worker(

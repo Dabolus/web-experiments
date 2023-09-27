@@ -8,8 +8,8 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import Page from '../../Page';
-import Text from '../../Text';
+import Page from '../../../components/Page';
+import Text from '../../../components/Text';
 
 const highlightDiff = (a: string, b: string) => {
   const diffIndex = Array.from(b).findIndex((char, index) => char !== a[index]);

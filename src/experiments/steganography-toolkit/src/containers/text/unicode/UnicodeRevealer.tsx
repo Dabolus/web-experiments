@@ -19,11 +19,11 @@ import {
 } from '@mui/icons-material';
 import usePreprocessor from '../../../hooks/usePreprocessor';
 import { prettifySize } from '../../../helpers';
-import Page from '../../Page';
-import { Label } from '../../forms/common';
+import Page from '../../../components/Page';
+import { Label } from '../../../components/forms/common';
 import UnicodeRevealerForm, {
   UnicodeRevealerFormProps,
-} from './UnicodeRevealerForm';
+} from '../../../components/text/unicode/UnicodeRevealerForm';
 import { unicodeWorker } from './unicodeWorkerClient';
 import type { DecodedBinaryResult } from '../../../workers/text/unicode.worker';
 

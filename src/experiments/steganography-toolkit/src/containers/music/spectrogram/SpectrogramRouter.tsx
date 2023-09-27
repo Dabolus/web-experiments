@@ -1,13 +1,16 @@
 import React, { FunctionComponent } from 'react';
-import SpectrogramInfo from '../../components/music/spectrogram/SpectrogramInfo';
-import SpectrogramGenerator from '../../components/music/spectrogram/SpectrogramGenerator';
+import SpectrogramInfo from './SpectrogramInfo';
+import SpectrogramGenerator from './SpectrogramGenerator';
 import TechniquePage, {
   TechniquePageProps,
-} from '../../components/TechniquePage';
+} from '../../../components/TechniquePage';
 
-export type SpectrogramProps = Omit<TechniquePageProps, 'id' | 'name' | 'tabs'>;
+export type SpectrogramRouterProps = Omit<
+  TechniquePageProps,
+  'id' | 'name' | 'tabs'
+>;
 
-const Spectrogram: FunctionComponent<SpectrogramProps> = props => (
+const SpectrogramRouter: FunctionComponent<SpectrogramRouterProps> = props => (
   <TechniquePage
     id="spectrogram"
     name="Spectrogram"
@@ -27,4 +30,4 @@ const Spectrogram: FunctionComponent<SpectrogramProps> = props => (
   />
 );
 
-export default Spectrogram;
+export default SpectrogramRouter;

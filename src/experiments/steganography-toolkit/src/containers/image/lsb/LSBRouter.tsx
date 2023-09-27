@@ -1,15 +1,15 @@
 import React, { FunctionComponent } from 'react';
-import LSBInfo from '../../components/image/lsb/LSBInfo';
-import LSBGenerator from '../../components/image/lsb/LSBGenerator';
-import LSBConcealer from '../../components/image/lsb/LSBConcealer';
-import LSBRevealer from '../../components/image/lsb/LSBRevealer';
+import LSBInfo from './LSBInfo';
+import LSBGenerator from './LSBGenerator';
+import LSBConcealer from './LSBConcealer';
+import LSBRevealer from './LSBRevealer';
 import TechniquePage, {
   TechniquePageProps,
-} from '../../components/TechniquePage';
+} from '../../../components/TechniquePage';
 
-export type LSBProps = Omit<TechniquePageProps, 'id' | 'name' | 'tabs'>;
+export type LSBRouterProps = Omit<TechniquePageProps, 'id' | 'name' | 'tabs'>;
 
-const LSB: FunctionComponent<LSBProps> = props => (
+const LSBRouter: FunctionComponent<LSBRouterProps> = props => (
   <TechniquePage
     id="lsb"
     name="Least Significant Bit"
@@ -39,4 +39,4 @@ const LSB: FunctionComponent<LSBProps> = props => (
   />
 );
 
-export default LSB;
+export default LSBRouter;

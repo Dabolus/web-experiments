@@ -11,13 +11,13 @@ import {
   ArrowDropUp as ArrowDropUpIcon,
   ArrowDropDown as ArrowDropDownIcon,
 } from '@mui/icons-material';
-import Page from '../../Page';
+import Page from '../../../components/Page';
 import Cicada3301DyadsForm, {
   Cicada3301DyadsFormProps,
   Cicada3301DyadsFormValue,
-} from './Cicada3301DyadsForm';
-import Abc from '../Abc';
-import Loader from '../../Loader';
+} from '../../../components/music/cicada-3301-dyads/Cicada3301DyadsForm';
+import Abc from '../../../components/music/Abc';
+import Loader from '../../../components/Loader';
 import { setupWorkerClient } from '../../../workers/utils';
 import type { Cicada3301DyadsWorker } from '../../../workers/music/cicada-3301-dyads.worker';
 import useAudioExporter from '../../../hooks/useAudioExporter';

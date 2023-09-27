@@ -1,14 +1,17 @@
 import React, { FunctionComponent } from 'react';
-import UnicodeInfo from '../../components/text/unicode/UnicodeInfo';
-import UnicodeConcealer from '../../components/text/unicode/UnicodeConcealer';
-import UnicodeRevealer from '../../components/text/unicode/UnicodeRevealer';
+import UnicodeInfo from './UnicodeInfo';
+import UnicodeConcealer from './UnicodeConcealer';
+import UnicodeRevealer from './UnicodeRevealer';
 import TechniquePage, {
   TechniquePageProps,
-} from '../../components/TechniquePage';
+} from '../../../components/TechniquePage';
 
-export type UnicodeProps = Omit<TechniquePageProps, 'id' | 'name' | 'tabs'>;
+export type UnicodeRouterProps = Omit<
+  TechniquePageProps,
+  'id' | 'name' | 'tabs'
+>;
 
-const Unicode: FunctionComponent<UnicodeProps> = props => (
+const UnicodeRouter: FunctionComponent<UnicodeRouterProps> = props => (
   <TechniquePage
     id="unicode"
     name="Unicode"
@@ -33,4 +36,4 @@ const Unicode: FunctionComponent<UnicodeProps> = props => (
   />
 );
 
-export default Unicode;
+export default UnicodeRouter;

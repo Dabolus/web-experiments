@@ -1,7 +1,7 @@
 import React, { FunctionComponent, Fragment } from 'react';
 import { Link } from '@mui/material';
-import Page from '../../Page';
-import Text from '../../Text';
+import Page from '../../../components/Page';
+import Text from '../../../components/Text';
 
 const UnicodeInfo: FunctionComponent = () => (
   <Page title="Text - Unicode - Info">

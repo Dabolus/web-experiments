@@ -1,8 +1,8 @@
 import React, { FunctionComponent, Fragment } from 'react';
 import { styled } from '@mui/material';
-import Page from '../../Page';
-import Text from '../../Text';
-import { convertToSolresolForm } from './helpers';
+import Page from '../../../components/Page';
+import Text from '../../../components/Text';
+import { convertToSolresolForm } from '../../../components/music/solresol/helpers';
 
 const MusicalScaleExampleContainer = styled('div')(({ theme }) => ({
   margin: theme.spacing(1, 0),

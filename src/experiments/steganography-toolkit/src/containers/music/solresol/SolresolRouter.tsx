@@ -1,13 +1,16 @@
 import React, { FunctionComponent } from 'react';
-import SolresolInfo from '../../components/music/solresol/SolresolInfo';
-import SolresolTranslator from '../../components/music/solresol/SolresolTranslator';
+import SolresolInfo from './SolresolInfo';
+import SolresolTranslator from './SolresolTranslator';
 import TechniquePage, {
   TechniquePageProps,
-} from '../../components/TechniquePage';
+} from '../../../components/TechniquePage';
 
-export type SolresolProps = Omit<TechniquePageProps, 'id' | 'name' | 'tabs'>;
+export type SolresolRouterProps = Omit<
+  TechniquePageProps,
+  'id' | 'name' | 'tabs'
+>;
 
-const Solresol: FunctionComponent<SolresolProps> = props => (
+const SolresolRouter: FunctionComponent<SolresolRouterProps> = props => (
   <TechniquePage
     id="solresol"
     name="Solresol"
@@ -27,4 +30,4 @@ const Solresol: FunctionComponent<SolresolProps> = props => (
   />
 );
 
-export default Solresol;
+export default SolresolRouter;

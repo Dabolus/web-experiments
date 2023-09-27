@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import Page from '../../Page';
-import Text from '../../Text';
+import Page from '../../../components/Page';
+import Text from '../../../components/Text';
 
 const SpectrogramInfo: FunctionComponent = () => (
   <Page title="Music - Spectrogram - Info">

@@ -4,11 +4,11 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 import { TopbarLayoutProps } from '../../components/TopbarLayout';
 
-const Unicode = lazy(() => import('./Unicode'));
+const UnicodeRouter = lazy(() => import('./unicode/UnicodeRouter'));
 
 const TextRouter: FunctionComponent<TopbarLayoutProps> = props => (
   <Routes>
-    <Route path="/unicode/:tab?" element={<Unicode {...props} />} />
+    <Route path="/unicode/:tab?" element={<UnicodeRouter {...props} />} />
     <Route path="*" element={<Navigate to="/unicode" replace />} />
   </Routes>
 );

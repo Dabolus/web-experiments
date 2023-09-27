@@ -16,11 +16,11 @@ import {
 } from '@mui/icons-material';
 import usePreprocessor from '../../../hooks/usePreprocessor';
 import { prettifySize } from '../../../helpers';
-import Page from '../../Page';
-import { Label } from '../../forms/common';
+import Page from '../../../components/Page';
+import { Label } from '../../../components/forms/common';
 import UnicodeConcealerForm, {
   UnicodeConcealerFormProps,
-} from './UnicodeConcealerForm';
+} from '../../../components/text/unicode/UnicodeConcealerForm';
 import { unicodeWorker } from './unicodeWorkerClient';
 
 const UnicodeConcealer: FunctionComponent = () => {

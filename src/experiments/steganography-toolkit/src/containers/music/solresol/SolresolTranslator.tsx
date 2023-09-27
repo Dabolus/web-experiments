@@ -35,11 +35,11 @@ import {
 } from '@mui/icons-material';
 import { useDebounce } from 'use-debounce';
 import { setupWorkerClient } from '../../../workers/utils';
-import Page from '../../Page';
-import Loader from '../../Loader';
+import Page from '../../../components/Page';
+import Loader from '../../../components/Loader';
 import SolresolOutput, {
   SolresolOutputProps,
-} from '../../music/solresol/SolresolOutput';
+} from '../../../components/music/solresol/SolresolOutput';
 import {
   SolresolInputType,
   SolresolOutputType,
@@ -49,7 +49,7 @@ import {
   isSolresolInputType,
   isSolresolOutputType,
   convertSolresolInput,
-} from './helpers';
+} from '../../../components/music/solresol/helpers';
 import type {
   SolresolWorker,
   TranslationOutputItems,
@@ -57,7 +57,7 @@ import type {
 } from '../../../workers/music/solresol.worker';
 import useAudioExporter from '../../../hooks/useAudioExporter';
 import { chunk } from '../../../helpers';
-import Abc from '../Abc';
+import Abc from '../../../components/music/Abc';
 
 const solresolWorker = setupWorkerClient<SolresolWorker>(
   new Worker(

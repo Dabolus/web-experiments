@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import Page from '../../Page';
-import Text from '../../Text';
+import Page from '../../../components/Page';
+import Text from '../../../components/Text';
 
 const Cicada3301DyadsInfo: FunctionComponent = () => (
   <Page title="Music - Cicada 3301 Dyads - Info">
