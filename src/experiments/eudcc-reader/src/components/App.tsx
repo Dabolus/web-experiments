@@ -1,9 +1,10 @@
 import { FunctionalComponent, h } from 'preact';
 import { Router, Route } from 'wouter-preact';
 import makeMatcher, { MatcherFn } from 'wouter-preact/matcher';
+import { lazy } from '../utils';
 
-import Home from '../routes/Home';
-import Reader from '../routes/Reader';
+const Home = lazy(() => import('../routes/Home'));
+const Reader = lazy(() => import('../routes/Reader'));
 
 const defaultMatcher = makeMatcher();
 

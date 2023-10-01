@@ -1,8 +1,5 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
-import EUDCCResultsTab from '../routes/EUDCCResultsTab';
-import EUDCCAdvancedTab from '../routes/EUDCCAdvancedTab';
-import EUDCCRawTab from '../routes/EUDCCRawTab';
 import {
   eudccStatusToMessageMap,
   EUDCCDataOutput,
@@ -11,6 +8,11 @@ import {
 import classes from './EUDCC.module.scss';
 import commonClasses from '../common/styles.module.scss';
 import Tabs from './Tabs';
+import { lazy } from '../utils';
+
+const EUDCCResultsTab = lazy(() => import('../routes/EUDCCResultsTab'));
+const EUDCCAdvancedTab = lazy(() => import('../routes/EUDCCAdvancedTab'));
+const EUDCCRawTab = lazy(() => import('../routes/EUDCCRawTab'));
 
 export interface EUDCCProps {
   value: EUDCCDataOutput;

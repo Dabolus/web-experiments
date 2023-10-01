@@ -8,8 +8,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "NODE_OPTIONS=--openssl-legacy-provider preact watch --config preact.config.mjs --port 3000",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider preact build --config preact.config.mjs --preload --no-prerender --dest dist"
+    "start": "vite",
+    "build": "vite build"
   },
   "dependencies": {
     "barcode-detector": "^1.0.3",
@@ -21,13 +21,18 @@
     "preact": "^10.16.0",
     "preact-render-to-string": "^6.2.0",
     "qr.js": "^0.0.0",
+    "workbox-core": "^7.0.0",
+    "workbox-google-analytics": "^7.0.0",
+    "workbox-precaching": "^7.0.0",
+    "workbox-routing": "^7.0.0",
     "wouter-preact": "^2.11.0"
   },
   "devDependencies": {
+    "@preact/preset-vite": "^2.5.0",
     "@types/pako": "^2.0.0",
     "cbor": "^9.0.1",
-    "preact-cli": "^3.4.6",
-    "sass": "^1.64.0",
-    "sass-loader": "10"
+    "typescript": "^5.1.6",
+    "vite": "^4.4.6",
+    "vite-plugin-pwa": "^0.16.4"
   }
 }
