@@ -11,12 +11,12 @@
     "@preact/preset-vite": "^2.5.0",
     "@rollup/plugin-yaml": "^4.1.1",
     "tosource": "^2.0.0-alpha.3",
-    "vite": "^4.4.6",
+    "vite": "^4.4.9",
     "vite-plugin-html": "^3.2.0",
     "vite-plugin-markdown": "^2.1.0",
-    "vite-plugin-pwa": "^0.16.4"
+    "vite-plugin-pwa": "^0.16.5"
   },
   "devDependencies": {
-    "@types/node": "18"
+    "@types/node": "^20.8.0"
   }
 }

@@ -1,18 +1,20 @@
-import type BarcodeDetectorJsqr from 'barcode-detector/dist/BarcodeDetectorJsqr';
+import type { BarcodeDetector as BarcodeDetectorPolyfill } from 'barcode-detector/pure';
 
-export const configureQrCodeDetector = async (): Promise<BarcodeDetector> => {
-  const Detector =
-    'BarcodeDetector' in window &&
-    (await BarcodeDetector.getSupportedFormats()).includes('qr_code')
-      ? // If BarcodeDetector exists and supports QR Codes, use it
-        BarcodeDetector
-      : // Otherwise, lazy load the polyfill and use that instead
-        (await import('barcode-detector')).default;
+export const configureQrCodeDetector =
+  async (): Promise<BarcodeDetectorPolyfill> => {
+    const Detector =
+      'BarcodeDetector' in window &&
+      (await BarcodeDetector.getSupportedFormats()).includes('qr_code')
+        ? // If BarcodeDetector exists and supports QR Codes, use it
+          BarcodeDetector
+        : // Otherwise, lazy load the polyfill and use that instead
+          (await import('barcode-detector/pure')).BarcodeDetector;
 
-  return new Detector({ formats: ['qr_code'] });
-};
+    return new Detector({ formats: ['qr_code'] });
+  };
 
-const detectorPromise: Promise<BarcodeDetectorJsqr> = configureQrCodeDetector();
+const detectorPromise: Promise<BarcodeDetectorPolyfill> =
+  configureQrCodeDetector();
 
 export const detectQrCode = async (
   video: HTMLVideoElement,

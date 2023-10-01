@@ -12,14 +12,14 @@
     "build": "vite build"
   },
   "dependencies": {
-    "barcode-detector": "^1.0.3",
+    "barcode-detector": "^2.0.3",
     "base45-ts": "^1.0.3",
     "cbor-web": "^9.0.1",
     "date-fns": "^2.30.0",
-    "firebase": "^10.3.1",
+    "firebase": "^10.4.0",
     "pako": "^2.1.0",
-    "preact": "^10.16.0",
-    "preact-render-to-string": "^6.2.0",
+    "preact": "^10.18.1",
+    "preact-render-to-string": "^6.2.1",
     "qr.js": "^0.0.0",
     "workbox-core": "^7.0.0",
     "workbox-google-analytics": "^7.0.0",
@@ -29,10 +29,10 @@
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",
-    "@types/pako": "^2.0.0",
+    "@types/pako": "^2.0.1",
     "cbor": "^9.0.1",
-    "typescript": "^5.1.6",
-    "vite": "^4.4.6",
-    "vite-plugin-pwa": "^0.16.4"
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9",
+    "vite-plugin-pwa": "^0.16.5"
   }
 }

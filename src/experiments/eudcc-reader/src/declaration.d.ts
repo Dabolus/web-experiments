@@ -7,15 +7,11 @@ declare module 'cbor-web' {
   export * from 'cbor';
 }
 
-declare const BarcodeDetector: typeof import('barcode-detector/dist/BarcodeDetector').default;
+declare const BarcodeDetector: typeof import('barcode-detector/pure').BarcodeDetector;
 declare type BarcodeDetector = BarcodeDetector;
 
 interface Window {
   BarcodeDetector: BarcodeDetector;
-}
-
-declare module 'barcode-detector' {
-  export = BarcodeDetector;
 }
 
 declare module 'qr.js' {
