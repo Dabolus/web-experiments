@@ -138,4 +138,4 @@ console.log(
     1,
   )}s\x1b[0m!\nFinal build contents:`,
 );
-await execute("tree --dirsfirst -C dist | sed '1d;$d'");
+await execute("tree --dirsfirst -C dist | sed '1d;$d' | sed '$d'");
