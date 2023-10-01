@@ -1,19 +1,26 @@
-import { promises as fs } from 'fs';
+import { promises as fs } from 'node:fs';
+import { performance } from 'node:perf_hooks';
 import { execute } from '@yarnpkg/shell';
 import { render as renderTemplate } from 'ejs';
 import { minify as minifyTemplate } from 'html-minifier';
 
+console.log('Starting build...');
+const start = performance.now();
+
 const kebabToCamelCase = str =>
   str.replace(/-([a-z])/g, ([, match]) => match.toUpperCase());
 
+console.log('Gathering projects and APIs...');
 const [projects, apis] = await Promise.all([
   fs.readdir('src/experiments'),
   fs.readdir('src/functions/src/apis'),
 ]);
 
+console.log('Cleaning up previous build...');
 await fs.rm('dist', { recursive: true, force: true });
 
 // Build the functions index
+console.log('Building functions index...');
 const firebaseFunctionsIndex = `import { onRequest } from 'firebase-functions/v2/https';
 ${apis.map(
   api =>
@@ -31,14 +38,20 @@ ${apis.map(
 await fs.writeFile('src/functions/src/index.ts', firebaseFunctionsIndex);
 
 // Build all the things
+console.log('Building the experiments...');
 await execute(
-  "yarn workspaces foreach -p --exclude 'web-experiments,@webexp/config' run build",
+  "yarn workspaces foreach -p --exclude 'web-experiments,@webexp/config' run build --logLevel silent",
+  [],
+  // Suppress stdout
+  { stdout: null },
 );
 
 // Move home page to the root dist directory
+console.log('Preparing the home page...');
 await fs.rename('src/home/dist/', 'dist/');
 
 // Move each experiment into the root dist directory
+console.log('Preparing the experiments...');
 await Promise.all(
   projects.map(project =>
     fs.rename(`src/experiments/${project}/dist/`, `dist/${project}/`),
@@ -46,6 +59,7 @@ await Promise.all(
 );
 
 // Build the sitemap
+console.log('Building the sitemap...');
 const sitemapTemplatePath = 'src/sitemap.ejs';
 const sitemapTemplate = await fs.readFile(sitemapTemplatePath, 'utf8');
 const renderedSitemap = await renderTemplate(
@@ -87,6 +101,7 @@ const minifiedSitemap = minifyTemplate(renderedSitemap, {
 await fs.writeFile('dist/sitemap.xml', minifiedSitemap, 'utf8');
 
 // Read the Firebase config template
+console.log('Generating Firebase configuration...');
 const firebaseConfigTemplate = JSON.parse(
   await fs.readFile('firebase.template.json', 'utf8'),
 );
@@ -117,5 +132,10 @@ await fs.writeFile(
   'utf8',
 );
 
-console.log('\nFinal build contents:');
+const end = performance.now();
+console.log(
+  `Build completed in \x1b[32m${((end - start) / 1000).toFixed(
+    1,
+  )}s\x1b[0m!\nFinal build contents:`,
+);
 await execute("tree --dirsfirst -C dist | sed '1d;$d'");
