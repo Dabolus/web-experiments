@@ -1,12 +1,11 @@
 import { App, initializeApp, getApp } from 'firebase-admin/app';
 import { getFirestore, Firestore } from 'firebase-admin/firestore';
-import { defineString } from 'firebase-functions/params';
+import { defineSecret } from 'firebase-functions/params';
 import { stringify } from 'querystring';
 import type { Request } from 'firebase-functions/lib/common/providers/https';
 import type { Response } from 'express';
 
-// TODO: maybe migrate to `defineSecret`?
-const recaptchaSecret = defineString('RECAPTCHA_SECRET');
+const recaptchaSecret = defineSecret('RECAPTCHA_SECRET');
 
 let app: App;
 let firestore: Firestore;
