@@ -118,4 +118,4 @@ await fs.writeFile(
 );
 
 console.log('\nFinal build contents:');
-await execute("tree --dirsfirst -C -L 2 dist | sed '1d;$d'");
+await execute("tree --dirsfirst -C dist | sed '1d;$d'");
