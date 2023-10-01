@@ -1,8 +1,3 @@
-const randomId = () => {
-  const [uint32] = window.crypto.getRandomValues(new Uint32Array(1));
-  return uint32.toString(16);
-};
-
 export type PromisifiedObject<T extends {}> = {
   [K in keyof T]: T[K] extends (...args: infer A) => infer R
     ? (...args: A) => Promise<Awaited<R>>
@@ -15,6 +10,7 @@ export type PromisifiedWorker<T extends Worker> = Worker &
 export const setupWorkerClient = <T extends Worker, U = Omit<T, keyof Worker>>(
   worker: Worker,
   methods: (keyof U)[],
+  timeout = 30000,
 ): PromisifiedWorker<T> => {
   const eventsQueueMap: Record<
     string,
@@ -42,13 +38,13 @@ export const setupWorkerClient = <T extends Worker, U = Omit<T, keyof Worker>>(
         method,
         (...args: unknown[]) =>
           new Promise((resolve, reject) => {
-            const id = randomId();
-            const handle = window.setTimeout(() => {
+            const id = crypto.randomUUID();
+            const handle = setTimeout(() => {
               delete eventsQueueMap[id];
               reject(new Error('Timeout'));
-            }, 120000);
+            }, timeout);
             const wrappedResolve: typeof resolve = (...args) => {
-              window.clearTimeout(handle);
+              clearTimeout(handle);
               return resolve(...args);
             };
             eventsQueueMap[id] = { resolve: wrappedResolve, reject };
@@ -82,12 +78,18 @@ export const setupWorkerServer = <T extends Worker, U = Omit<T, keyof Worker>>(
       self.postMessage({
         id,
         status: 'rejected',
-        reason: {
-          name: (error as Error).name,
-          message: (error as Error).message,
-          stack: (error as Error).stack,
-          cause: (error as Error).cause,
-        },
+        reason:
+          error instanceof Error
+            ? {
+                name: error.name,
+                message: error.message,
+                stack: error.stack,
+                cause: error.cause,
+              }
+            : {
+                name: 'UnknownError',
+                message: 'Unknown error',
+              },
       });
     }
   });
