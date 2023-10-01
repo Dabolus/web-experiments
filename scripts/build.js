@@ -116,3 +116,6 @@ await fs.writeFile(
   JSON.stringify(firebaseConfig, null, 2),
   'utf8',
 );
+
+console.log('\nFinal build contents:');
+await execute("tree --dirsfirst -C -L 2 dist | sed '1d;$d'");
