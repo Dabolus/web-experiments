@@ -6,6 +6,26 @@ h1,
   margin: 16px;
 }
 
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#portfolio-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  background: rgba(255, 128, 128, 0.6);
+  text-decoration: none;
+  padding: 8px;
+  border-radius: 8px;
+  margin: 0 16px;
+}
+
 #projects {
   list-style: none;
   padding: 0;
@@ -164,6 +184,10 @@ input {
 
   #projects {
     gap: 32px;
+  }
+
+  #portfolio-link {
+    margin: 0 32px;
   }
 }
 
