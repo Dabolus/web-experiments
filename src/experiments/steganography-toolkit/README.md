@@ -10,9 +10,9 @@ _Keep in mind that this project is still in early development, so you won't find
 This project was built using Create React App, so you just need to run the usual scripts to get started.
 
 ```bash
-$ yarn start  # Serves the project in development (watch) mode.
+$ bun run start  # Serves the project in development (watch) mode.
 
-$ yarn build  # Builds the production ready version of the project in the `build/` directory.
+$ bun run build  # Builds the production ready version of the project in the `build/` directory.
 ```
 
 ### Contributing

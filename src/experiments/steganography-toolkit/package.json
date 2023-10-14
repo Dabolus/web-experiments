@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "vite",
-    "build": "vite build"
+    "start": "bun run vite",
+    "build": "bun run vite build"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

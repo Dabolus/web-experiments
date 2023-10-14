@@ -18,14 +18,14 @@ jobs:
         with:
           node-version: 20
       - name: Install deps
-        run: yarn install
+        run: bun install
       - name: Build
-        run: yarn build
+        run: bun run build
       - name: Deploy
         if: github.ref == 'refs/heads/main'
         run: |
           echo "$FIREBASE_SERVICE_ACCOUNT_BASE64" | base64 --decode > firebase-service-account.json
-          yarn firebase deploy --project $FIREBASE_PROJECT
+          bun run firebase deploy --project $FIREBASE_PROJECT
         env:
           FIREBASE_SERVICE_ACCOUNT_BASE64: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BASE64 }}
           FIREBASE_PROJECT: ${{ secrets.FIREBASE_PROJECT }}

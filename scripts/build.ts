@@ -1,8 +1,24 @@
 import { promises as fs } from 'node:fs';
 import { performance } from 'node:perf_hooks';
-import { execute } from '@yarnpkg/shell';
+import childProcess from 'node:child_process';
+import path from 'node:path';
 import { render as renderTemplate } from 'ejs';
 import { minify as minifyTemplate } from 'html-minifier';
+import { globby } from 'globby';
+
+const execute = async (
+  command: string,
+  options?: childProcess.ExecOptions,
+): Promise<{ stdout: string; stderr: string }> =>
+  new Promise((resolve, reject) =>
+    childProcess.exec(command, options, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve({ stdout: stdout.toString(), stderr: stderr.toString() });
+      }
+    }),
+  );
 
 console.log('Starting build...');
 const start = performance.now();
@@ -39,11 +55,19 @@ await fs.writeFile('src/functions/src/index.ts', firebaseFunctionsIndex);
 
 // Build all the things
 console.log('Building the experiments...');
-await execute(
-  "yarn workspaces foreach -p --exclude 'web-experiments,@webexp/config' run build --logLevel silent",
-  [],
-  // Suppress stdout
-  { stdout: null },
+const { workspaces }: { workspaces: string[] } = JSON.parse(
+  await fs.readFile('package.json', 'utf8'),
+);
+const projectsPackageJsons = await globby(
+  workspaces
+    .filter(workspace => !workspace.includes('src/config'))
+    .map(workspace => path.join(workspace, 'package.json')),
+);
+await Promise.all(
+  projectsPackageJsons.map(async packageJson => {
+    const packageDir = path.dirname(packageJson);
+    await execute('bun run build', { cwd: packageDir });
+  }),
 );
 
 // Move home page to the root dist directory
@@ -138,4 +162,7 @@ console.log(
     1,
   )}s\x1b[0m!\nFinal build contents:`,
 );
-await execute("tree --dirsfirst -C dist | sed '1d;$d' | sed '$d'");
+const { stdout: tree } = await execute(
+  "tree --dirsfirst -C dist | sed '1d;$d' | sed '$d'",
+);
+console.log(tree);

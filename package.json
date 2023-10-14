@@ -8,16 +8,24 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "node scripts/build.js",
-    "deploy": "firebase deploy"
+    "build": "bun run scripts/build.ts",
+    "deploy": "firebase deploy",
+    "start:functions": "cd src/functions && bun run start",
+    "start:home": "cd src/home && bun run start",
+    "start:choicest-voice": "cd src/experiments/choicest-voice && bun run start",
+    "start:eudcc-reader": "cd src/experiments/eudcc-reader && bun run start",
+    "start:me": "cd src/experiments/me && bun run start",
+    "start:planet-age": "cd src/experiments/planet-age && bun run start",
+    "start:steganography-toolkit": "cd src/experiments/steganography-toolkit && bun run start"
   },
   "devDependencies": {
     "@types/ejs": "^3.1.3",
     "@types/html-minifier": "^4.0.3",
-    "@yarnpkg/shell": "^4.0.0-rc.52",
     "ejs": "^3.1.9",
     "firebase-tools": "^12.6.1",
+    "globby": "^13.2.2",
     "html-minifier": "^4.0.0",
+    "npm-check-updates": "^16.14.6",
     "typescript": "^5.2.2"
   },
   "workspaces": [
@@ -28,6 +36,5 @@
   ],
   "resolutions": {
     "browserslist": "^4.21.4"
-  },
-  "packageManager": "yarn@3.6.1"
+  }
 }
