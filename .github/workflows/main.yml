@@ -25,10 +25,6 @@ jobs:
         run: bun install
       - name: Build
         run: bun run build
-      - name: Debug - list files
-        run: |
-          ls -l src/functions/src
-          ls -l src/functions/lib
       - name: Deploy
         if: github.ref == 'refs/heads/main'
         run: |
