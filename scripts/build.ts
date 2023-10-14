@@ -8,17 +8,20 @@ import { globby } from 'globby';
 
 const execute = async (
   command: string,
-  options?: childProcess.ExecOptions,
-): Promise<{ stdout: string; stderr: string }> =>
-  new Promise((resolve, reject) =>
-    childProcess.exec(command, options, (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
+  args: readonly string[] = [],
+  options: childProcess.SpawnOptions = {},
+): Promise<void> =>
+  new Promise((resolve, reject) => {
+    const child = childProcess.spawn(command, args, options);
+    child.on('close', code => {
+      if (code === 0) {
+        resolve();
       } else {
-        resolve({ stdout: stdout.toString(), stderr: stderr.toString() });
+        reject(new Error(`Process exited with code ${code}`));
       }
-    }),
-  );
+    });
+    child.on('error', reject);
+  });
 
 console.log('Starting build...');
 const start = performance.now();
@@ -66,7 +69,7 @@ const projectsPackageJsons = await globby(
 await Promise.all(
   projectsPackageJsons.map(async packageJson => {
     const packageDir = path.dirname(packageJson);
-    await execute('bun run build', { cwd: packageDir });
+    await execute('bun', ['run', 'build'], { cwd: packageDir });
   }),
 );
 
@@ -162,7 +165,7 @@ console.log(
     1,
   )}s\x1b[0m!\nFinal build contents:`,
 );
-const { stdout: tree } = await execute(
-  "tree --dirsfirst -C dist | sed '1d;$d' | sed '$d'",
-);
-console.log(tree);
+await execute("tree --dirsfirst -C dist | sed '1d;$d' | sed '$d'", [], {
+  shell: true,
+  stdio: 'inherit',
+});
