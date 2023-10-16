@@ -33,3 +33,13 @@ This repo also contains two additional projects:
 
 For more information about each experiment, please refer to the README file in
 the corresponding folder.
+
+## Development
+
+The monorepo is managed using [bun](https://bun.sh/). To start a project
+locally, follow these steps:
+
+- Make sure [bun](https://bun.sh/) is installed;
+- Clone the repo;
+- Run `bun install` to install the dependencies;
+- Run `bun run start:<project>` to start the project you want to work on.
