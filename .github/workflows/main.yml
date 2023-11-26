@@ -17,10 +17,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-      - name: Use Bun 1.0.6
+      - name: Use Bun 1.0.14
         uses: oven-sh/setup-bun@v1
         with:
-          bun-version: 1.0.6
+          bun-version: 1.0.14
       - name: Install deps
         run: bun install
       - name: Build
