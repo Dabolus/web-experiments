@@ -8,7 +8,7 @@ import React, {
 import { useDebouncedCallback } from 'use-debounce';
 import colormap from 'colormap';
 import WaveSurfer from 'wavesurfer.js';
-import Spectrogram from 'wavesurfer.js/dist/plugins/spectrogram';
+import Spectrogram from 'wavesurfer.js/plugins/spectrogram';
 import { saveAs } from 'file-saver';
 import { IconButton, Tooltip, Stack, Typography } from '@mui/material';
 import {
