@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { setupWorkerClient } from '../workers/utils';
+import { setupWorkerClient } from '@easy-worker/core';
 import type { PreprocessorWorker } from '../workers/preprocessor.worker';
 
 const preprocessorWorker = setupWorkerClient<PreprocessorWorker>(

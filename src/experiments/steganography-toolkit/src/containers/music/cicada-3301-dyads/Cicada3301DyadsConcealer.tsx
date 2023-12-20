@@ -6,6 +6,7 @@ import React, {
   useEffect,
 } from 'react';
 import { useDebounce } from 'use-debounce';
+import { setupWorkerClient } from '@easy-worker/core';
 import { Button, Menu, MenuItem, Box, Grid } from '@mui/material';
 import {
   ArrowDropUp as ArrowDropUpIcon,
@@ -18,7 +19,6 @@ import Cicada3301DyadsForm, {
 } from '../../../components/music/cicada-3301-dyads/Cicada3301DyadsForm';
 import Abc from '../../../components/music/Abc';
 import Loader from '../../../components/Loader';
-import { setupWorkerClient } from '../../../workers/utils';
 import type { Cicada3301DyadsWorker } from '../../../workers/music/cicada-3301-dyads.worker';
 import useAudioExporter from '../../../hooks/useAudioExporter';
 

@@ -1,6 +1,6 @@
+import { setupWorkerServer } from '@easy-worker/core';
 import { nextPrime } from '../../helpers';
 import letterNotesMapping from '../../static/cicada-3301-dyads/letterNotesMapping.json';
-import { setupWorkerServer } from '../utils';
 import type {
   Language,
   Cicada3301DyadsFormValue,

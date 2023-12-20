@@ -1,4 +1,4 @@
-import { setupWorkerServer } from '../utils';
+import { setupWorkerServer } from '@easy-worker/core';
 
 export interface DecodedTextResult {
   originalText: string;

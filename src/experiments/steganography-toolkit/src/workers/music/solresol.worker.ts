@@ -1,7 +1,7 @@
 import Fuse from 'fuse.js';
 import nlp from 'compromise';
+import { setupWorkerServer } from '@easy-worker/core';
 import solresolDictionary from '../../static/solresol/dictionary.json';
-import { setupWorkerServer } from '../utils';
 import type { Verbs } from 'compromise/types/view/three';
 import type { PickMatching } from '../../helpers';
 

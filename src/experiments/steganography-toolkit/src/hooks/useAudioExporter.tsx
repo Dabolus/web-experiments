@@ -8,8 +8,8 @@ import {
 } from 'react';
 import ABCJS from 'abcjs';
 import { saveAs } from 'file-saver';
+import { setupWorkerClient } from '@easy-worker/core';
 import { AbcProps } from '../components/music/Abc';
-import { setupWorkerClient } from '../workers/utils';
 import type {
   EncodeMp3Options,
   MusicExporterWorker,

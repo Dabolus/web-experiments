@@ -5,6 +5,7 @@ import React, {
   useEffect,
   startTransition,
 } from 'react';
+import { setupWorkerClient } from '@easy-worker/core';
 import { useDebouncedCallback } from 'use-debounce';
 import colormap from 'colormap';
 import WaveSurfer from 'wavesurfer.js';
@@ -17,7 +18,6 @@ import {
   Download as DownloadIcon,
 } from '@mui/icons-material';
 import Page from '../../../components/Page';
-import { setupWorkerClient } from '../../../workers/utils';
 import type {
   GetImageSpectrogramProgressMessage,
   SpectrogramWorker,

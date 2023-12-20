@@ -10,6 +10,7 @@ import React, {
 import { useSearchParams } from 'react-router-dom';
 import { renderToString } from 'react-dom/server';
 import { saveAs } from 'file-saver';
+import { setupWorkerClient } from '@easy-worker/core';
 import {
   OutlinedInputProps,
   Unstable_Grid2 as Grid,
@@ -34,7 +35,6 @@ import {
   ArrowDropDown as ArrowDropDownIcon,
 } from '@mui/icons-material';
 import { useDebounce } from 'use-debounce';
-import { setupWorkerClient } from '../../../workers/utils';
 import Page from '../../../components/Page';
 import Loader from '../../../components/Loader';
 import SolresolOutput, {

@@ -2,7 +2,7 @@ import { Mp3Encoder } from 'lamejs';
 import MPEGMode from 'lamejs/src/js/MPEGMode';
 import Lame from 'lamejs/src/js/Lame';
 import BitStream from 'lamejs/src/js/BitStream';
-import { setupWorkerServer } from '../utils';
+import { setupWorkerServer } from '@easy-worker/core';
 
 // lamejs is buggy and refers to these modules globally instead of importing them
 (globalThis as any).MPEGMode = MPEGMode;
