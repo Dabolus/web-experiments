@@ -1,6 +1,6 @@
 import './polyfills.js';
 import { generatePlaceholder } from './generate.js';
-import { drawFileToCanvas } from './utils.js';
+import { debounce, drawFileToCanvas } from './utils.js';
 
 const inputEl = document.querySelector<HTMLLabelElement>('#input')!;
 const inputPlaceholderEl =
@@ -61,26 +61,32 @@ inputFileEl.addEventListener('change', async () => {
   await handleFileSelect(file);
 });
 
-widthEl.addEventListener('input', async () => {
-  if (!widthEl.valueAsNumber) {
-    return;
-  }
-  if (constrainEl.checked) {
-    heightEl.value = Math.round(
-      (widthEl.valueAsNumber / outputImg.width) * outputImg.height,
-    ).toString();
-  }
-  await updateOutput();
-});
+widthEl.addEventListener(
+  'input',
+  debounce(async () => {
+    if (!widthEl.valueAsNumber) {
+      return;
+    }
+    if (constrainEl.checked) {
+      heightEl.value = Math.round(
+        (widthEl.valueAsNumber / outputImg.width) * outputImg.height,
+      ).toString();
+    }
+    await updateOutput();
+  }, 500),
+);
 
-heightEl.addEventListener('input', async () => {
-  if (!heightEl.valueAsNumber) {
-    return;
-  }
-  if (constrainEl.checked) {
-    widthEl.value = Math.round(
-      (heightEl.valueAsNumber / outputImg.height) * outputImg.width,
-    ).toString();
-  }
-  await updateOutput();
-});
+heightEl.addEventListener(
+  'input',
+  debounce(async () => {
+    if (!heightEl.valueAsNumber) {
+      return;
+    }
+    if (constrainEl.checked) {
+      widthEl.value = Math.round(
+        (heightEl.valueAsNumber / outputImg.height) * outputImg.width,
+      ).toString();
+    }
+    await updateOutput();
+  }, 500),
+);
