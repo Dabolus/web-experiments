@@ -1,0 +1,28 @@
+{
+  "name": "@webexp/image-placeholder-generator",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Dabolus/web-experiments.git",
+  "author": "Giorgio Garasto <giorgio@garasto.me>",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun run vite",
+    "build": "bun run vite build"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "mini-svg-data-uri": "^1.4.4",
+    "primitive": "^1.0.1",
+    "svgo": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "@webexp/config": "workspace:^",
+    "sass": "^1.68.0",
+    "tosource": "^2.0.0-alpha.3",
+    "vite": "^4.4.9",
+    "vite-plugin-html": "^3.2.0"
+  }
+}
