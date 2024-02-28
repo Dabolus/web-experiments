@@ -9,7 +9,8 @@
   "private": true,
   "scripts": {
     "start": "bun run vite",
-    "build": "bun run vite build"
+    "build": "bun run vite build",
+    "test": "bun test"
   },
   "dependencies": {
     "buffer": "^6.0.3",

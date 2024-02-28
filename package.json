@@ -18,9 +18,11 @@
     "start:me": "cd src/experiments/me && bun run start",
     "start:planet-age": "cd src/experiments/planet-age && bun run start",
     "start:steganography-toolkit": "cd src/experiments/steganography-toolkit && bun run start",
-    "start:img-placeholder-generator": "cd src/experiments/img-placeholder-generator && bun run start"
+    "start:img-placeholder-generator": "cd src/experiments/img-placeholder-generator && bun run start",
+    "test:img-placeholder-generator": "cd src/experiments/img-placeholder-generator && bun test"
   },
   "devDependencies": {
+    "@types/bun": "^1.0.7",
     "@types/ejs": "^3.1.3",
     "@types/html-minifier": "^4.0.3",
     "ejs": "^3.1.9",
