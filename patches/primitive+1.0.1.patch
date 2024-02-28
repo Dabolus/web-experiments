@@ -70,3 +70,16 @@ index 70831ad..380c16b 100644
  
      const candidates = model.step({
        shapeType,
+diff --git a/node_modules/primitive/lib/shapes/factory.js b/node_modules/primitive/lib/shapes/factory.js
+index 7974a93..573531b 100644
+--- a/node_modules/primitive/lib/shapes/factory.js
++++ b/node_modules/primitive/lib/shapes/factory.js
+@@ -46,7 +46,7 @@ const factory = (shapeType, opts) => {
+ }
+ 
+ function randomShapeType () {
+-  return SHAPES[random.int(SHAPES.length - 1)]
++  return SHAPES[random.int(0, SHAPES.length - 1)]
+ }
+ 
+ export default factory
