@@ -1,4 +1,4 @@
-import primitive, { type ShapeType } from 'primitive/browser.js';
+import archaic, { type ShapeType } from 'archaic/browser';
 import { optimize as svgOptimize } from 'svgo';
 import toSafeDataURI from 'mini-svg-data-uri';
 
@@ -81,7 +81,7 @@ const generateFreshPlaceholder = async (
   ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(inputCanvas, 0, 0, width, height);
 
-  const model = await primitive({
+  const model = await archaic({
     input: ctx.getImageData(0, 0, width, height),
     numSteps: steps,
     shapeType,

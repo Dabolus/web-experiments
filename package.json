@@ -8,7 +8,6 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "postinstall": "patch-package",
     "build": "bun run scripts/build.ts",
     "deploy": "firebase deploy",
     "start:functions": "cd src/functions && bun run start",
@@ -30,7 +29,6 @@
     "globby": "^13.2.2",
     "html-minifier": "^4.0.0",
     "npm-check-updates": "^16.14.6",
-    "patch-package": "^8.0.0",
     "typescript": "^5.2.2"
   },
   "workspaces": [

@@ -1,7 +1,7 @@
 import './polyfills.js';
 import { generatePlaceholder } from './generate.js';
 import { debounce, drawFileToCanvas } from './utils.js';
-import type { ShapeType } from 'primitive/browser.js';
+import type { ShapeType } from 'archaic/browser';
 
 const inputEl = document.querySelector<HTMLLabelElement>('#input')!;
 const inputPlaceholderEl =
