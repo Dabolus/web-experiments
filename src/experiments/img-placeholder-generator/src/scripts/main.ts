@@ -1,6 +1,7 @@
 import './polyfills.js';
 import { generatePlaceholder } from './generate.js';
 import { debounce, drawFileToCanvas } from './utils.js';
+import type { ShapeType } from 'primitive/browser.js';
 
 const inputEl = document.querySelector<HTMLLabelElement>('#input')!;
 const inputPlaceholderEl =
@@ -16,12 +17,22 @@ const optionsEl = document.querySelector<HTMLElement>('#options')!;
 const widthEl = optionsEl.querySelector<HTMLInputElement>('#width')!;
 const heightEl = optionsEl.querySelector<HTMLInputElement>('#height')!;
 const constrainEl = optionsEl.querySelector<HTMLInputElement>('#constrain')!;
+const stepsNumberEl =
+  optionsEl.querySelector<HTMLInputElement>('#steps-number')!;
+const shapeTypeEl = optionsEl.querySelector<HTMLSelectElement>('#shape-type')!;
+const blurStdDevEl =
+  optionsEl.querySelector<HTMLInputElement>('#blur-std-dev')!;
+const refreshEl = optionsEl.querySelector<HTMLButtonElement>('#refresh')!;
 const downloadEl = optionsEl.querySelector<HTMLAnchorElement>('#download')!;
 
-const updateOutput = async () => {
+const updateOutput = async (forceRefresh?: boolean) => {
   const placeholder = await generatePlaceholder(inputPreviewEl, {
     width: widthEl.valueAsNumber,
     height: heightEl.valueAsNumber,
+    steps: stepsNumberEl.valueAsNumber,
+    shapeType: shapeTypeEl.value as ShapeType,
+    blurStdDev: blurStdDevEl.valueAsNumber,
+    forceRefresh,
   });
   outputImg.src = placeholder;
   downloadEl.href = placeholder;
@@ -90,3 +101,13 @@ heightEl.addEventListener(
     await updateOutput();
   }, 500),
 );
+
+stepsNumberEl.addEventListener(
+  'input',
+  debounce(() => updateOutput(), 500),
+);
+shapeTypeEl.addEventListener('input', e =>
+  updateOutput((e.target as HTMLSelectElement).value === 'random'),
+);
+blurStdDevEl.addEventListener('input', () => updateOutput());
+refreshEl.addEventListener('click', () => updateOutput(true));

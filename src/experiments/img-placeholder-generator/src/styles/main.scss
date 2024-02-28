@@ -7,27 +7,37 @@ body {
 
 header,
 footer {
-  flex: 0;
-  text-align: center;
+  flex: 0 0 4rem;
+  height: 4rem;
   padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   > * {
     margin: 0;
   }
 }
 
-footer a {
-  color: #fff;
-  font-weight: bold;
-  text-decoration: none;
+footer {
+  small {
+    font-size: 1rem;
+  }
 
-  &:hover {
-    text-decoration: underline;
+  a {
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
 main {
-  flex: 1;
+  flex: 0 0 calc(100vh - 8rem);
+  height: calc(100vh - 8rem);
   display: flex;
   flex-direction: column;
 }
@@ -63,6 +73,11 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
 }
 
 #input,
@@ -78,6 +93,13 @@ main {
 #options {
   flex: 0;
   position: relative;
+  max-height: 11.5rem;
+
+  details > div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
 
   &[aria-disabled='true'] {
     pointer-events: none;
@@ -89,7 +111,7 @@ main {
     display: grid;
     grid-template: 'wl wv c' 'hl hv c';
     align-items: center;
-    gap: 0.25rem 0.5rem;
+    gap: 0.5rem;
     width: 180px;
   }
 
@@ -168,7 +190,27 @@ a[download] {
   }
 }
 
+input:not([type='checkbox']),
+select {
+  appearance: none;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #f5f5f5;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: #f5f5f5;
+  transition: background 0.3s ease-in-out;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &:active {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
 summary {
+  cursor: pointer;
   background-color: #3f3f3f;
   color: white;
   padding: 0.75rem;

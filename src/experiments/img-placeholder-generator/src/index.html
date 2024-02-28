@@ -54,19 +54,36 @@
       <section id="options" aria-disabled="true">
         <details open>
           <summary>Options</summary>
-          <div id="width-height">
-            <label for="width">Width:</label>
-            <input type="number" id="width" min="1" max="10000" required>
-            <label for="height">Height:</label>
-            <input type="number" id="height" min="1" max="10000" required>
-            <input type="checkbox" id="constrain" checked aria-label="Constrain proportions">
+          <div>
+            <div id="width-height">
+              <label for="width">Width:</label>
+              <input type="number" id="width" min="1" max="10000" required>
+              <label for="height">Height:</label>
+              <input type="number" id="height" min="1" max="10000" required>
+              <input type="checkbox" id="constrain" checked aria-label="Constrain proportions">
+            </div>
+            <label for="steps-number">No. of steps:</label>
+            <input type="number" id="steps-number" min="1" max="10000" value="8" required>
+            <label for="shape-type">Shape type:</label>
+            <select id="shape-type" required>
+              <option value="random" selected>Random</option>
+              <option value="triangle">Triangle</option>
+              <option value="circle">Circle</option>
+              <option value="ellipse">Ellipse</option>
+              <option value="rotated-ellipse">Rotated ellipse</option>
+              <option value="rectangle">Rectangle</option>
+              <option value="rotated-rectangle">Rotated rectangle</option>
+            </select>
+            <label for="blur-std-dev">Blur:</label>
+            <input type="number" id="blur-std-dev" min="0" max="10000" value="12" required>
           </div>
         </details>
+        <button id="refresh">Refresh</button>
         <a id="download" download="placeholder.svg">Download</a>
       </section>
     </main>
     <footer>
-        Brought to you with <strong>❤</strong> by <a href="https://github.com/Dabolus" target="my-github">Dabolus</a>
+        <small>Brought to you with <strong>❤</strong> by <a href="https://github.com/Dabolus" target="my-github">Dabolus</a></small>
     </footer>
     <!-- Google tag (gtag.js) -->
     <script async defer src="https://www.googletagmanager.com/gtag/js?id=G-2K71JVEWWT"></script>
