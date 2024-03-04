@@ -22,6 +22,7 @@ const stepsNumberEl =
 const shapeTypeEl = optionsEl.querySelector<HTMLSelectElement>('#shape-type')!;
 const blurStdDevEl =
   optionsEl.querySelector<HTMLInputElement>('#blur-std-dev')!;
+const cssBlurEl = optionsEl.querySelector<HTMLInputElement>('#css-blur')!;
 const refreshEl = optionsEl.querySelector<HTMLButtonElement>('#refresh')!;
 const downloadEl = optionsEl.querySelector<HTMLAnchorElement>('#download')!;
 
@@ -32,6 +33,7 @@ const updateOutput = async (forceRefresh?: boolean) => {
     steps: stepsNumberEl.valueAsNumber,
     shapeType: shapeTypeEl.value as ShapeType,
     blurStdDev: blurStdDevEl.valueAsNumber,
+    cssBlur: cssBlurEl.checked,
     forceRefresh,
   });
   outputImg.src = placeholder;
@@ -110,4 +112,5 @@ shapeTypeEl.addEventListener('input', e =>
   updateOutput((e.target as HTMLSelectElement).value === 'random'),
 );
 blurStdDevEl.addEventListener('input', () => updateOutput());
+cssBlurEl.addEventListener('change', () => updateOutput());
 refreshEl.addEventListener('click', () => updateOutput(true));
