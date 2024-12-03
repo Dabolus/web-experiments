@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CompressionEnabled>false</CompressionEnabled>
     <NoWarn>$(NoWarn);OOXML0001</NoWarn>
   </PropertyGroup>
   <ItemGroup>
