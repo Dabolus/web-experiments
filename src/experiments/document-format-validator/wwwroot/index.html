@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Document Format Validator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="./main.js"></script>
+    <style>
+      #output {
+        white-space: nowrap;
+        overflow-x: auto;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+      th {
+        text-align: left;
+
+        &[scope='row'] {
+          text-align: right;
+        }
+      }
+      th,
+      td {
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>DOCX validator</h1>
+    <p>Load your .docx file here</p>
+    <input type="file" id="file" accept=".docx">
+    <div id="output"></div>
+  </body>
+</html>

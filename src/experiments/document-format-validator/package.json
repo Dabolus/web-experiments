@@ -1,0 +1,14 @@
+{
+  "name": "@webexp/document-format-validator",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Dabolus/web-experiments.git",
+  "author": "Giorgio Garasto <giorgio@garasto.me>",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "dotnet watch",
+    "build": "rm -rf dist/ && dotnet publish && mv bin/Release/net9.0/publish/wwwroot/ dist/"
+  }
+}
