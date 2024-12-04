@@ -12,17 +12,17 @@
     "build": "bun run vite build"
   },
   "dependencies": {
-    "firebase": "^10.4.0",
+    "firebase": "^11.0.2",
     "pwa-helpers": "^0.9.1"
   },
   "devDependencies": {
-    "@rollup/plugin-yaml": "^4.1.1",
-    "@types/node": "^20.8.0",
+    "@rollup/plugin-yaml": "^4.1.2",
+    "@types/node": "^22.10.1",
     "@webexp/config": "workspace:^",
-    "sass": "^1.68.0",
+    "sass": "^1.82.0",
     "tosource": "^2.0.0-alpha.3",
-    "vite": "^4.4.9",
-    "vite-plugin-html": "^3.2.0",
-    "vite-plugin-markdown": "^2.1.0"
+    "vite": "^6.0.2",
+    "vite-plugin-html": "^3.2.2",
+    "vite-plugin-markdown": "^2.2.0"
   }
 }

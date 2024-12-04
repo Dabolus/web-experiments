@@ -1,5 +1,6 @@
 import { basename } from 'path';
 import { promises as fs } from 'fs';
+import type { RollupLog, LoggingFunction } from 'rollup';
 import { defineConfig, UserConfig, Plugin } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { plugin as markdownPlugin, Mode } from 'vite-plugin-markdown';
@@ -104,10 +105,10 @@ const createConfig = async (
       // Workaround Vite quotes escaping issue
       {
         name: 'vite-plugin-fix-inline-background-image-urls',
-        enforce: 'post',
+        enforce: 'post' as const,
         transformIndexHtml: {
-          enforce: 'post',
-          transform: html =>
+          order: 'post' as const,
+          handler: (html: string) =>
             html.replace(
               /style=\"background-image:url\("([^"]+)"/g,
               'style="background-image:url(&#34;$1&#34;',
@@ -124,13 +125,13 @@ const createConfig = async (
       sourcemap: true,
       rollupOptions: {
         // .NET framework should never be bundled
-        external: src => src.endsWith('/_framework/dotnet.js'),
+        external: (src: string) => src.endsWith('/_framework/dotnet.js'),
         output: {
           assetFileNames: fileNames?.assets,
           chunkFileNames: fileNames?.chunks,
           entryFileNames: fileNames?.entries,
         },
-        onwarn(warning, warn) {
+        onwarn: (warning: RollupLog, warn: LoggingFunction) => {
           if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
             return;
           }

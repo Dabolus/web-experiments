@@ -12,27 +12,27 @@
     "build": "bun run vite build"
   },
   "dependencies": {
-    "barcode-detector": "^2.0.3",
+    "barcode-detector": "^2.3.1",
     "base45-ts": "^1.0.3",
-    "cbor-web": "^9.0.1",
-    "date-fns": "^2.30.0",
-    "firebase": "^10.4.0",
+    "cbor-web": "^10.0.3",
+    "date-fns": "^4.1.0",
+    "firebase": "^11.0.2",
     "pako": "^2.1.0",
-    "preact": "^10.18.1",
-    "preact-render-to-string": "^6.2.1",
+    "preact": "^10.25.1",
+    "preact-render-to-string": "^6.5.11",
     "qr.js": "^0.0.0",
-    "workbox-core": "^7.0.0",
-    "workbox-google-analytics": "^7.0.0",
-    "workbox-precaching": "^7.0.0",
-    "workbox-routing": "^7.0.0",
-    "wouter-preact": "^2.11.0"
+    "workbox-core": "^7.3.0",
+    "workbox-google-analytics": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-routing": "^7.3.0",
+    "wouter-preact": "^2.12.2"
   },
   "devDependencies": {
-    "@preact/preset-vite": "^2.5.0",
-    "@types/pako": "^2.0.1",
-    "cbor": "^9.0.1",
-    "typescript": "^5.2.2",
-    "vite": "^4.4.9",
-    "vite-plugin-pwa": "^0.16.5"
+    "@preact/preset-vite": "^2.9.2",
+    "@types/pako": "^2.0.3",
+    "cbor": "^10.0.3",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.2",
+    "vite-plugin-pwa": "^0.21.1"
   }
 }
