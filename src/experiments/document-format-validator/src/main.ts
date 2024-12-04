@@ -1,35 +1,42 @@
+// @ts-ignore
 import { dotnet } from './_framework/dotnet.js';
+import { ValidationErrorType, ValidationError } from './model.js';
 
 const { getAssemblyExports, getConfig, runMain } = await dotnet.create();
 
 const config = getConfig();
 const exports = await getAssemblyExports(config.mainAssemblyName);
 
-const errorTypes = [
-  'Schema validation error',
-  'Semantic validation error',
-  'Package structure validation error',
-  'Markup Compatibility validation error',
-];
+const errorTypes: Record<ValidationErrorType, string> = {
+  [ValidationErrorType.SCHEMA]: 'Schema validation error',
+  [ValidationErrorType.SEMANTIC]: 'Semantic validation error',
+  [ValidationErrorType.PACKAGE]: 'Package structure validation error',
+  [ValidationErrorType.MARKUP_COMPATIBILITY]:
+    'Markup Compatibility validation error',
+};
 
-const output = document.querySelector('#output');
+const output = document.querySelector<HTMLDivElement>('#output')!;
+const fileInput = document.querySelector<HTMLInputElement>('#file')!;
 
-document.querySelector('#file').addEventListener('change', async e => {
+document.querySelector('#file')!.addEventListener('change', async () => {
   output.innerHTML = `
     <label for="loading">Loading...</label>
     <progress id="loading"></progress>
   `;
-  const file = e.target.files[0];
-  const readerResult = Promise.withResolvers();
+  if (!fileInput.files?.length) {
+    return;
+  }
+  const readerResult = Promise.withResolvers<ArrayBuffer>();
   const reader = new FileReader();
-  reader.onload = e => readerResult.resolve(e.target.result);
+  reader.onload = e => readerResult.resolve(e.target!.result as ArrayBuffer);
   reader.onerror = readerResult.reject;
-  reader.readAsArrayBuffer(file);
+  reader.readAsArrayBuffer(fileInput.files[0]);
   const buffer = await readerResult.promise;
   const validationResult = exports.WordprocessingDocumentValidator.Validate(
     new Uint8Array(buffer),
   );
-  const parsedValidationResult = JSON.parse(validationResult);
+  const parsedValidationResult: ValidationError[] =
+    JSON.parse(validationResult);
   output.innerHTML = `
     <table>
       <thead>
@@ -60,7 +67,7 @@ document.querySelector('#file').addEventListener('change', async e => {
       </tbody>
     </table>
   `;
-  e.target.value = '';
+  fileInput.value = '';
 });
 
 // run the C# Main() method and keep the runtime process running and executing further API calls

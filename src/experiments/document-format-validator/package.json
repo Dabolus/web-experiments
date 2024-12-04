@@ -8,7 +8,19 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "dotnet watch",
-    "build": "rm -rf dist/ && dotnet publish && mv bin/Release/net9.0/publish/wwwroot/ dist/"
+    "start": "vite build && concurrently 'bun:start:*'",
+    "start:vite": "vite build --watch",
+    "start:dotnet": "dotnet watch",
+    "build": "rm -rf dist/ && vite build && dotnet publish && mv bin/Release/net9.0/publish/wwwroot/ dist/"
+  },
+  "devDependencies": {
+    "@rollup/plugin-yaml": "^4.1.1",
+    "@types/node": "^20.8.0",
+    "@webexp/config": "workspace:^",
+    "concurrently": "^9.1.0",
+    "sass": "^1.68.0",
+    "vite": "^4.4.9",
+    "vite-plugin-html": "^3.2.0",
+    "vite-plugin-markdown": "^2.1.0"
   }
 }

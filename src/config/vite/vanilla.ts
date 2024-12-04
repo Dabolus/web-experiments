@@ -12,6 +12,12 @@ export interface DefineConfigOptions {
   plugins?: UserConfig['plugins'];
   htmlData?: Record<string, any> | Promise<Record<string, any>>;
   pwa?: boolean | Partial<VitePWAOptions>;
+  outDir?: string;
+  fileNames?: {
+    assets?: string;
+    chunks?: string;
+    entries?: string;
+  };
 }
 
 export type DefineConfigOptionsCallback = () =>
@@ -56,6 +62,8 @@ const createConfig = async (
     plugins,
     htmlData,
     pwa,
+    outDir,
+    fileNames,
   } = (typeof options === 'function' ? await options() : options) || {};
 
   return defineConfig(async ({ command, mode }) => ({
@@ -110,8 +118,18 @@ const createConfig = async (
       ...(plugins || []),
     ],
     build: {
+      // To support top-level await
+      target: ['chrome89', 'edge89', 'firefox89', 'safari15', 'es2022'],
+      outDir,
       sourcemap: true,
       rollupOptions: {
+        // .NET framework should never be bundled
+        external: ['./_framework/dotnet.js'],
+        output: {
+          assetFileNames: fileNames?.assets,
+          chunkFileNames: fileNames?.chunks,
+          entryFileNames: fileNames?.entries,
+        },
         onwarn(warning, warn) {
           if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
             return;
