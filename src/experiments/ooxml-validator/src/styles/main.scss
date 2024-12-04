@@ -6,23 +6,39 @@ footer {
   padding: 0.5rem;
   color: #fff;
   z-index: 1;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 header {
   top: 0;
-  height: 3rem;
+  height: 2.5rem;
   background: #185abd;
 }
 
 main {
-  padding: 3rem 0 2.375rem;
+  padding: 2.5rem 0 2.375rem;
 }
 
 footer {
   bottom: 0;
   height: 2.375rem;
   background: #333;
+
+  small {
+    font-size: 0.9rem;
+  }
+
+  a {
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 h1 {
@@ -40,7 +56,7 @@ fluent-data-grid {
 }
 
 fluent-data-grid-row.sticky-header {
-  top: 3rem;
+  top: 2.5rem;
 }
 
 fluent-data-grid-cell {
@@ -63,21 +79,5 @@ fluent-data-grid-cell {
   & > label {
     display: inline-block;
     margin-bottom: 0.75rem;
-  }
-}
-
-footer {
-  small {
-    font-size: 1rem;
-  }
-
-  a {
-    color: #fff;
-    font-weight: bold;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
   }
 }
