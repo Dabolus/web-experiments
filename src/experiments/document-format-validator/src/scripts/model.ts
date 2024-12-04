@@ -8,8 +8,8 @@ export interface ValidationError {
 }
 
 export const enum ValidationErrorType {
-  SCHEMA, // Schema validation error.
-  SEMANTIC, // Semantic validation error.
-  PACKAGE, // Package structure validation error.
-  MARKUP_COMPATIBILITY, // Markup Compatibility validation error.
+  SCHEMA,
+  SEMANTIC,
+  PACKAGE,
+  MARKUP_COMPATIBILITY,
 }

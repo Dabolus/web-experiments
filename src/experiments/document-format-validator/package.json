@@ -13,6 +13,9 @@
     "start:dotnet": "dotnet watch",
     "build": "rm -rf dist/ && vite build && dotnet publish && mv bin/Release/net9.0/publish/wwwroot/ dist/"
   },
+  "dependencies": {
+    "@fluentui/web-components": "^2.6.1"
+  },
   "devDependencies": {
     "@rollup/plugin-yaml": "^4.1.1",
     "@types/node": "^20.8.0",

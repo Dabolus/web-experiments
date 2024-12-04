@@ -124,7 +124,7 @@ const createConfig = async (
       sourcemap: true,
       rollupOptions: {
         // .NET framework should never be bundled
-        external: ['./_framework/dotnet.js'],
+        external: src => src.endsWith('/_framework/dotnet.js'),
         output: {
           assetFileNames: fileNames?.assets,
           chunkFileNames: fileNames?.chunks,

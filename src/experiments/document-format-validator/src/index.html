@@ -4,35 +4,46 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document Format Validator</title>
+    <script type="module" src="/src/scripts/main.ts"></script>
+    <link rel="stylesheet" href="/src/styles/main.scss">
     <style>
-      #output {
-        white-space: nowrap;
-        overflow-x: auto;
+      @font-face {
+        font-family: 'Segoe UI Variable';
+        src: url('./assets/fonts/SegoeUI-VF.906d9df0.woff2') format('woff2 supports variations'),
+        url('./assets/fonts/SegoeUI-VF.906d9df0.woff2') format('woff2-variations');
+        font-style: normal;
+        font-weight: 100 700;
+        font-optical-sizing: auto;
+        font-display: swap;
       }
-      table,
-      th,
-      td {
-        border: 1px solid black;
-        border-collapse: collapse;
-      }
-      th {
-        text-align: left;
 
-        &[scope='row'] {
-          text-align: right;
-        }
+      * {
+        box-sizing: border-box;
+        font-family: 'Segoe UI Variable', sans-serif;
       }
-      th,
-      td {
-        padding: 5px;
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
       }
     </style>
   </head>
   <body>
-    <h1>DOCX validator</h1>
-    <p>Load your .docx file here</p>
-    <input type="file" id="file" accept=".docx">
-    <div id="output"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <header>
+      <h1>Document Format Validator</h1>
+    </header>
+    <main>
+      <form id="input">
+        <p>Load your .docx file here</p>
+        <fluent-button id="choose-file">Choose file</fluent-button>
+        <input type="file" id="file" accept=".docx" hidden>
+      </form>
+      <div id="output"></div>
+    </main>
+    <footer>
+      <small>Brought to you with <strong>❤</strong> by <a href="https://github.com/Dabolus" target="my-github">Dabolus</a></small>
+    </footer>
   </body>
 </html>

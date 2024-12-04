@@ -1,6 +1,23 @@
 // @ts-ignore
-import { dotnet } from './_framework/dotnet.js';
+import { dotnet } from '../_framework/dotnet.js';
 import { ValidationErrorType, ValidationError } from './model.js';
+import {
+  provideFluentDesignSystem,
+  fluentButton,
+  fluentProgress,
+  fluentDataGridCell,
+  fluentDataGridRow,
+  fluentDataGrid,
+  type DataGrid,
+} from '@fluentui/web-components';
+
+provideFluentDesignSystem().register(
+  fluentButton(),
+  fluentProgress(),
+  fluentDataGridCell(),
+  fluentDataGridRow(),
+  fluentDataGrid(),
+);
 
 const { getAssemblyExports, getConfig, runMain } = await dotnet.create();
 
@@ -15,17 +32,21 @@ const errorTypes: Record<ValidationErrorType, string> = {
     'Markup Compatibility validation error',
 };
 
-const output = document.querySelector<HTMLDivElement>('#output')!;
+const chooseFileButton =
+  document.querySelector<HTMLButtonElement>('#choose-file')!;
 const fileInput = document.querySelector<HTMLInputElement>('#file')!;
+const output = document.querySelector<HTMLDivElement>('#output')!;
 
-document.querySelector('#file')!.addEventListener('change', async () => {
-  output.innerHTML = `
-    <label for="loading">Loading...</label>
-    <progress id="loading"></progress>
-  `;
+fileInput.addEventListener('change', async () => {
   if (!fileInput.files?.length) {
     return;
   }
+  output.innerHTML = /* html */ `
+    <div id="loading-container">
+      <label for="loading">Loading...</label>
+      <fluent-progress id="loading"></fluent-progress>
+    </div>
+  `;
   const readerResult = Promise.withResolvers<ArrayBuffer>();
   const reader = new FileReader();
   reader.onload = e => readerResult.resolve(e.target!.result as ArrayBuffer);
@@ -37,38 +58,21 @@ document.querySelector('#file')!.addEventListener('change', async () => {
   );
   const parsedValidationResult: ValidationError[] =
     JSON.parse(validationResult);
-  output.innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>Error #</th>
-          <th>Description</th>
-          <th>Error type</th>
-          <th>ID</th>
-          <th>Path</th>
-          <th>Part</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${parsedValidationResult
-          .map(
-            (error, index) => `
-                <tr>
-                  <th scope="row">${index + 1}</td>
-                  <td>${error.description}</td>
-                  <td>${errorTypes[error.errorType]}</td>
-                  <td>${error.id}</td>
-                  <td>${error.xPath}</td>
-                  <td>${error.uri}</td>
-                </tr>
-              `,
-          )
-          .join('')}
-      </tbody>
-    </table>
-  `;
+  const dataGrid = document.createElement('fluent-data-grid') as DataGrid;
+  dataGrid.generateHeader = 'sticky';
+  dataGrid.rowsData = parsedValidationResult.map((error, index) => ({
+    'Error #': index + 1,
+    Description: error.description,
+    'Error type': errorTypes[error.errorType],
+    ID: error.id,
+    Path: error.xPath,
+    Part: error.uri,
+  }));
+  output.innerHTML = '';
+  output.appendChild(dataGrid);
   fileInput.value = '';
 });
+chooseFileButton.addEventListener('click', () => fileInput.click());
 
 // run the C# Main() method and keep the runtime process running and executing further API calls
 await runMain();
