@@ -1,5 +1,5 @@
 {
-  "name": "@webexp/document-format-validator",
+  "name": "@webexp/ooxml-validator",
   "version": "0.0.0",
   "main": "index.js",
   "repository": "git@github.com:Dabolus/web-experiments.git",

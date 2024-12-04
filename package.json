@@ -18,7 +18,7 @@
     "start:planet-age": "cd src/experiments/planet-age && bun run start",
     "start:steganography-toolkit": "cd src/experiments/steganography-toolkit && bun run start",
     "start:sqipper": "cd src/experiments/sqipper && bun run start",
-    "start:document-format-validator": "cd src/experiments/document-format-validator && bun run start",
+    "start:ooxml-validator": "cd src/experiments/ooxml-validator && bun run start",
     "test:sqipper": "cd src/experiments/sqipper && bun test"
   },
   "devDependencies": {
