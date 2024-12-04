@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "start": "vite build && concurrently 'bun:start:*'",
-    "start:vite": "vite build --watch",
+    "start:vite": "WATCH=true vite build --watch",
     "start:dotnet": "dotnet watch",
     "build": "rm -rf dist/ && vite build && dotnet publish && mv bin/Release/net9.0/publish/wwwroot/ dist/"
   },

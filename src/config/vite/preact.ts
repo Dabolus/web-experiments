@@ -6,13 +6,14 @@ import createConfig, {
 
 const createPreactConfig = async (
   options?: DefineConfigOptions | DefineConfigOptionsCallback,
-) => {
-  const userOptions =
-    (typeof options === 'function' ? await options() : options) || {};
-  return createConfig({
-    ...userOptions,
-    plugins: [preact(), ...(userOptions.plugins || [])],
+) =>
+  createConfig(async env => {
+    const userOptions =
+      (typeof options === 'function' ? await options(env) : options) || {};
+    return {
+      ...userOptions,
+      plugins: [preact(), ...(userOptions.plugins || [])],
+    };
   });
-};
 
 export default createPreactConfig;
