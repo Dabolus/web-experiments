@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Document Format Validator</title>
+    <title>Office Open XML Validator</title>
     <base href="<%= base %>">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" src="/src/scripts/main.ts"></script>
+    <meta name="theme-color" content="#d83b01" />
     <link rel="stylesheet" href="/src/styles/main.scss">
     <style>
       @font-face {
@@ -23,6 +24,10 @@
         font-family: 'Segoe UI Variable', sans-serif;
       }
 
+      [hidden] {
+        display: none !important;
+      }
+
       html,
       body {
         margin: 0;
@@ -33,13 +38,13 @@
   </head>
   <body>
     <header>
-      <h1>Document Format Validator</h1>
+      <h1>Office Open XML Validator</h1>
     </header>
     <main>
       <form id="input">
-        <p>Load your .docx file here</p>
+        <p>Load your .docx, .xlsx, or .pptx file here</p>
         <fluent-button id="choose-file">Choose file</fluent-button>
-        <input type="file" id="file" accept=".docx" hidden>
+        <input type="file" id="file" accept=".docx,.xlsx,.pptx" hidden>
       </form>
       <div id="output"></div>
     </main>

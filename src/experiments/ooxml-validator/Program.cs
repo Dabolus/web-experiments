@@ -45,20 +45,36 @@ internal partial class SourceGenerationContext : JsonSerializerContext { }
 partial class WordprocessingDocumentValidator
 {
     [JSExport]
-    public static string Validate(byte[] doc)
+    public static string Validate(string fileName, byte[] doc)
     {
         using (MemoryStream stream = new MemoryStream())
         {
             stream.Write(doc, 0, doc.Length);
-            using (WordprocessingDocument wordprocessingDocument = WordprocessingDocument.Open(stream, true))
+            using (var document = getDocument(fileName, stream))
             {
                 OpenXmlValidator validator = new OpenXmlValidator();
                 ValidationError[] errors = validator
-                    .Validate(wordprocessingDocument)
+                    .Validate(document)
                     .Select(e => new ValidationError(e))
                     .ToArray();
                 return JsonSerializer.Serialize(errors, typeof(ValidationError[]), SourceGenerationContext.Default);
             }
+        }
+    }
+
+    private static OpenXmlPackage getDocument(string fileName, Stream stream)
+    {
+        string fileExt = Path.GetExtension(fileName).TrimStart('.');
+        switch (fileExt)
+        {
+            case "docx":
+                return WordprocessingDocument.Open(stream, false);
+            case "xlsx":
+                return SpreadsheetDocument.Open(stream, false);
+            case "pptx":
+                return PresentationDocument.Open(stream, false);
+            default:
+                throw new ArgumentException("Invalid file type");
         }
     }
 }
