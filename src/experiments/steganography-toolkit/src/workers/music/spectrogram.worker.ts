@@ -10,7 +10,7 @@ export interface GetImageSpectrogramOptions {
   logarithmic?: boolean;
 }
 
-export interface SpectrogramWorker extends Worker {
+export interface SpectrogramWorker {
   getImageSpectrogram(options: GetImageSpectrogramOptions): Promise<Blob>;
 }
 

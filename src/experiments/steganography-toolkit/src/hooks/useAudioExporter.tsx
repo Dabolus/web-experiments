@@ -15,12 +15,13 @@ import type {
   MusicExporterWorker,
 } from '../workers/music/exporter.worker';
 
-const musicExporterWorker = setupWorkerClient<MusicExporterWorker>(
-  new Worker(new URL('../workers/music/exporter.worker.ts', import.meta.url), {
-    type: 'module',
-  }),
-  ['encodeMp3'],
+const musicExporterWorker = new Worker(
+  new URL('../workers/music/exporter.worker.ts', import.meta.url),
+  { type: 'module' },
 );
+
+const musicExporterWorkerClient =
+  setupWorkerClient<MusicExporterWorker>(musicExporterWorker);
 
 export interface UseAudioExporterValue {
   isExporting?: boolean;
@@ -127,7 +128,7 @@ const useAudioExporter: UseAudioExporterHook = () => {
 
       setIsExporting(true);
       const wavUrl = await getWavUrl();
-      const mp3 = await musicExporterWorker.encodeMp3(wavUrl, options);
+      const mp3 = await musicExporterWorkerClient.encodeMp3(wavUrl, options);
       saveAs(mp3, `${title || 'song'}.mp3`);
       setIsExporting(false);
     },

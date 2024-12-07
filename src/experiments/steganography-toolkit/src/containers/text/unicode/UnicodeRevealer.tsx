@@ -24,7 +24,7 @@ import { Label } from '../../../components/forms/common';
 import UnicodeRevealerForm, {
   UnicodeRevealerFormProps,
 } from '../../../components/text/unicode/UnicodeRevealerForm';
-import { unicodeWorker } from './unicodeWorkerClient';
+import { unicodeWorkerClient } from './unicodeWorkerClient';
 import type { DecodedBinaryResult } from '../../../workers/text/unicode.worker';
 
 const DownloadLink = styled(Link)({
@@ -60,7 +60,7 @@ const UnicodeRevealer: FunctionComponent = () => {
       return;
     }
 
-    const decoded = await unicodeWorker.decodeBinary(
+    const decoded = await unicodeWorkerClient.decodeBinary(
       decoder.decode(data.carrierWithPayload),
     );
 

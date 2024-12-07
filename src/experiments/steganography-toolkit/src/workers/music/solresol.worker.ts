@@ -32,7 +32,7 @@ export interface TranslationOutput {
 
 export type Translator = (input: string) => Promise<TranslationOutput>;
 
-export interface SolresolWorker extends Worker {
+export interface SolresolWorker {
   computeSolresolOutput: Translator;
   computeEnglishOutput: Translator;
 }

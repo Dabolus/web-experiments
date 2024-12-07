@@ -21,7 +21,7 @@ import { Label } from '../../../components/forms/common';
 import UnicodeConcealerForm, {
   UnicodeConcealerFormProps,
 } from '../../../components/text/unicode/UnicodeConcealerForm';
-import { unicodeWorker } from './unicodeWorkerClient';
+import { unicodeWorkerClient } from './unicodeWorkerClient';
 
 const UnicodeConcealer: FunctionComponent = () => {
   const [carrierLength, setCarrierLength] = useState(0);
@@ -53,7 +53,7 @@ const UnicodeConcealer: FunctionComponent = () => {
             data.encryption.algorithm,
           );
 
-    const encodedText = await unicodeWorker.encodeBinary(
+    const encodedText = await unicodeWorkerClient.encodeBinary(
       data.carrier,
       finalDataToEncode,
     );

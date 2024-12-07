@@ -59,13 +59,12 @@ import useAudioExporter from '../../../hooks/useAudioExporter';
 import { chunk } from '../../../helpers';
 import Abc from '../../../components/music/Abc';
 
-const solresolWorker = setupWorkerClient<SolresolWorker>(
-  new Worker(
-    new URL('../../../workers/music/solresol.worker.ts', import.meta.url),
-    { type: 'module' },
-  ),
-  ['computeSolresolOutput', 'computeEnglishOutput'],
+const solresolWorker = new Worker(
+  new URL('../../../workers/music/solresol.worker.ts', import.meta.url),
+  { type: 'module' },
 );
+
+const solresolWorkerClient = setupWorkerClient<SolresolWorker>(solresolWorker);
 
 const SolresolTranslator: FunctionComponent = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -118,8 +117,8 @@ const SolresolTranslator: FunctionComponent = () => {
         : debouncedInput;
 
       const { output: possibleOutput, hint: possibleHint = [] } = swapped
-        ? await solresolWorker.computeEnglishOutput(normalizedInput)
-        : await solresolWorker.computeSolresolOutput(normalizedInput);
+        ? await solresolWorkerClient.computeEnglishOutput(normalizedInput)
+        : await solresolWorkerClient.computeSolresolOutput(normalizedInput);
 
       const transformedOutput = swapped
         ? possibleOutput.map(item =>

@@ -13,7 +13,7 @@ import {
 import LSBGeneratorForm, {
   LSBGeneratorFormProps,
 } from '../../../components/image/lsb/LSBGeneratorForm';
-import { lsbWorker } from './lsbWorkerClient';
+import { lsbWorkerClient } from './lsbWorkerClient';
 
 const formatToExt: Record<string, string> = {
   'image/png': 'png',
@@ -88,7 +88,7 @@ const LSBGenerator: FunctionComponent = () => {
       data.backgroundColor.blue,
       Math.round((data.backgroundColor.alpha ?? 1) * 255),
     ];
-    const outputImage = await lsbWorker.encode({
+    const outputImage = await lsbWorkerClient.encode({
       inputImage: new ImageData(
         Uint8ClampedArray.from(
           { length: width * height * 4 },

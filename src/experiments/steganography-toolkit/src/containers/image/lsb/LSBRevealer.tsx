@@ -21,7 +21,7 @@ import { Label } from '../../../components/forms/common';
 import LSBRevealerForm, {
   LSBRevealerFormProps,
 } from '../../../components/image/lsb/LSBRevealerForm';
-import { lsbWorker } from './lsbWorkerClient';
+import { lsbWorkerClient } from './lsbWorkerClient';
 
 const DownloadLink = styled(Link)({
   marginTop: '-0.25rem',
@@ -50,7 +50,7 @@ const LSBRevealer: FunctionComponent = () => {
       return;
     }
     const payload = Uint8Array.from(
-      await lsbWorker.decode({
+      await lsbWorkerClient.decode({
         imageWithMessage: data.carrierWithPayload
           .getContext('2d', { willReadFrequently: true })!
           .getImageData(

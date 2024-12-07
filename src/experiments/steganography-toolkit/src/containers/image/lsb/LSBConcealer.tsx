@@ -13,7 +13,7 @@ import {
 import LSBConcealerForm, {
   LSBConcealerFormProps,
 } from '../../../components/image/lsb/LSBConcealerForm';
-import { lsbWorker } from './lsbWorkerClient';
+import { lsbWorkerClient } from './lsbWorkerClient';
 
 const formatToExt: Record<string, string> = {
   'image/png': 'png',
@@ -59,7 +59,7 @@ const LSBConcealer: FunctionComponent = () => {
             data.encryption.password,
             data.encryption.algorithm,
           );
-    const outputImage = await lsbWorker.encode({
+    const outputImage = await lsbWorkerClient.encode({
       inputImage: data.carrier
         .getContext('2d', { willReadFrequently: true })!
         .getImageData(0, 0, data.carrier.width, data.carrier.height),

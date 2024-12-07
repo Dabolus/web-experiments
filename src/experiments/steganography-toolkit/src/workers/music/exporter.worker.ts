@@ -15,7 +15,7 @@ export interface EncodeMp3Options {
   kbps?: number;
 }
 
-export interface MusicExporterWorker extends Worker {
+export interface MusicExporterWorker {
   encodeMp3(wavUrl: string, options?: EncodeMp3Options): Promise<Blob>;
 }
 

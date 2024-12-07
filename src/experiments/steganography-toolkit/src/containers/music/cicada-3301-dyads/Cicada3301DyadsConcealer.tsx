@@ -22,16 +22,16 @@ import Loader from '../../../components/Loader';
 import type { Cicada3301DyadsWorker } from '../../../workers/music/cicada-3301-dyads.worker';
 import useAudioExporter from '../../../hooks/useAudioExporter';
 
-const cicada3301Worker = setupWorkerClient<Cicada3301DyadsWorker>(
-  new Worker(
-    new URL(
-      '../../../workers/music/cicada-3301-dyads.worker.ts',
-      import.meta.url,
-    ),
-    { type: 'module' },
+const cicada3301Worker = new Worker(
+  new URL(
+    '../../../workers/music/cicada-3301-dyads.worker.ts',
+    import.meta.url,
   ),
-  ['computeAbc'],
+  { type: 'module' },
 );
+
+const cicada3301WorkerClient =
+  setupWorkerClient<Cicada3301DyadsWorker>(cicada3301Worker);
 
 const Cicada3301DyadsConcealer: FunctionComponent = () => {
   const [data, setData] = useState<Cicada3301DyadsFormValue>();
@@ -54,7 +54,9 @@ const Cicada3301DyadsConcealer: FunctionComponent = () => {
   useEffect(() => {
     const compute = async () => {
       if (debouncedData) {
-        const computedAbc = await cicada3301Worker.computeAbc(debouncedData);
+        const computedAbc = await cicada3301WorkerClient.computeAbc(
+          debouncedData,
+        );
 
         setInput(computedAbc);
       }

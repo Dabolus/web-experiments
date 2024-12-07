@@ -10,7 +10,7 @@ export interface DecodedBinaryResult {
   hiddenData: Uint8Array;
 }
 
-export interface UnicodeWorker extends Worker {
+export interface UnicodeWorker {
   encodeText(text1: string, text2: string): string;
   decodeText(text: string): DecodedTextResult;
   encodeBinary(text: string, data: Uint8Array): string;

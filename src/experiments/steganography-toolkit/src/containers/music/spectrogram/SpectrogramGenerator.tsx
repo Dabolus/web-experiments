@@ -27,15 +27,13 @@ import SpectrogramGeneratorForm, {
   SpectrogramGeneratorFormProps,
 } from '../../../components/music/spectrogram/SpectrogramGeneratorForm';
 
-const spectrogramWorker = setupWorkerClient<SpectrogramWorker>(
-  new Worker(
-    new URL('../../../workers/music/spectrogram.worker.ts', import.meta.url),
-    {
-      type: 'module',
-    },
-  ),
-  ['getImageSpectrogram'],
+const spectrogramWorker = new Worker(
+  new URL('../../../workers/music/spectrogram.worker.ts', import.meta.url),
+  { type: 'module' },
 );
+
+const spectrogramWorkerClient =
+  setupWorkerClient<SpectrogramWorker>(spectrogramWorker);
 
 const spectrogramHeight = 256;
 
@@ -87,7 +85,7 @@ const SpectrogramGenerator: FunctionComponent = () => {
       .getImageData(0, 0, data.image.width, data.image.height);
     const aspectRatio = imageData.width / imageData.height;
     const resizedImageWidth = Math.round(spectrogramHeight * aspectRatio);
-    const outputWav = await spectrogramWorker.getImageSpectrogram({
+    const outputWav = await spectrogramWorkerClient.getImageSpectrogram({
       imageData,
       density: data.density,
       duration: data.duration,

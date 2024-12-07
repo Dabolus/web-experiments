@@ -2,7 +2,7 @@ import { setupWorkerServer } from '@easy-worker/core';
 
 export type EncryptionAlgorithm = 'AES-CTR' | 'AES-CBC' | 'AES-GCM';
 
-export interface PreprocessorWorker extends Worker {
+export interface PreprocessorWorker {
   encrypt(
     message: string | Uint8Array,
     password: string | Uint8Array,

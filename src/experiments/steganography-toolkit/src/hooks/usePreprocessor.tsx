@@ -2,12 +2,15 @@ import { useCallback } from 'react';
 import { setupWorkerClient } from '@easy-worker/core';
 import type { PreprocessorWorker } from '../workers/preprocessor.worker';
 
-const preprocessorWorker = setupWorkerClient<PreprocessorWorker>(
-  new Worker(new URL('../workers/preprocessor.worker.ts', import.meta.url), {
+const preprocessorWorker = new Worker(
+  new URL('../workers/preprocessor.worker.ts', import.meta.url),
+  {
     type: 'module',
-  }),
-  ['encrypt', 'decrypt'],
+  },
 );
+
+const preprocessorWorkerClient =
+  setupWorkerClient<PreprocessorWorker>(preprocessorWorker);
 
 export interface UsePreprocessorValue {
   encrypt: PreprocessorWorker['encrypt'];
@@ -18,12 +21,12 @@ export type UsePreprocessorHook = () => UsePreprocessorValue;
 
 const usePreprocessor: UsePreprocessorHook = () => {
   const encrypt = useCallback<UsePreprocessorValue['encrypt']>(
-    async (...args) => preprocessorWorker.encrypt(...args),
+    async (...args) => preprocessorWorkerClient.encrypt(...args),
     [],
   );
 
   const decrypt = useCallback<UsePreprocessorValue['decrypt']>(
-    async (...args) => preprocessorWorker.decrypt(...args),
+    async (...args) => preprocessorWorkerClient.decrypt(...args),
     [],
   );
 

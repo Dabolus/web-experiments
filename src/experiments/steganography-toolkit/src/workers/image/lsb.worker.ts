@@ -13,7 +13,7 @@ export interface DecodeOptions {
   useAlphaChannel?: boolean | 'auto';
 }
 
-export interface LSBWorker extends Worker {
+export interface LSBWorker {
   encode(options: EncodeOptions): Promise<ImageData>;
   decode(options: DecodeOptions): Promise<Uint8ClampedArray>;
 }
