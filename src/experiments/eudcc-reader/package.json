@@ -21,18 +21,19 @@
     "preact": "^10.25.1",
     "preact-render-to-string": "^6.5.11",
     "qr.js": "^0.0.0",
+    "regexparam": "^3.0.0",
     "workbox-core": "^7.3.0",
     "workbox-google-analytics": "^7.3.0",
     "workbox-precaching": "^7.3.0",
     "workbox-routing": "^7.3.0",
-    "wouter-preact": "^2.12.2"
+    "wouter-preact": "^3.3.5"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.9.2",
     "@types/pako": "^2.0.3",
     "cbor": "^10.0.3",
     "typescript": "^5.7.2",
-    "vite": "^6.0.2",
+    "vite": "^6.0.3",
     "vite-plugin-pwa": "^0.21.1"
   }
 }

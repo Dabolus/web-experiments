@@ -17,7 +17,7 @@
     "@webexp/config": "workspace:^",
     "sass": "^1.82.0",
     "tosource": "^2.0.0-alpha.3",
-    "vite": "^6.0.2",
+    "vite": "^6.0.3",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-static-copy": "^2.2.0"
   }

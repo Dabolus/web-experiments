@@ -1,28 +1,38 @@
 import { FunctionalComponent, h } from 'preact';
-import { Router, Route } from 'wouter-preact';
-import makeMatcher, { MatcherFn } from 'wouter-preact/matcher';
+import { Router, Route, type Path } from 'wouter-preact';
+import { parse as parsePattern } from 'regexparam';
 import { lazy } from '../utils';
 
 const Home = lazy(() => import('../routes/Home'));
 const Reader = lazy(() => import('../routes/Reader'));
 
-const defaultMatcher = makeMatcher();
-
 /*
  * A custom routing matcher function that supports multipath routes
  */
-const multipathMatcher: MatcherFn = (patterns, path) => {
-  for (let pattern of [patterns].flat()) {
-    const [match, params] = defaultMatcher(pattern, path);
-    if (match) return [match, params];
+const multipathParser = (
+  routeOrRoutes: Path | Path[],
+  loose?: boolean,
+): { pattern: RegExp; keys: string[] } => {
+  if (typeof routeOrRoutes === 'string') {
+    return parsePattern(routeOrRoutes, loose);
   }
-
-  return [false, null];
+  const results = routeOrRoutes.map(route => parsePattern(route, loose));
+  const mergedKeys = results.flatMap(({ keys }) => keys);
+  const mergedPatternSource = `(?:${results
+    .map(({ pattern }) => pattern.source)
+    .join('|')})`;
+  const mergedPatternFlags = Array.from(
+    new Set(results.flatMap(({ pattern }) => pattern.flags.split(''))),
+  ).join('');
+  return {
+    keys: mergedKeys,
+    pattern: new RegExp(mergedPatternSource, mergedPatternFlags),
+  };
 };
 
 const App: FunctionalComponent = () => (
   <div>
-    <Router base="/eudcc-reader" matcher={multipathMatcher}>
+    <Router base="/eudcc-reader" parser={multipathParser}>
       <Route path="/" component={Home} />
       {/* wouter types don't know about our custom matcher function */}
       <Route
