@@ -69,7 +69,13 @@ const projectsPackageJsons = await globby(
 await Promise.all(
   projectsPackageJsons.map(async packageJson => {
     const packageDir = path.dirname(packageJson);
-    await execute('bun', ['run', 'build'], { cwd: packageDir });
+    try {
+      await execute('bun', ['run', 'build'], { cwd: packageDir });
+    } catch (error) {
+      throw new Error(`Failed to build ${packageDir}: ${error}`, {
+        cause: error,
+      });
+    }
   }),
 );
 
