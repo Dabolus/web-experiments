@@ -473,6 +473,11 @@ const SolresolTranslator: FunctionComponent = () => {
           </FormControl>
         </Grid>
       </Grid>
+      <Box textAlign="center" mt={4}>
+        <Typography variant="caption">
+          In loving memory of Daniel "Dan" Parson
+        </Typography>
+      </Box>
     </Page>
   );
 };
