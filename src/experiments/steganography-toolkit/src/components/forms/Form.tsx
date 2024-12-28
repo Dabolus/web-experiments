@@ -5,7 +5,7 @@ import React, {
   BaseSyntheticEvent,
 } from 'react';
 import { FieldValues, useForm, EventType, FormProvider } from 'react-hook-form';
-import { Unstable_Grid2 as Grid } from '@mui/material';
+import { Grid2 as Grid } from '@mui/material';
 import { HelperTextSeverity } from './HelperText';
 
 export type SubmitHandler<T extends FieldValues = FieldValues> = (

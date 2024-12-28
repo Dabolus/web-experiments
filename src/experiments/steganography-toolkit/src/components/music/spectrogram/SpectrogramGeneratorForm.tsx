@@ -1,5 +1,4 @@
-import React, { FunctionComponent, useRef, useState } from 'react';
-import { Unstable_Grid2 as Grid, Button } from '@mui/material';
+import { FunctionComponent, useRef, useState } from 'react';
 import { loadImage, readFile } from '../../../helpers';
 import Form, { ChangeHandlerInfo, FormProps } from '../../forms/Form';
 import FileField from '../../forms/FileField';

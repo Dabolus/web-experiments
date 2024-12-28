@@ -74,6 +74,7 @@ const HelperText: FunctionComponent<HelperTextProps> = ({
 
   return (
     <ColoredFormHelperText
+      component="div"
       severity={severity}
       error={severity === 'error'}
       {...props}

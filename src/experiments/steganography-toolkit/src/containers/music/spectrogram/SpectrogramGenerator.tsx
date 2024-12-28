@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import { setupWorkerClient } from '@easy-worker/core';
 import { useDebouncedCallback } from 'use-debounce';
-import colormap from 'colormap';
 import WaveSurfer from 'wavesurfer.js';
 import Spectrogram from 'wavesurfer.js/plugins/spectrogram';
 import { saveAs } from 'file-saver';
@@ -36,12 +35,6 @@ const spectrogramWorkerClient =
   setupWorkerClient<SpectrogramWorker>(spectrogramWorker);
 
 const spectrogramHeight = 256;
-
-const colorMap = colormap({
-  colormap: 'jet',
-  nshades: 256,
-  format: 'float',
-});
 
 const statusToLabelMap: Record<
   GetImageSpectrogramProgressMessage['phase'],
@@ -111,7 +104,8 @@ const SpectrogramGenerator: FunctionComponent = () => {
           height: spectrogramHeight,
           frequencyMin: 0,
           frequencyMax: data.sampleRate / 2,
-          colorMap,
+          colorMap: 'roseus',
+          scale: data.logarithmic ? 'logarithmic' : 'linear',
         }),
       ],
     };

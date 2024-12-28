@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useId } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
-  Unstable_Grid2 as Grid,
+  Grid2 as Grid,
   FormControl,
   OutlinedInput,
   OutlinedInputProps,
@@ -28,7 +28,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
   descriptionSeverity,
   showDescription = () => true,
   type,
-  inputProps,
+  slotProps,
   cols = 12,
   wideScreenCols = 6,
   height,
@@ -49,19 +49,22 @@ const TextField: FunctionComponent<TextFieldProps> = ({
       name={name}
       control={control}
       render={({ field: { value, onChange, disabled: _, ...field } }) => (
-        <Grid xs={cols} sm={wideScreenCols}>
+        <Grid size={{ xs: cols, sm: wideScreenCols }}>
           <FormControl fullWidth>
             {label && <Label id={labelId}>{label}</Label>}
             <OutlinedInput
               type={type}
-              inputProps={{
-                ...(label && { 'aria-labelledby': labelId }),
-                ...(description && { 'aria-describedby': descriptionId }),
-                min,
-                max,
-                step,
-                maxLength,
-                ...inputProps,
+              slotProps={{
+                ...slotProps,
+                input: {
+                  ...(label && { 'aria-labelledby': labelId }),
+                  ...(description && { 'aria-describedby': descriptionId }),
+                  min,
+                  max,
+                  step,
+                  maxLength,
+                  ...slotProps?.input,
+                },
               }}
               value={value}
               onChange={event =>

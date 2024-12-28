@@ -2,7 +2,7 @@ import React, { FunctionComponent, useMemo, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { saveAs } from 'file-saver';
 import {
-  Unstable_Grid2 as Grid,
+  Grid2 as Grid,
   Box,
   FormControl,
   OutlinedInput,
@@ -100,7 +100,7 @@ const UnicodeRevealer: FunctionComponent = () => {
     <Page size="md" title="Text - Unicode - Reveal">
       <UnicodeRevealerForm onChange={handleChange} />
       <Grid container spacing={3} mt={2}>
-        <Grid xs={12} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <FormControl fullWidth>
             <Label>Original text</Label>
             <OutlinedInput
@@ -121,7 +121,7 @@ const UnicodeRevealer: FunctionComponent = () => {
             )}
           </FormControl>
         </Grid>
-        <Grid xs={12} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <FormControl fullWidth>
             <Label>Hidden text/file</Label>
             <OutlinedInput readOnly multiline rows={8} value={hiddenText} />

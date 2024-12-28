@@ -13,7 +13,7 @@ import { saveAs } from 'file-saver';
 import { setupWorkerClient } from '@easy-worker/core';
 import {
   OutlinedInputProps,
-  Unstable_Grid2 as Grid,
+  Grid2 as Grid,
   Link,
   Typography,
   FormControl,
@@ -288,7 +288,7 @@ const SolresolTranslator: FunctionComponent = () => {
   return (
     <Page size="md" title="Music - Solresol - Translate">
       <Grid container spacing={3} columns={13}>
-        <Grid xs={13} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <FormControl fullWidth>
             <Box
               display="flex"
@@ -351,12 +351,12 @@ const SolresolTranslator: FunctionComponent = () => {
             </Typography>
           )}
         </Grid>
-        <Grid xs={13} sm={1} sx={{ textAlign: 'center' }}>
+        <Grid size={{ xs: 12, sm: 1 }} sx={{ textAlign: 'center' }}>
           <IconButton aria-label="Swap languages" onClick={handleSwapClick}>
             <SwapHorizIcon />
           </IconButton>
         </Grid>
-        <Grid xs={13} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <FormControl fullWidth>
             <Box
               display="flex"

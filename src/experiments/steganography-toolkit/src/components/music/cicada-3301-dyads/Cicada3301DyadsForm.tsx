@@ -8,7 +8,7 @@ import React, {
   useEffect,
 } from 'react';
 import {
-  Grid,
+  Grid2 as Grid,
   FormControl,
   FormLabel,
   OutlinedInput,
@@ -240,7 +240,7 @@ const Cicada3301DyadsForm: FunctionComponent<Cicada3301DyadsFormProps> = ({
 
   return (
     <Grid container spacing={3} component="form">
-      <Grid item xs={12}>
+      <Grid size={12}>
         <FormControl fullWidth>
           <Label>Input</Label>
           <OutlinedInput
@@ -256,7 +256,7 @@ const Cicada3301DyadsForm: FunctionComponent<Cicada3301DyadsFormProps> = ({
           </FormHelperText>
         </FormControl>
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <FormControl fullWidth>
           <Label>Title</Label>
           <OutlinedInput
@@ -265,12 +265,12 @@ const Cicada3301DyadsForm: FunctionComponent<Cicada3301DyadsFormProps> = ({
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid size={{ xs: 12, sm: 6 }}>
         <Label focused={isTempoFocused}>Meter</Label>
         <MeterContainer>
           <MeterPart
             type="number"
-            inputProps={{ min: 1 }}
+            slotProps={{ input: { min: 1 } }}
             value={state.meterBeats}
             onInput={createTextFieldInputHandler('meterBeats')}
             onFocus={handleTempoFocus}
@@ -279,7 +279,7 @@ const Cicada3301DyadsForm: FunctionComponent<Cicada3301DyadsFormProps> = ({
           <Box marginX={1}>/</Box>
           <MeterPart
             type="number"
-            inputProps={{ min: 1 }}
+            slotProps={{ input: { min: 1 } }}
             value={state.meterNoteValue}
             onInput={createTextFieldInputHandler('meterNoteValue')}
             onFocus={handleTempoFocus}
@@ -287,7 +287,7 @@ const Cicada3301DyadsForm: FunctionComponent<Cicada3301DyadsFormProps> = ({
           />
         </MeterContainer>
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid size={{ xs: 12, sm: 6 }}>
         <FormControl fullWidth>
           <Label>Key</Label>
           <Select
@@ -336,18 +336,18 @@ const Cicada3301DyadsForm: FunctionComponent<Cicada3301DyadsFormProps> = ({
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid size={{ xs: 12, sm: 6 }}>
         <FormControl fullWidth>
           <Label>Tempo</Label>
           <OutlinedInput
             type="number"
-            inputProps={{ min: 1 }}
+            slotProps={{ input: { min: 1 } }}
             value={state.tempo}
             onInput={createTextFieldInputHandler('tempo')}
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid size={{ xs: 12, sm: 6 }}>
         <FormControl fullWidth>
           <Label>Language</Label>
           <Select

@@ -1,11 +1,6 @@
 import React, { FunctionComponent, useId } from 'react';
 import { Controller, Primitive, useFormContext } from 'react-hook-form';
-import {
-  Unstable_Grid2 as Grid,
-  FormControl,
-  Select,
-  SelectProps,
-} from '@mui/material';
+import { Grid2 as Grid, FormControl, Select, SelectProps } from '@mui/material';
 import { FormChildProps } from './Form';
 import { Label } from './common';
 import HelperText from './HelperText';
@@ -30,7 +25,6 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
   description,
   descriptionSeverity,
   showDescription = () => true,
-  inputProps,
   cols = 12,
   wideScreenCols = 6,
   height,
@@ -47,7 +41,7 @@ const SelectField: FunctionComponent<SelectFieldProps> = ({
       name={name}
       control={control}
       render={({ field: { value, onChange, disabled: _, ...field } }) => (
-        <Grid xs={cols} sm={wideScreenCols}>
+        <Grid size={{ xs: cols, sm: wideScreenCols }}>
           <FormControl fullWidth>
             {label && <Label id={labelId}>{label}</Label>}
             <Select

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, PropsWithChildren, useId } from 'react';
 import Dropzone, { DropzoneProps } from 'react-dropzone';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Unstable_Grid2 as Grid, styled } from '@mui/material';
+import { Grid2 as Grid, styled } from '@mui/material';
 import { Clear as ClearIcon } from '@mui/icons-material';
 import { FormChildProps } from './Form';
 import {
@@ -57,7 +57,7 @@ const FileField: FunctionComponent<FileFieldProps> = ({
       render={({
         field: { value = [], onChange, disabled: _, ref: __, ...field },
       }) => (
-        <Grid xs={cols} sm={wideScreenCols}>
+        <Grid size={{ xs: cols, sm: wideScreenCols }}>
           <Dropzone
             multiple={multiple}
             disabled={disabled}

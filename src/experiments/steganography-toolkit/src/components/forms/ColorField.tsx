@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useId } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { MuiColorInput, MuiColorInputProps } from 'mui-color-input';
-import { Unstable_Grid2 as Grid, FormControl } from '@mui/material';
+import { Grid2 as Grid, FormControl } from '@mui/material';
 import { FormChildProps } from './Form';
 import { Label } from './common';
 import HelperText from './HelperText';
@@ -22,7 +22,7 @@ const ColorField: FunctionComponent<ColorFieldProps> = ({
   description,
   descriptionSeverity,
   showDescription = () => true,
-  inputProps,
+  slotProps,
   cols = 12,
   wideScreenCols = 6,
   height,
@@ -38,14 +38,17 @@ const ColorField: FunctionComponent<ColorFieldProps> = ({
       name={name}
       control={control}
       render={({ field: { value, onChange, disabled: _, ...field } }) => (
-        <Grid xs={cols} sm={wideScreenCols}>
+        <Grid size={{ xs: cols, sm: wideScreenCols }}>
           <FormControl fullWidth>
             {label && <Label id={labelId}>{label}</Label>}
             <MuiColorInput
-              inputProps={{
-                ...(label && { 'aria-labelledby': labelId }),
-                ...(description && { 'aria-describedby': descriptionId }),
-                ...inputProps,
+              slotProps={{
+                ...slotProps,
+                input: {
+                  ...(label && { 'aria-labelledby': labelId }),
+                  ...(description && { 'aria-describedby': descriptionId }),
+                  ...slotProps?.input,
+                },
               }}
               value={`${
                 typeof value.alpha === 'undefined' || value.alpha === 2555

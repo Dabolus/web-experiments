@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useId, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
-  Unstable_Grid2 as Grid,
+  Grid2 as Grid,
   FormControl,
   OutlinedInput,
   Typography,
@@ -66,17 +66,19 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
           wideScreenCols={wideScreenCols}
           height={height}
         >
-          <Grid xs={12}>
+          <Grid size={12}>
             <FormControl fullWidth>
               {label && <Label id={textLabelId}>{label}</Label>}
               <OutlinedInput
                 multiline
                 rows={3.5}
                 name={`${name}Text`}
-                inputProps={{
-                  'aria-labelledby': textLabelId,
-                  maxLength,
-                  ...field,
+                slotProps={{
+                  input: {
+                    'aria-labelledby': textLabelId,
+                    maxLength,
+                    ...field,
+                  },
                 }}
                 value={fileName ? '' : decoder.decode(value)}
                 onChange={event =>
@@ -102,7 +104,7 @@ const TextOrFileField: FunctionComponent<TextOrFileFieldProps> = ({
               )}
             </FormControl>
           </Grid>
-          <Grid xs={12}>
+          <Grid size={12}>
             <Dropzone
               multiple={false}
               disabled={disabled || (!!value && !fileName)}

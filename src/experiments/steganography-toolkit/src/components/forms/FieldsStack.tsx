@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactElement } from 'react';
-import { Unstable_Grid2 as Grid } from '@mui/material';
+import { Grid2 as Grid } from '@mui/material';
 import { FormChildProps } from './Form';
 
 export interface FieldsStackProps {
@@ -19,7 +19,7 @@ const FieldsStack: FunctionComponent<FieldsStackProps> = ({
   height,
   children,
 }) => (
-  <Grid xs={cols} sm={wideScreenCols}>
+  <Grid size={{ xs: cols, sm: wideScreenCols }}>
     <div>
       <Grid container spacing={spacing} sx={{ height }}>
         {children}

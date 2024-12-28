@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { useDebounce } from 'use-debounce';
 import { setupWorkerClient } from '@easy-worker/core';
-import { Button, Menu, MenuItem, Box, Grid } from '@mui/material';
+import { Button, Menu, MenuItem, Box, Grid2 as Grid } from '@mui/material';
 import {
   ArrowDropUp as ArrowDropUpIcon,
   ArrowDropDown as ArrowDropDownIcon,
@@ -90,10 +90,10 @@ const Cicada3301DyadsConcealer: FunctionComponent = () => {
   return (
     <Page title="Music - Cicada 3301 Dyads - Conceal">
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Cicada3301DyadsForm onChange={handleFormChange} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Box textAlign="center">
             <Button
               ref={exportButtonRef}
@@ -132,7 +132,7 @@ const Cicada3301DyadsConcealer: FunctionComponent = () => {
             </Menu>
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Abc {...getAbcProps({ src: input })} />
         </Grid>
       </Grid>

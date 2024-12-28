@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useId } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
-  Unstable_Grid2 as Grid,
+  Grid2 as Grid,
   FormControl,
   OutlinedInput,
   Select,
@@ -55,7 +55,7 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
           cols={cols}
           wideScreenCols={wideScreenCols}
         >
-          <Grid xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <FormControl fullWidth>
               <Label id={algorithmLabelId}>Encryption</Label>
               <Select
@@ -80,7 +80,7 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
               </Select>
             </FormControl>
           </Grid>
-          <Grid xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <FormControl fullWidth>
               <Label>Password</Label>
               <OutlinedInput
@@ -88,7 +88,7 @@ const EncryptionField: FunctionComponent<EncryptionFieldProps> = ({
                 name={`${name}Password`}
                 readOnly={algorithm === 'none'}
                 value={algorithm === 'none' ? '' : password}
-                inputProps={{ 'aria-labelledby': passwordLabelId }}
+                slotProps={{ input: { 'aria-labelledby': passwordLabelId } }}
                 onChange={event =>
                   onChange({
                     algorithm,
