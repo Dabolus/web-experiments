@@ -1,9 +1,47 @@
-section {
+section,
+footer {
   position: fixed;
-  top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+}
+
+section {
+  top: 0;
+  height: calc(100vh - 48px);
+}
+
+footer {
+  bottom: 0;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+
+  .footer-content-container {
+    color: #fff;
+    background: #656362;
+    border: 8px solid #544f4b;
+    border-bottom: none;
+    border-radius: 16px 16px 0 0;
+    height: 100%;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  small {
+    font-size: 0.9rem;
+  }
+
+  a {
+    color: #fa8a8a;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 #notification {
