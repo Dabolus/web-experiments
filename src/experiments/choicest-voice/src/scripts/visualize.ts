@@ -42,6 +42,9 @@ export class WaveformIndicator {
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
   private x!: number;
+  private barSpacing!: number;
+  private barWidth!: number;
+  private barPadding!: number;
 
   /**
    * @param {HTMLCanvasElement} canvas
@@ -64,6 +67,7 @@ export class WaveformIndicator {
     { color, play, onValue }: WaveformIndicatorDisplayOptions = {},
   ): Promise<Uint8Array> {
     return new Promise(async resolve => {
+      this.canvas.width = window.innerWidth;
       this.x = 0;
       const audioCtx = new AudioContext();
       const analyser = audioCtx.createAnalyser();
@@ -74,7 +78,13 @@ export class WaveformIndicator {
           : audioCtx.createMediaStreamSource(source);
       if (source instanceof ArrayBuffer) {
         const audioBuffer = await audioCtx.decodeAudioData(source);
-        this.canvas.width = (Math.ceil(audioBuffer.duration * 60) + 4) * 16;
+        const estimatedBars =
+          audioBuffer.length / 24 / analyser.frequencyBinCount;
+        this.barSpacing = Math.ceil(this.canvas.width / estimatedBars);
+        // The bar spacing is 60% of the bar width, plus 20% padding on each side.
+        // NOTE: we precompute them for performance reasons
+        this.barWidth = Math.ceil(this.barSpacing * 0.6);
+        this.barPadding = Math.floor(this.barSpacing * 0.2);
         (sourceNode as AudioBufferSourceNode).buffer = audioBuffer;
       }
       sourceNode.connect(analyser);
@@ -134,14 +144,14 @@ export class WaveformIndicator {
     // loudness.
     // this.context.clearRect(this.x, 0, 1, this.canvas.height);
     this.context.fillRect(
-      this.x + 2,
+      this.x + this.barPadding,
       ((1 - loudness) * this.canvas.height) / 2,
-      12,
+      this.barWidth,
       loudness * this.canvas.height,
     );
 
     if (this.x < this.canvas.width - 1) {
-      this.x += 16;
+      this.x += this.barSpacing;
     }
     this.context.fillStyle = '#000';
   }
