@@ -1,4 +1,4 @@
-import type { BarcodeDetector as BarcodeDetectorPolyfill } from 'barcode-detector/pure';
+import type { BarcodeDetector as BarcodeDetectorPolyfill } from 'barcode-detector/ponyfill';
 
 export const configureQrCodeDetector =
   async (): Promise<BarcodeDetectorPolyfill> => {
@@ -8,7 +8,7 @@ export const configureQrCodeDetector =
         ? // If BarcodeDetector exists and supports QR Codes, use it
           BarcodeDetector
         : // Otherwise, lazy load the polyfill and use that instead
-          (await import('barcode-detector/pure')).BarcodeDetector;
+          (await import('barcode-detector/ponyfill')).BarcodeDetector;
 
     return new Detector({ formats: ['qr_code'] });
   };
