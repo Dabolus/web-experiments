@@ -1,31 +1,5 @@
 @use './textfield';
 
-h1,
-#filters,
-#projects {
-  margin: 16px;
-}
-
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-#portfolio-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #fff;
-  background: rgba(255, 128, 128, 0.6);
-  text-decoration: none;
-  padding: 8px;
-  border-radius: 8px;
-  margin: 0 16px;
-}
-
 #projects {
   list-style: none;
   padding: 0;
@@ -173,22 +147,6 @@ input {
   appearance: none;
   background: rgba(0, 0, 0, 0.6);
   border: 1px solid #fff;
-}
-
-@media (min-width: 640px) {
-  h1,
-  #filters,
-  #projects {
-    margin: 32px;
-  }
-
-  #projects {
-    gap: 32px;
-  }
-
-  #portfolio-link {
-    margin: 0 32px;
-  }
 }
 
 .pixelated {

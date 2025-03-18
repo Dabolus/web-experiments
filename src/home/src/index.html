@@ -108,6 +108,48 @@
         background: #303030;
         color: #fff;
       }
+
+      h1,
+      #filters,
+      #projects {
+        margin: 16px;
+      }
+
+      #portfolio-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #fff;
+        background: rgba(255, 128, 128, 0.6);
+        text-decoration: none;
+        padding: 8px;
+        border-radius: 8px;
+        margin: 0 16px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      @media (min-width: 640px) {
+        h1,
+        #filters,
+        #projects {
+          margin: 32px;
+        }
+
+        #projects {
+          gap: 32px;
+        }
+
+        #portfolio-link {
+          margin: 0 32px;
+        }
+      }
     </style>
     <script type="module" src="/src/scripts/main.ts"></script>
     <link rel="stylesheet" href="/src/styles/main.scss">
