@@ -16,9 +16,9 @@
     "base45-ts": "^1.0.3",
     "cbor-web": "^10.0.3",
     "date-fns": "^4.1.0",
-    "firebase": "^11.4.0",
+    "firebase": "^11.6.0",
     "pako": "^2.1.0",
-    "preact": "^10.26.4",
+    "preact": "^10.26.5",
     "preact-render-to-string": "^6.5.13",
     "qr.js": "^0.0.0",
     "regexparam": "^3.0.0",
@@ -26,14 +26,14 @@
     "workbox-google-analytics": "^7.3.0",
     "workbox-precaching": "^7.3.0",
     "workbox-routing": "^7.3.0",
-    "wouter-preact": "^3.6.1"
+    "wouter-preact": "^3.7.0"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.1",
     "@types/pako": "^2.0.3",
     "cbor": "^10.0.3",
-    "typescript": "^5.8.2",
-    "vite": "^6.2.2",
-    "vite-plugin-pwa": "^0.21.1"
+    "typescript": "^5.8.3",
+    "vite": "^6.3.2",
+    "vite-plugin-pwa": "^1.0.0"
   }
 }
