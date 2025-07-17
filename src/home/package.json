@@ -15,7 +15,7 @@
     "fuse.js": "^7.1.0"
   },
   "devDependencies": {
-    "@dabolus/portfolio-data": "^0.24.0",
+    "@dabolus/portfolio-data": "^0.25.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.14.1",
     "@webexp/config": "workspace:^",

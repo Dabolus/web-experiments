@@ -209,7 +209,7 @@
         "fuse.js": "^7.1.0",
       },
       "devDependencies": {
-        "@dabolus/portfolio-data": "^0.24.0",
+        "@dabolus/portfolio-data": "^0.25.0",
         "@types/js-yaml": "^4.0.9",
         "@types/node": "^22.14.1",
         "@webexp/config": "workspace:^",
@@ -421,7 +421,7 @@
 
     "@dabh/diagnostics": ["@dabh/diagnostics@2.0.3", "", { "dependencies": { "colorspace": "1.1.x", "enabled": "2.0.x", "kuler": "^2.0.0" } }, "sha512-hrlQOIi7hAfzsMqlGSFyVucrx38O+j6wiGOf//H2ecvIEqYN4ADBSS2iLMh5UFyDunCNniUIPk/q3riFv45xRA=="],
 
-    "@dabolus/portfolio-data": ["@dabolus/portfolio-data@0.24.0", "", {}, "sha512-LWWn9RGGrdKrpmHnjOMZoZZ/5j/YLce0fPigjrJMGrM8t+grJWfskUMNmtz/KLacoLUYig4NLS8LryctN7jfag=="],
+    "@dabolus/portfolio-data": ["@dabolus/portfolio-data@0.25.0", "", {}, "sha512-qlMs8eFoOM3E0q8bGTxuHYLYW9tGU3ETFTAeWfGSUW7mw2gQ5N8AZPdtbO8bEf4x29g1w9Rz8flqTDSGKgDPUg=="],
 
     "@easy-worker/core": ["@easy-worker/core@0.2.1", "", {}, "sha512-moPTbfJECysrekyt2URph/hEYkJo6GTuFjPDw9qXYL6h8IFBuSrSp5nHmsUeiDIJirZERW+yaYmu/4U9IWsJzg=="],
 
