@@ -1,5 +1,5 @@
 import archaic, { type ShapeType } from 'archaic/browser';
-import { optimize as svgOptimize } from 'svgo';
+import { optimize as svgOptimize } from 'svgo/browser';
 import toSafeDataURI from 'mini-svg-data-uri';
 
 const optimize = async (svg: string): Promise<string> => {

@@ -110,18 +110,14 @@ const SpectrogramGenerator: FunctionComponent = () => {
       ],
     };
 
-    if (waveSurfer) {
-      waveSurfer.setOptions(waveSurferOptions);
-      waveSurfer.loadBlob(outputWav);
-      setStatus(endStatus);
-      return;
-    }
-
-    const ws = WaveSurfer.create(waveSurferOptions);
-    ws.loadBlob(outputWav);
-    ws.on('play', () => setIsPlaying(true));
-    ws.on('pause', () => setIsPlaying(false));
-    setWaveSurfer(ws);
+    setWaveSurfer(prevWs => {
+      prevWs?.destroy();
+      const ws = WaveSurfer.create(waveSurferOptions);
+      ws.loadBlob(outputWav);
+      ws.on('play', () => setIsPlaying(true));
+      ws.on('pause', () => setIsPlaying(false));
+      return ws;
+    });
     setStatus(endStatus);
   }, 300);
 

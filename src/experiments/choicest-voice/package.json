@@ -12,16 +12,16 @@
     "build": "bun run vite build"
   },
   "dependencies": {
-    "firebase": "^11.6.0",
+    "firebase": "^12.2.1",
     "pwa-helpers": "^0.9.1"
   },
   "devDependencies": {
     "@rollup/plugin-yaml": "^4.1.2",
-    "@types/node": "^22.14.1",
+    "@types/node": "^24.3.0",
     "@webexp/config": "workspace:^",
-    "sass": "^1.86.3",
+    "sass": "^1.92.0",
     "tosource": "^2.0.0-alpha.3",
-    "vite": "^6.3.2",
+    "vite": "^7.1.4",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-markdown": "^2.2.0"
   }
