@@ -18,10 +18,10 @@ import {
 import usePreprocessor from '../../../hooks/usePreprocessor';
 import Page from '../../../components/Page';
 import { Label } from '../../../components/forms/common';
-import LSBRevealerForm, {
-  LSBRevealerFormProps,
-} from '../../../components/image/lsb/LSBRevealerForm';
-import { lsbWorkerClient } from './lsbWorkerClient';
+import PVDRevealerForm, {
+  PVDRevealerFormProps,
+} from '../../../components/image/pvd/PVDRevealerForm';
+import { pvdWorkerClient } from './pvdWorkerClient';
 
 const DownloadLink = styled(Link)({
   marginTop: '-0.25rem',
@@ -32,7 +32,7 @@ const DownloadLink = styled(Link)({
 
 const decoder = new TextDecoder();
 
-const LSBRevealer: FunctionComponent = () => {
+const PVDRevealer: FunctionComponent = () => {
   const [copyToClipboardText, setCopyToClipboardText] =
     useState('Copy to clipboard');
   const [output, setOutput] = useState<Uint8Array | undefined>(undefined);
@@ -40,7 +40,7 @@ const LSBRevealer: FunctionComponent = () => {
   const { decrypt } = usePreprocessor();
 
   const handleChange = useDebouncedCallback<
-    NonNullable<LSBRevealerFormProps['onChange']>
+    NonNullable<PVDRevealerFormProps['onChange']>
   >(async data => {
     if (
       !data.carrierWithPayload ||
@@ -50,7 +50,7 @@ const LSBRevealer: FunctionComponent = () => {
       return;
     }
     const payload = Uint8Array.from(
-      await lsbWorkerClient.decode({
+      await pvdWorkerClient.decode({
         imageWithMessage: data.carrierWithPayload
           .getContext('2d', { willReadFrequently: true })!
           .getImageData(
@@ -89,8 +89,8 @@ const LSBRevealer: FunctionComponent = () => {
   };
 
   return (
-    <Page size="md" title="Image - LSB - Reveal">
-      <LSBRevealerForm onChange={handleChange} />
+    <Page size="md" title="Image - PVD - Reveal">
+      <PVDRevealerForm onChange={handleChange} />
       <Box mt={3}>
         <FormControl fullWidth>
           <Label>Hidden text/file</Label>
@@ -153,4 +153,4 @@ const LSBRevealer: FunctionComponent = () => {
   );
 };
 
-export default LSBRevealer;
+export default PVDRevealer;

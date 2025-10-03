@@ -90,6 +90,10 @@ const MENU_ITEMS: MenuItem[] = [
         title: 'Least Significant Bit',
       },
       {
+        key: 'pvd',
+        title: 'Pixel Value Differencing',
+      },
+      {
         key: 'dt',
         title: 'Discrete Transform',
         available: false,
